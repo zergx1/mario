@@ -1,8 +1,8 @@
 #include "BaseMonster.h"
 
 
-int width = 640;
-int height = 480;
+int width = 320;
+int height = 240;
 
 BaseMonster::BaseMonster(void)
 {
