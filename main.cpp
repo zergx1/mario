@@ -5,7 +5,8 @@
 #include <allegro5/allegro_ttf.h>
 #include "lib/mappy_A5.h"
 #include "BaseMonster.h"
-
+#include "TurtleMonster.h"
+//
  int WIDTH = 1000;
 const int HEIGHT = 240;
 
@@ -35,7 +36,7 @@ int main(void)
 	int i = al_get_num_display_modes();
 
 	al_get_display_mode(1, &disp_data);
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
 	if (!display)										//test display object
@@ -48,6 +49,10 @@ int main(void)
 	al_init_font_addon();
 	al_init_ttf_addon();
 	al_init_primitives_addon();
+	al_install_audio();
+	al_init_acodec_addon();
+
+	al_reserve_samples(1);
 
 	float gameTime = 0;
 	int frames = 0;
@@ -55,9 +60,9 @@ int main(void)
 	int width = 640;
 	int height = 480;
 
-	const int numSprites = 5;
+	const int numSprites =3;
 
-	BaseMonster orbs[numSprites];
+	TurtleMonster orbs[numSprites];
 
 	if (MapLoad("Maps/level.fmp", 1))
 		return -5;
@@ -68,7 +73,7 @@ int main(void)
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init(image);
+		orbs[i].Init();
 
 
 	event_queue = al_create_event_queue();
@@ -128,6 +133,8 @@ int main(void)
 					break;
 				case ALLEGRO_KEY_DOWN:
 					keys[DOWN] = false;
+					for (int i = 0; i < numSprites; i++)
+						orbs[i].Hit();
 					break;
 				}
 		}
@@ -201,7 +208,7 @@ int main(void)
 	//	int imageWidth = 16;
 	//	int imageHeight = 16;
 	//
-	//	const int arraySize = 3;
+	//	const int arraySize = 5;
 	//	
 	//	//allegro variable
 	//	ALLEGRO_DISPLAY *display = NULL;
@@ -220,10 +227,12 @@ int main(void)
 	//	//addon init
 	//	al_init_image_addon();
 	//
-	//	image[0] = al_load_bitmap("33.png");
-	//	image[1] = al_load_bitmap("34.png");
-	//	image[2] = al_load_bitmap("35.png");
-	//
+	//	image[0] = al_load_bitmap("24.png");
+	//	image[1] = al_load_bitmap("25.png");
+	//	image[2] = al_load_bitmap("26.png");
+	//	image[3] = al_load_bitmap("27.png");
+	//	image[4] = al_load_bitmap("28.png");
+	//	image[5] = al_load_bitmap("29.png");
 	//	//imageWidth = al_get_bitmap_width(image[0]);
 	//	//imageHeight = al_get_bitmap_height(image[0]);
 	//
