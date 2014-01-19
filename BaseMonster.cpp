@@ -13,6 +13,8 @@ void BaseMonster::Init()
 {
 	live = true;
 	show = true;
+	killedByShot = false;
+
 
 	timeToClear = 130;
 	currentTimeToClear = 0;
@@ -35,6 +37,11 @@ void BaseMonster::Init()
 	animationDirection = 1;
 	score = 100;
 	lives = 1;
+	deathJumpY = 5;
+	fallingSpeedFactor = 0.3;
+
+//	image = al_load_bitmap("Sprites/flower_monster.png");
+//	al_convert_mask_to_alpha(image, al_map_rgb(238, 243, 250));
 
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
@@ -67,7 +74,7 @@ void BaseMonster::Update()
 		dirX *= -1;
 		animationDirection *= 1;
 	}
-	if(!live)
+	if(!live && !killedByShot)
 	{
 
 		if(currentTimeToClear++ >= timeToClear)
@@ -92,21 +99,36 @@ void BaseMonster::Draw()
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
-	
+	int flag = 0;
 	if(!live)
 	{
-		fy = fy - 8;
+		if(killedByShot )//&& y > deathJumpY)
+		{
+			y -= deathJumpY;
+			flag = ALLEGRO_FLIP_VERTICAL;
+			deathJumpY -= fallingSpeedFactor;
+		}
+		else
+			fy = fy - 8;
 	}
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x, y, 0);
+			frameHeight, x, y, flag);
 	}
 }
 
 void BaseMonster::Hit()
 {
 	Kill();
+}
+
+void BaseMonster::KillByShot()
+{
+	Kill();
+	killedByShot = true;
+	lives = 0;
+
 }
 
 void BaseMonster::Kill()

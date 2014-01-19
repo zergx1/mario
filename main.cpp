@@ -130,6 +130,8 @@ int main(void)
 					break;
 				case ALLEGRO_KEY_UP:
 					keys[UP] = false;
+					for (int i = 0; i < numSprites; i++)
+						orbs[i].KillByShot();
 					break;
 				case ALLEGRO_KEY_DOWN:
 					keys[DOWN] = false;
