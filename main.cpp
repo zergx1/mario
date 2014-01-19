@@ -60,9 +60,11 @@ int main(void)
 	int width = 640;
 	int height = 480;
 
-	const int numSprites =3;
-
-	TurtleMonster orbs[numSprites];
+	const int numTurtles = 3;
+	const int numMonster = 2;
+	
+	TurtleMonster turtles[numTurtles];
+	BaseMonster monsters[numMonster];
 
 	if (MapLoad("Maps/level.fmp", 1))
 		return -5;
@@ -72,9 +74,11 @@ int main(void)
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
-	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init();
+	for (int i = 0; i < numTurtles; i++)
+		turtles[i].Init();
 
+	for (int i = 0; i < numMonster; i++)
+		monsters[i].Init();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -130,13 +134,17 @@ int main(void)
 					break;
 				case ALLEGRO_KEY_UP:
 					keys[UP] = false;
-					for (int i = 0; i < numSprites; i++)
-						orbs[i].KillByShot();
+					for (int i = 0; i < numTurtles; i++)
+						turtles[i].KillByShot();
+					for (int i = 0; i < numMonster; i++)
+						monsters[i].KillByShot();
 					break;
 				case ALLEGRO_KEY_DOWN:
 					keys[DOWN] = false;
-					for (int i = 0; i < numSprites; i++)
-						orbs[i].Hit();
+					for (int i = 0; i < numTurtles; i++)
+						turtles[i].Hit();
+					for (int i = 0; i < numMonster; i++)
+						monsters[i].Hit();
 					break;
 				}
 		}
@@ -163,8 +171,10 @@ int main(void)
 					frames = 0;
 				}
 
-				for (int i = 0; i < numSprites; i++)
-					orbs[i].Update();
+				for (int i = 0; i < numTurtles; i++)
+					turtles[i].Update();
+				for (int i = 0; i < numMonster; i++)
+					monsters[i].Update();
 
 				render = true;
 			
@@ -176,8 +186,10 @@ int main(void)
 			render = false;
 			MapDrawBG(xOff, yOff, 0, 0, WIDTH, HEIGHT);
 
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw();
+			for (int i = 0; i < numTurtles; i++)
+				turtles[i].Draw();
+			for (int i = 0; i < numMonster; i++)
+				monsters[i].Draw();
 
 			al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "FPS: %i", gameFPS);
 
