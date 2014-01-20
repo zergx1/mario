@@ -4,8 +4,8 @@
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include "lib/mappy_A5.h"
-#include "BaseMonster.h"
-#include "TurtleMonster.h"
+#include "header/BaseMonster.h"
+#include "header/TurtleMonster.h"
 //
  int WIDTH = 1000;
 const int HEIGHT = 240;
@@ -13,7 +13,7 @@ const int HEIGHT = 240;
 bool keys[] = { false, false, false, false };
 enum KEYS{ UP, DOWN, LEFT, RIGHT };
 
-int main(void)
+int mainGeneral(void)
 {
 	//variables
 	bool done = false;
@@ -36,7 +36,7 @@ int main(void)
 	int i = al_get_num_display_modes();
 
 	al_get_display_mode(1, &disp_data);
-	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
 	if (!display)										//test display object
