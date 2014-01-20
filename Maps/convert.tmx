@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<map version="1.0" orientation="orthogonal" width="200" height="15" tilewidth="16" tileheight="16">
+  <tileset firstgid="1" name="untitled tile sheet" tilewidth="16" tileheight="16" spacing="0" margin="0">
+    <image source="background.png" />
+  </tileset>
+  <layer name="untitled layer" width="200" height="15">
+    <properties>
+      <property name="@Description" value="" />
+    </properties>
+    <data encoding="base64" compression="zlib">eJztl11uwjAMgIN6BcYLBxgbBfYMbOPnMuX+F8A8RLKsOA1NnaaJI31KsRP/JHZFW2NMqygZ8wlsgK8MfEjEkiI/ad8pcyjtDmI5AifgnIEPiVhS5CftO2UOpd2BonDM+b2tZ6BIU8J7O7a+U55Bbb0omW9tZzmUOfV47rGOXXOS+XK2G4JLRuXUtmstp+f2cPqp77gm5lTPqfDVszHv9YdBe/psUT1nc+rzqYmYei71rriaxSOkP+hoGJ32R3mUfFfc/yg8tD+UkPqRsL/2+LXP38A2Ua52xiO2P3zfJ9oH88L3nfqOHa7uca3vgD1wAH4cMVifv8BfgO2x8zY95+Fa79pjiI7zGyJXZFkCH8DKcyeh/bFk7PwDF+Du0Nlat2uuwA2tddUg7g/cU1xuFldsvpxfdEwMQ+QdeeZ+UxmWT10vNbGIZCw7Y9KSWVGmIsf+eJBZUYbyBDQtp5k=</data>
+  </layer>
+</map>
