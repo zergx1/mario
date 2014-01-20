@@ -6,8 +6,8 @@
 #include "lib/mappy_A5.h"
 #include "header/BaseMonster.h"
 #include "header/TurtleMonster.h"
-//
- int WIDTH = 1000;
+
+int WIDTH = 1000;
 const int HEIGHT = 240;
 
 bool keys[] = { false, false, false, false };
@@ -27,7 +27,6 @@ int mainGeneral(void)
 	ALLEGRO_DISPLAY_MODE   disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
-	ALLEGRO_FONT *font18 = NULL;
 	ALLEGRO_BITMAP *image;
 
 	//program init
@@ -46,8 +45,6 @@ int mainGeneral(void)
 	al_hide_mouse_cursor(display);
 	al_install_keyboard();
 	al_init_image_addon();
-	al_init_font_addon();
-	al_init_ttf_addon();
 	al_init_primitives_addon();
 	al_install_audio();
 	al_init_acodec_addon();
@@ -66,8 +63,6 @@ int mainGeneral(void)
 
 	if (MapLoad("Maps/level.fmp", 1))
 		return -5;
-
-	font18 = al_load_font("Fonts/arial.ttf", 18, 0);
 
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
@@ -179,9 +174,6 @@ int mainGeneral(void)
 			for (int i = 0; i < numSprites; i++)
 				orbs[i].Draw();
 
-			al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "FPS: %i", gameFPS);
-
-
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
@@ -190,73 +182,8 @@ int mainGeneral(void)
 	MapFreeMem();
 
 	al_destroy_bitmap(image);
-	al_destroy_font(font18);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
 
 	return 0;
 	}
-
-
-	//#include <allegro5\allegro.h>
-	//#include <allegro5\allegro_image.h>
-	//
-	//int main(void)
-	//{
-	//	//variables
-	//	int width = 640;
-	//	int height = 480;
-	//
-	//	int imageWidth = 16;
-	//	int imageHeight = 16;
-	//
-	//	const int arraySize = 5;
-	//	
-	//	//allegro variable
-	//	ALLEGRO_DISPLAY *display = NULL;
-	//	ALLEGRO_BITMAP *image[arraySize];
-	//	ALLEGRO_BITMAP *outImage;
-	//	
-	//	//program init
-	//	if(!al_init())										//initialize Allegro
-	//		return -1;
-	//
-	//	display = al_create_display(width, height);			//create our display object
-	//
-	//	if(!display)										//test display object
-	//		return -1;
-	//
-	//	//addon init
-	//	al_init_image_addon();
-	//
-	//	image[0] = al_load_bitmap("24.png");
-	//	image[1] = al_load_bitmap("25.png");
-	//	image[2] = al_load_bitmap("26.png");
-	//	image[3] = al_load_bitmap("27.png");
-	//	image[4] = al_load_bitmap("28.png");
-	//	image[5] = al_load_bitmap("29.png");
-	//	//imageWidth = al_get_bitmap_width(image[0]);
-	//	//imageHeight = al_get_bitmap_height(image[0]);
-	//
-	//	outImage = al_create_bitmap(imageWidth * arraySize, imageHeight);
-	//
-	//	al_set_target_bitmap(outImage);
-	//	al_clear_to_color(al_map_rgb(0, 0, 0));
-	//
-	//	for(int i = 0; i < arraySize; i++)
-	//	{
-	//		al_draw_bitmap(image[i], i * imageWidth, 0, 0);
-	//	}
-	//
-	//	al_save_bitmap("sprite_sheet_demo.png", outImage);
-	//
-	//	al_set_target_bitmap(al_get_backbuffer(display));
-	//
-	//
-	//	for(int i = 0; i < arraySize; i++)
-	//		al_destroy_bitmap(image[i]);
-	//	al_destroy_bitmap(outImage);
-	//	al_destroy_display(display);						//destroy our display object
-	//
-	//	return 0;
-	//}

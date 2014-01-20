@@ -1,0 +1,130 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Map Id="Untitled">
+  <Description><![CDATA[]]></Description>
+  <TileSheets>
+    <TileSheet Id="untitled tile sheet">
+      <Description><![CDATA[]]></Description>
+      <ImageSource><![CDATA[background.png]]></ImageSource>
+      <Alignment SheetSize="1 x 228" TileSize="16 x 16" Margin="0 x 0" Spacing="0 x 0" />
+      <Properties>
+        <Property Key="@FirstGid" Type="Int32"><![CDATA[1]]></Property>
+      </Properties>
+    </TileSheet>
+  </TileSheets>
+  <Layers>
+    <Layer Id="background" Visible="True">
+      <Description><![CDATA[]]></Description>
+      <Dimensions LayerSize="200 x 20" TileSize="16 x 16" />
+      <TileArray>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+        <Row>
+          <Null Count="38" />
+          <TileSheet Ref="untitled tile sheet" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="161" />
+        </Row>
+        <Row>
+          <Null Count="37" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="161" />
+        </Row>
+        <Row>
+          <Null Count="35" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="162" />
+        </Row>
+        <Row>
+          <Null Count="32" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="165" />
+        </Row>
+        <Row>
+          <Null Count="28" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="167" />
+        </Row>
+        <Row>
+          <Null Count="6" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="1" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="1" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Static Index="0" BlendMode="Alpha" />
+          <Null Count="171" />
+        </Row>
+        <Row>
+          <Null Count="200" />
+        </Row>
+      </TileArray>
+      <Properties>
+        <Property Key="@Description" Type="String"><![CDATA[]]></Property>
+      </Properties>
+    </Layer>
+  </Layers>
+  <Properties />
+</Map>

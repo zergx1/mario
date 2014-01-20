@@ -1,12 +1,14 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" width="200" height="15" tilewidth="16" tileheight="16">
-  <tileset firstgid="1" name="background" tilewidth="16" tileheight="16" spacing="0" margin="0">
-    <image source="..\ocuments\GitHub\Mario\Sprites\background.png" />
-  </tileset>
-  <layer name="background" width="200" height="15">
-    <properties>
-      <property name="@Description" value="" />
-    </properties>
-    <data encoding="base64" compression="zlib">eNrtl0kSwiAQRdvKFdSNB3DCYe08XCbe/wL2xiqKoglJgBD8i1dRCN10+D8QRUQKgIxZMitmnUGOGHNJUV/s3ClrKG0N+nJizswlgxwx5pKivti5U9ZQ2hoAUOJ7G88AlHA2yF3fKZ/Bv3kxZr14r5Xn8dznGlpzMeuVYlcGtjazXXnEkPqVI4etH56FnofEpWdq6Q/SxjTFUp4xodtx7EelrpWkWbLo3aVlcowhwTvwR7kaKq22ykPT8AfwOTuHZOGxX22YbcKzVmh/uL5P4IPx7hVVD39Iute1vmP2zIE5Ojx5ZW4esUPXTS2/20kYg/1jPEyZGTP32Cua/DEV4tyZB/O29P20/rvnyby0e20a1P2he0qqbeaosel8VQtz6NJeG7+l/2ZbDX8MwqQnoeKERBlXAIbUYm46/BhXALryBTQtp5k=</data>
-  </layer>
+ <tileset firstgid="1" name="background" tilewidth="16" tileheight="16">
+  <image source="../../../../../Documents/GitHub/Mario/Sprites/background.png" width="16" height="3648"/>
+ </tileset>
+ <layer name="background" width="200" height="15">
+  <properties>
+   <property name="@Description" value=""/>
+  </properties>
+  <data encoding="base64" compression="zlib">
+   eJztl11uwjAMgIN6BcYLBxgbBfYMbOPnMuX+F8A8RLKsOA1NnaaJI31KsRP/JHZFW2NMqygZ8wlsgK8MfEjEkiI/ad8pcyjtDmI5AifgnIEPiVhS5CftO2UOpd2BonDM+b2tZ6BIU8J7O7a+U55Bbb0omW9tZzmUOfV47rGOXXOS+XK2G4JLRuXUtmstp+f2cPqp77gm5lTPqfDVszHv9YdBe/psUT1nc+rzqYmYei71rriaxSOkP+hoGJ32R3mUfFfc/yg8tD+UkPqRsL/2+LXP38A2Ua52xiO2P3zfJ9oH88L3nfqOHa7uca3vgD1wAH4cMVifv8BfgO2x8zY95+Fa79pjiI7zGyJXZFkCH8DKcyeh/bFk7PwDF+Du0Nlat2uuwA2tddUg7g/cU1xuFldsvpxfdEwMQ+QdeeZ+UxmWT10vNbGIZCw7Y9KSWVGmIsf+eJBZUYbyBDQtp5k=
+  </data>
+ </layer>
 </map>
