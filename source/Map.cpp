@@ -1,6 +1,6 @@
 #include "header/Map.h"
 
-static const short MAP_MATRIX[2][2] = { { 0, 0 }, { 1, 1 } };
+//static const short MAP_MATRIX[2][2] = { { 0, 0 }, { 1, 1 } };
 Map::Map(void)
 {
 }

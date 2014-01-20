@@ -22,9 +22,13 @@ void BaseMonster::Init()
 	x = rand() % (width - 20) + 20;
 	y = rand() % (height - 20) + 20;
 	velX = 1;
-	velY = rand() % 7 + 2;
+	velY = 0;
 	dirX = -1;
 	dirY = -1;
+
+	startY = y;
+	waitY = 100;
+	currentWaitY = 0;
 
 	startFrame = 1;
 	maxFrame = 3;
@@ -66,12 +70,24 @@ void BaseMonster::Update()
 	}
 
 	x += velX * dirX;
-	//y += velX * dirY;
+	if(currentWaitY == 0 || currentWaitY > waitY)
+	{
+		currentWaitY = 0;
+		y += velY * dirY;
+	}
 
 	if((x <= 0 && dirX == -1) || 
 		(x >= width - frameWidth && dirX == 1))
 	{
 		dirX *= -1;
+		animationDirection *= 1;
+	}
+	if(currentWaitY > 0)
+		currentWaitY++;
+	else if((y <= startY-frameHeight && dirY == -1) || (y >= startY && dirY == 1))
+	{
+		currentWaitY = 1;
+		dirY *= -1;
 		animationDirection *= 1;
 	}
 	if(!live && !killedByShot)

@@ -6,7 +6,7 @@
 #include "lib/mappy_A5.h"
 #include "header/BaseMonster.h"
 #include "header/TurtleMonster.h"
-
+#include "header/FlowerMonster.h"
 
 
 int mainArtur(void)
@@ -38,7 +38,7 @@ int mainArtur(void)
 	int i = al_get_num_display_modes();
 
 	al_get_display_mode(1, &disp_data);
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
 	if (!display)										//test display object
@@ -64,9 +64,10 @@ int mainArtur(void)
 
 	const int numTurtles = 3;
 	const int numMonster = 2;
-	
+	const int numFlowers = 2;
 	TurtleMonster turtles[numTurtles];
 	BaseMonster monsters[numMonster];
+	FlowerMonster flowers[numFlowers];
 
 	if (MapLoad("Maps/level.fmp", 1))
 		return -5;
@@ -81,6 +82,9 @@ int mainArtur(void)
 
 	for (int i = 0; i < numMonster; i++)
 		monsters[i].Init();
+
+	for (int i = 0; i < numFlowers; i++)
+		flowers[i].Init();
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -140,6 +144,8 @@ int mainArtur(void)
 						turtles[i].KillByShot();
 					for (int i = 0; i < numMonster; i++)
 						monsters[i].KillByShot();
+					for (int i = 0; i < numFlowers; i++)
+						flowers[i].KillByShot();
 					break;
 				case ALLEGRO_KEY_DOWN:
 					keys[DOWN] = false;
@@ -147,6 +153,8 @@ int mainArtur(void)
 						turtles[i].Hit();
 					for (int i = 0; i < numMonster; i++)
 						monsters[i].Hit();
+					for (int i = 0; i < numFlowers; i++)
+						flowers[i].Hit();
 					break;
 				}
 		}
@@ -177,7 +185,8 @@ int mainArtur(void)
 					turtles[i].Update();
 				for (int i = 0; i < numMonster; i++)
 					monsters[i].Update();
-
+				for (int i = 0; i < numFlowers; i++)
+					flowers[i].Update();
 				render = true;
 			
 		}
@@ -192,7 +201,8 @@ int mainArtur(void)
 				turtles[i].Draw();
 			for (int i = 0; i < numMonster; i++)
 				monsters[i].Draw();
-
+			for (int i = 0; i < numFlowers; i++)
+				flowers[i].Draw();
 			al_draw_textf(font18, al_map_rgb(255, 0, 255), 5, 5, 0, "FPS: %i", gameFPS);
 
 
