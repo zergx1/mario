@@ -16,6 +16,11 @@ class BaseMonster: public BaseCharacter
 		int currentTimeToClear;
 		int score;
 		int lives;
+		int startY;
+
+		int waitY;
+		int currentWaitY;
+
 		float fallingSpeedFactor;
 		float deathJumpY;
 

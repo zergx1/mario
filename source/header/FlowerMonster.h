@@ -1,22 +1,20 @@
 #pragma once
 #include "BaseMonster.h"
 
-class TurtleMonster :
+
+class FlowerMonster :
 	public BaseMonster
 {
-
 public:
 
-	TurtleMonster(void);
+	FlowerMonster(void);
 	virtual void Init();
 	virtual void Draw();
+	virtual void Update();
+
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
-	void revive();
-
-	int timeToReborn;
-	int currentTimeToReborn;
-	~TurtleMonster(void);
+	~FlowerMonster(void);
 };
 
