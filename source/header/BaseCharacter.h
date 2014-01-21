@@ -40,4 +40,3 @@ public:
 	virtual void KillByShot();
 	
 };
-

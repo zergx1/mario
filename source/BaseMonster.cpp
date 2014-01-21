@@ -1,4 +1,7 @@
 #include "header/BaseMonster.h"
+#include "header/Map.h"
+#include <math.h>
+#include <iostream>
 
 
 int width = 320;
@@ -8,6 +11,9 @@ BaseMonster::BaseMonster(void)
 {
 }
 
+BaseMonster::~BaseMonster(void)
+{
+}
 
 void BaseMonster::Init()
 {
@@ -19,12 +25,12 @@ void BaseMonster::Init()
 	timeToClear = 130;
 	currentTimeToClear = 0;
 	x = 1;
-	x = rand() % (width - 20) + 20;
-	y = rand() % (height - 20) + 20;
+	x = 50;
+	y = 0;
 	velX = 1;
-	velY = rand() % 7 + 2;
+	velY = 0;
 	dirX = -1;
-	dirY = -1;
+	dirY = 1;
 
 	startFrame = 1;
 	maxFrame = 3;
@@ -66,14 +72,26 @@ void BaseMonster::Update()
 	}
 
 	x += velX * dirX;
-	//y += velX * dirY;
-
-	if((x <= 0 && dirX == -1) || 
-		(x >= width - frameWidth && dirX == 1))
+	y += velY * dirY;
+	
+	if ((x <= 0 && dirX == -1) || (x >= width - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
 	{
 		dirX *= -1;
-		animationDirection *= 1;
+		//animationDirection *= 1;
 	}
+
+	if ((y >= height - frameHeight) || (Map::collided(this, 'y')))
+	{
+		velY = 0;
+		velX = 1;
+		//animationDirection *= 1;
+	}
+	else
+	{
+		velY += 10.0 / 120.0;
+		velX = 0.2;
+	}
+
 	if(!live && !killedByShot)
 	{
 
@@ -95,7 +113,7 @@ void BaseMonster::Update()
 }
 
 
-void BaseMonster::Draw()
+void BaseMonster::Draw(float xOff, float yOff)
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
@@ -114,7 +132,7 @@ void BaseMonster::Draw()
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x, y, flag);
+			frameHeight, x - xOff, y - yOff, flag);
 	}
 }
 
@@ -141,6 +159,3 @@ void BaseMonster::Kill()
 
 }
 
-BaseMonster::~BaseMonster(void)
-{
-}

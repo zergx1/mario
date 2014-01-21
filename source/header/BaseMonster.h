@@ -10,8 +10,6 @@
 class BaseMonster: public BaseCharacter
 {
 	public:
-		bool live;
-		bool show;
 		bool killedByShot;
 
 		int timeToClear;
@@ -21,28 +19,12 @@ class BaseMonster: public BaseCharacter
 		float fallingSpeedFactor;
 		float deathJumpY;
 
-		float x;
-		float y;
-		float velX;
-		float velY;
-		int dirX;
-		int dirY;
-		int startFrame;
-		int maxFrame;
-		int curFrame;
-		int frameCount;
-		int frameDelay;
-		int frameWidth;
-		int frameHeight;
-		int animationColumns;
-		int animationDirection;
-
 		ALLEGRO_BITMAP *image;
 		ALLEGRO_SAMPLE *death_sound;
 		BaseMonster(void);
 		virtual void Init();
 		virtual void Update();
-		virtual void Draw();
+		virtual void Draw(float xOff, float yOff);
 		virtual void Hit();
 		virtual void Kill();
 		virtual void KillByShot();

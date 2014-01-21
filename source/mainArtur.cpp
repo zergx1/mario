@@ -165,8 +165,8 @@ int mainArtur(void)
 					frames = 0;
 				}
 
-				for (int i = 0; i < numSprites; i++)
-					orbs[i].Update();
+				//for (int i = 0; i < numSprites; i++)
+					//orbs[i].Update();
 
 				render = true;
 			

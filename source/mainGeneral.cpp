@@ -159,7 +159,7 @@ int mainGeneral(void)
 				}
 
 				for (int i = 0; i < numSprites; i++)
-					orbs[i].Update();
+					//orbs[i].Update();
 
 				render = true;
 			
