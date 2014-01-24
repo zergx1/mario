@@ -160,3 +160,5 @@ $RECYCLE.BIN/
 *.vcxproj
 *.filters
 .gitattributes
+
+source/main.cpp

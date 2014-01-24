@@ -27,6 +27,8 @@ public:
 	int frameHeight;
 	int animationColumns;
 	int animationDirection;
+	int score;
+	int lives;
 
 	ALLEGRO_BITMAP *image;
 	ALLEGRO_SAMPLE *death_sound;
