@@ -1,6 +1,5 @@
 #include "header/FlowerMonster.h"
 
-
 FlowerMonster::FlowerMonster(void)
 {
 }

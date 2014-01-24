@@ -32,7 +32,7 @@ int mainAdam(void)
 		return -1;
 	int i = al_get_num_display_modes();
 
-	al_get_display_mode(1, &disp_data);
+	al_get_display_mode(0, &disp_data);
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
@@ -101,7 +101,7 @@ int mainAdam(void)
 				orbs[0].show = true;*/
 
 			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw(map.xOff, map.yOff);
+				orbs[i].Draw(map.xOff,0);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

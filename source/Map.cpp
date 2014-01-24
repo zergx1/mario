@@ -24,6 +24,7 @@ int Map::init(char *path)
 		al_show_native_message_box(al_get_current_display(), "Critical error", "", "Given map doesn't exist", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -5;
 	}
+	xOff = 0;
 	return status;
 }
 
@@ -34,27 +35,20 @@ void Map::del()
 
 void Map::draw()
 {
-	MapDrawBG(this->xOff, this->yOff, 0, 0, disp_data.width, disp_data.height);
+	MapDrawBG(this->xOff, 0, 0, 0, disp_data.width, 240);
 }
 
 void Map::update(bool *keys)
 {
 	xOff += keys[Keyboard::RIGHT] * 10;
 	xOff -= keys[Keyboard::LEFT] * 10;
-	yOff += keys[Keyboard::DOWN] * 10;
-	yOff -= keys[Keyboard::UP] * 10;
 
 	if (xOff < 0)
 		xOff = 0;
-	if (yOff < 0)
-		yOff = 0;
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
 		xOff = mapwidth*mapblockwidth - disp_data.width;
-	if (yOff > mapheight*mapblockheight - disp_data.height)
-		yOff = mapheight*mapblockheight - disp_data.height;
 
 	this->xOff = xOff;
-	this->yOff = yOff;
 }
 
 int Map::collided(BaseCharacter* character, char axis)
