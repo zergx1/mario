@@ -8,8 +8,9 @@
 #include "header/TurtleMonster.h"
 #include "header/Map.h"
 #include "header/Keyboard.h"
+#include "header/Menu.h"
 
-int mainAdam(void)
+int mainArtur(void)
 {
 	//variables
 	Map map;
@@ -27,12 +28,13 @@ int mainAdam(void)
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_BITMAP *image;
 
+
 	//program init
 	if (!al_init())										//initialize Allegro
 		return -1;
 	int i = al_get_num_display_modes();
 
-	al_get_display_mode(0, &disp_data);
+	al_get_display_mode(1, &disp_data);
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
@@ -50,7 +52,8 @@ int mainAdam(void)
 	const int numSprites = 1;
 
 	BaseMonster orbs[numSprites];
-	
+	Menu menu;
+	menu.init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -73,6 +76,7 @@ int mainAdam(void)
 
 	while (!keyboard.keys[Keyboard::ESC])
 	{
+
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
@@ -80,10 +84,10 @@ int mainAdam(void)
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			map.update(keyboard.keys);
-			
+			menu.update(keyboard.keys);
 			for (int i = 0; i < numSprites; i++)
 				orbs[i].Update();
-
+			menu.updateBackgrounds();
 			render = true;
 
 			
@@ -92,7 +96,16 @@ int mainAdam(void)
 
 		if (render && al_is_event_queue_empty(event_queue))
 		{
-			render = false;
+						render = false;
+
+			if(menu.state == MENU)
+			{
+				//al_draw_bitmap(menu.image, 0, 0, 0);
+				menu.drawBackgrounds();
+			}
+			else
+			{
+
 			map.draw();
 			//orbs[0].x -= xOff;
 			/*if (xOff > orbs[0].x + orbs[0].frameWidth)
@@ -102,7 +115,8 @@ int mainAdam(void)
 
 			for (int i = 0; i < numSprites; i++)
 				orbs[i].Draw(map.xOff,0);
-
+			}
+			
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}

@@ -7,7 +7,7 @@ enum MAIN{ GENERAL, ADAM, ARTUR };
 
 int main(void)
 {
-	int m = ADAM;
+	int m = ARTUR;
 
 	if (m == GENERAL)
 		mainGeneral();
