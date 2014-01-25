@@ -58,29 +58,59 @@ int Map::collided(BaseCharacter* character, char axis)
 	
 	if (axis == 'x')
 	{
-	if (character->dirX == 1)
-		x += character->frameWidth;
+		x += character->dirX * character->velX;
+		if (character->dirX == 1)
+			x += character->frameWidth;
 
 		float yFloor = floor(y / mapblockwidth);
 		float yCeil = ceil(y / mapblockwidth);
 		x /= mapblockwidth;
 
 		if (!outOfStage(x, yFloor) && !outOfStage(x, yCeil))
-			return (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
-		
+		{
+			bool result = (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
+			int characterX = character->x + character->dirX * character->velX;
+			if (result == 1 && (characterX % 16 != 0))
+			{
+				character->x = characterX;
+				if (character->dirX == 1)	// adjustment to title 
+					character->x -= (character->x % 16);
+				else
+					character->x += 16 - (character->x % 16);
+
+			}
+			return result;
+		}
 	}
 
 	if (axis == 'y')
 	{
+		y += character->dirY * character->velY;
 		if (character->dirY == 1)
 			y += character->frameHeight;
+
 		float xFloor = floor(x / mapblockwidth);
 		float xCeil = ceil(x / mapblockwidth);
 		
 		y /= mapblockheight;
 
 		if (!outOfStage(xFloor, y) && !outOfStage(xCeil, y))
-			return (MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl);
+		{
+			bool result = MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl;
+			int characterY = character->y + character->dirY * character->velY;
+		
+			if (result)
+			{
+				character->y = characterY;
+				if (character->dirY == 1)	// adjustment to title 
+					character->y -= (character->y % 16);
+				else
+					character->y += 16 - (character->y % 16);
+
+				character->velY = 0;
+			}
+			return result;
+		}
 		
 	}
 

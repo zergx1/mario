@@ -11,6 +11,6 @@ public:
 	~Player(void);
 	virtual void Init(Map* map);
 	virtual void Update(bool *keys);
-	virtual void Draw(float xOff);
+	virtual void Draw();
 };
 

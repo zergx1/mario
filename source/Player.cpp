@@ -33,7 +33,7 @@ void Player::Init(Map* map)
 	maxFrame = 3;
 	curFrame = 0;
 	frameCount = 0;
-	frameDelay = 5;
+	frameDelay = 10;
 	frameWidth = 16;
 	frameHeight = 16;
 	animationColumns = 3;
@@ -47,7 +47,6 @@ void Player::Update(bool *keys)
 	int height = 240;
 	if (++frameCount >= frameDelay)
 	{
-
 		curFrame += animationDirection;
 		if (curFrame >= maxFrame && animationColumns > 0)
 			curFrame = startFrame;
@@ -58,48 +57,50 @@ void Player::Update(bool *keys)
 	}
 
 	if (keys[Keyboard::LEFT])
+	{
 		dirX = -1;
+		velX = 1;
+	}
 	else if (keys[Keyboard::RIGHT])
+	{
 		dirX = 1;
+		velX = 1;
+	}
 
-	if (keys[Keyboard::UP] && velY == 0 && !jump)
+	if (keys[Keyboard::UP] && y % 16 == 0 && dirY == 1 && velY == 0)
 	{
 		velY = 3.0;
 		dirY = -1;
-		jump = true;
+		if (Map::collided(this, 'y'))
+		{
+			velY = 0;
+			dirY = 1;
+		}
 	}
 	
-	if ((keys[Keyboard::LEFT] || keys[Keyboard::RIGHT]) && !(Map::collided(this, 'x')) && x + velX * dirX >= map->xOff)
+	if ((keys[Keyboard::LEFT] || keys[Keyboard::RIGHT]) && !(Map::collided(this, 'x')) && x + 1 * dirX >= map->xOff)
 	{
-		velX = 1;
 		x += velX * dirX;
 
 		if (x - map->xOff > 16 * 8) // map moves
 			map->update(keys);
 	}
 	else
+	{
 		velX = 0;
+	}
 
 	y += dirY * velY;
 	
-	if (velY <= 0) // start falling down
-	{
-			dirY = 1;
-		if (y % 16 != 0)	// adjustment to title 
-			y -= 16 - (y % 16);
-
-	}
-	
-	if (Map::collided(this, 'y'))
+	if (velY <= 0 && dirY == -1) // start falling down
 	{
 		velY = 0;
-		jump = false;
 		dirY = 1;
 	}
-	else
+	
+	if (!Map::collided(this, 'y'))
 	{
-		velY += dirY * 10.0 / 60.0;
-		
+		velY += dirY * 10.0 / 60.0;	
 	}
 
 	if (y >= height - frameHeight)
@@ -107,16 +108,13 @@ void Player::Update(bool *keys)
 
 }
 
-
-void Player::Draw(float xOff)
+void Player::Draw()
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
 
-
 	if (show)
 	{
-		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x - xOff, y, 0);
+		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - map->xOff, y, 0);
 	}
 }

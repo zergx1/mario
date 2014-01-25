@@ -77,17 +77,15 @@ int mainAdam(void)
 	{
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-
 		keyboard.update(ev);
+
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			
-			//for (int i = 0; i < numSprites; i++)
-				//orbs[i].Update();
+			for (int i = 0; i < numSprites; i++)
+				orbs[i].Update();
 			mario.Update(keyboard.keys);
 			render = true;
 
-			
 		}
 
 
@@ -95,7 +93,7 @@ int mainAdam(void)
 		{
 			render = false;
 			map.draw();
-			mario.Draw(map.xOff);
+			mario.Draw();
 
 			for (int i = 0; i < numSprites; i++)
 				orbs[i].Draw(map.xOff);
