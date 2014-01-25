@@ -90,6 +90,18 @@ void Menu::update(bool *keys)
 		if(current < 0)
 			current = 2;
 	}
+	if(keys[Keyboard::SPACE])
+	{
+		switch(current)
+		{
+		case 0:
+			state = GAME; break;
+		case 1:
+			state = GAME; break;
+		case 2:
+			state = END; break;
+		}
+	}
 	switch(current)
 	{
 	case 0:

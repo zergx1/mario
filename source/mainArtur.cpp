@@ -8,6 +8,7 @@
 #include "header/TurtleMonster.h"
 #include "header/Map.h"
 #include "header/Keyboard.h"
+#include "header/Menu.h"
 
 int mainArtur(void)
 {
@@ -46,7 +47,8 @@ int mainArtur(void)
 	al_init_acodec_addon();
 
 	al_reserve_samples(1);
-
+	Menu menu;
+	menu.init();
 	const int numSprites = 1;
 
 	BaseMonster orbs[numSprites];
@@ -73,16 +75,26 @@ int mainArtur(void)
 
 	while (!keyboard.keys[Keyboard::ESC])
 	{
+		if(menu.state == END)
+			break;
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 
 		keyboard.update(ev);
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			map.update(keyboard.keys);
+			if(menu.state == MENU)
+			{
+				menu.update(keyboard.keys);
+				menu.updateBackgrounds();
+			}
+			else
+			{
+				map.update(keyboard.keys);
 			
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Update();
+				for (int i = 0; i < numSprites; i++)
+					orbs[i].Update();
+			}
 
 			render = true;
 
@@ -93,15 +105,22 @@ int mainArtur(void)
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
-			map.draw();
-			//orbs[0].x -= xOff;
-			/*if (xOff > orbs[0].x + orbs[0].frameWidth)
-				orbs[0].show = false;
+			if(menu.state == MENU)
+			{
+				menu.drawBackgrounds();
+			}
 			else
-				orbs[0].show = true;*/
+			{
+				map.draw();
+				//orbs[0].x -= xOff;
+				/*if (xOff > orbs[0].x + orbs[0].frameWidth)
+					orbs[0].show = false;
+				else
+					orbs[0].show = true;*/
 
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw(map.xOff);
+				for (int i = 0; i < numSprites; i++)
+					orbs[i].Draw(map.xOff);
+			}
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
