@@ -9,7 +9,7 @@
 #include "header/Map.h"
 #include "header/Keyboard.h"
 
-int mainAdam(void)
+int mainArtur(void)
 {
 	//variables
 	Map map;
@@ -101,7 +101,7 @@ int mainAdam(void)
 				orbs[0].show = true;*/
 
 			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw(map.xOff,0);
+				orbs[i].Draw(map.xOff);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

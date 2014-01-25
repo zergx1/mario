@@ -28,7 +28,7 @@ class BaseMonster: public BaseCharacter
 		BaseMonster(void);
 		virtual void Init();
 		virtual void Update();
-		virtual void Draw(float xOff, float yOff);
+		virtual void Draw(float xOff);
 		virtual void Hit();
 		virtual void Kill();
 		virtual void KillByShot();

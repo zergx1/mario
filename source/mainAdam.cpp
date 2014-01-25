@@ -5,6 +5,7 @@
 #include <allegro5/allegro_ttf.h>
 #include "lib/mappy_A5.h"
 #include "header/BaseMonster.h"
+#include "header/Player.h"
 #include "header/TurtleMonster.h"
 #include "header/Map.h"
 #include "header/Keyboard.h"
@@ -32,7 +33,7 @@ int mainAdam(void)
 		return -1;
 	int i = al_get_num_display_modes();
 
-	al_get_display_mode(0, &disp_data);
+	al_get_display_mode(1, &disp_data);
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
@@ -50,7 +51,8 @@ int mainAdam(void)
 	const int numSprites = 1;
 
 	BaseMonster orbs[numSprites];
-	
+	Player mario;
+	mario.Init(&map);
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -79,11 +81,10 @@ int mainAdam(void)
 		keyboard.update(ev);
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			map.update(keyboard.keys);
 			
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Update();
-
+			//for (int i = 0; i < numSprites; i++)
+				//orbs[i].Update();
+			mario.Update(keyboard.keys);
 			render = true;
 
 			
@@ -94,14 +95,10 @@ int mainAdam(void)
 		{
 			render = false;
 			map.draw();
-			//orbs[0].x -= xOff;
-			/*if (xOff > orbs[0].x + orbs[0].frameWidth)
-				orbs[0].show = false;
-			else
-				orbs[0].show = true;*/
+			mario.Draw(map.xOff);
 
 			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw(map.xOff,0);
+				orbs[i].Draw(map.xOff);
 
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

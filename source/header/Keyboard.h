@@ -6,7 +6,7 @@ class Keyboard
 public:
 	bool keys[5];
 	int numberButtons;
-	enum KEYS{ UP, DOWN, LEFT, RIGHT, ESC };
+	enum KEYS{ UP, DOWN, LEFT, RIGHT, ESC, SPACE, ENTER, Z, X };
 public:
 	Keyboard(void);
 	~Keyboard(void);

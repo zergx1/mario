@@ -113,7 +113,7 @@ void BaseMonster::Update()
 }
 
 
-void BaseMonster::Draw(float xOff, float yOff)
+void BaseMonster::Draw(float xOff)
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
@@ -132,7 +132,7 @@ void BaseMonster::Draw(float xOff, float yOff)
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x - xOff, y - yOff, flag);
+			frameHeight, x - xOff, y, flag);
 	}
 }
 

@@ -1,5 +1,6 @@
 #include "header/Map.h"
 #include <iostream>
+#include <cmath>
 #include <allegro5/allegro_native_dialog.h>
 #include "header/Keyboard.h"
 
@@ -35,20 +36,18 @@ void Map::del()
 
 void Map::draw()
 {
-	MapDrawBG(this->xOff, 0, 0, 0, disp_data.width, 240);
+	MapDrawBG(this->xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
 }
 
 void Map::update(bool *keys)
 {
-	xOff += keys[Keyboard::RIGHT] * 10;
-	xOff -= keys[Keyboard::LEFT] * 10;
+	xOff += keys[Keyboard::RIGHT];
 
 	if (xOff < 0)
 		xOff = 0;
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
 		xOff = mapwidth*mapblockwidth - disp_data.width;
 
-	this->xOff = xOff;
 }
 
 int Map::collided(BaseCharacter* character, char axis)
@@ -56,17 +55,45 @@ int Map::collided(BaseCharacter* character, char axis)
 	BLKSTR *blockdata;
 	float x = character->x;
 	float y = character->y;
-
-	if (character->dirX == 1 && axis == 'x')
+	
+	if (axis == 'x')
+	{
+	if (character->dirX == 1)
 		x += character->frameWidth;
 
-	if (character->dirY == 1 && axis == 'y')
-		y += character->frameHeight;
-	
-	x /= mapblockwidth;
-	y /= mapblockheight;
+		float yFloor = floor(y / mapblockwidth);
+		float yCeil = ceil(y / mapblockwidth);
+		x /= mapblockwidth;
 
-	blockdata = MapGetBlock(x, y);
+		if (!outOfStage(x, yFloor) && !outOfStage(x, yCeil))
+			return (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
+		
+	}
 
-	return blockdata->tl;
+	if (axis == 'y')
+	{
+		if (character->dirY == 1)
+			y += character->frameHeight;
+		float xFloor = floor(x / mapblockwidth);
+		float xCeil = ceil(x / mapblockwidth);
+		
+		y /= mapblockheight;
+
+		if (!outOfStage(xFloor, y) && !outOfStage(xCeil, y))
+			return (MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl);
+		
+	}
+
+	return 0;
+
+}
+
+int Map::outOfStage(int x, int y)
+{
+	if (x < 0 || x >= mapwidth)
+		return 1;
+	if (y < 0 || y >= mapheight)
+		return 1;
+
+	return 0;
 }

@@ -51,6 +51,18 @@ void Keyboard::update(ALLEGRO_EVENT ev)
 		case ALLEGRO_KEY_DOWN:
 			keys[DOWN] = true;
 			break;
+		case ALLEGRO_KEY_SPACE:
+			keys[SPACE] = true;
+			break;
+		case ALLEGRO_KEY_ENTER:
+			keys[ENTER] = true;
+			break;
+		case ALLEGRO_KEY_Z:
+			keys[Z] = true;
+			break;
+		case ALLEGRO_KEY_X:
+			keys[X] = true;
+			break;
 		}
 	}
 	else if (ev.type == ALLEGRO_EVENT_KEY_UP)
@@ -68,13 +80,21 @@ void Keyboard::update(ALLEGRO_EVENT ev)
 			break;
 		case ALLEGRO_KEY_UP:
 			keys[UP] = false;
-			//for (int i = 0; i < numSprites; i++)
-			//	orbs[i].KillByShot();
 			break;
 		case ALLEGRO_KEY_DOWN:
 			keys[DOWN] = false;
-			//for (int i = 0; i < numSprites; i++)
-			//	orbs[i].Hit();
+			break;
+		case ALLEGRO_KEY_SPACE:
+			keys[SPACE] = false;
+			break;
+		case ALLEGRO_KEY_ENTER:
+			keys[ENTER] = false;
+			break;
+		case ALLEGRO_KEY_Z:
+			keys[Z] = false;
+			break;
+		case ALLEGRO_KEY_X:
+			keys[X] = false;
 			break;
 		}
 	}

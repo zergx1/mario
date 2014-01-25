@@ -8,7 +8,6 @@ public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	int xOff;
-	int yOff;
 
 public:
 	Map(void);
@@ -18,5 +17,6 @@ public:
 	void draw();
 	void update(bool* keys);
 	static int collided(BaseCharacter* character, char axis);
+	static int outOfStage(int x, int y);
 };
 
