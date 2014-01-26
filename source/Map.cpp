@@ -74,9 +74,9 @@ int Map::collided(BaseCharacter* character, char axis)
 			{
 				character->x = characterX;
 				if (character->dirX == 1)	// adjustment to title 
-					character->x -= (character->x % 16);
+					character->x -= ((int)character->x % 16);
 				else
-					character->x += 16 - (character->x % 16);
+					character->x += 16 - ((int)character->x % 16);
 
 			}
 			return result;
@@ -103,11 +103,12 @@ int Map::collided(BaseCharacter* character, char axis)
 			{
 				character->y = characterY;
 				if (character->dirY == 1)	// adjustment to title 
-					character->y -= (character->y % 16);
+					character->y -= ((int)character->y % 16);
 				else
-					character->y += 16 - (character->y % 16);
+					character->y += 16 - ((int)character->y % 16);
 
 				character->velY = 0;
+				
 			}
 			return result;
 		}
@@ -118,6 +119,14 @@ int Map::collided(BaseCharacter* character, char axis)
 
 }
 
+int Map::collided(int x, int y)
+{
+	std::cout << x / mapblockwidth << " " << y / mapblockheight;
+	BLKSTR *blockdata;
+	blockdata = MapGetBlock(x / mapblockwidth, y / mapblockheight);
+	return blockdata->tl;
+}
+
 int Map::outOfStage(int x, int y)
 {
 	if (x < 0 || x >= mapwidth)
@@ -125,5 +134,25 @@ int Map::outOfStage(int x, int y)
 	if (y < 0 || y >= mapheight)
 		return 1;
 
+	return 0;
+}
+
+int Map::destroyBrick(BaseCharacter* character)
+{
+	int x = character->x + character->frameWidth / 2;
+	int y = character->y - 1;
+	
+	if (y < 0 || y >= mapblockheight * mapheight) // out of the map
+		return 0;
+
+	BLKSTR *blockdata;
+	blockdata = MapGetBlockInPixels(x, y);
+	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
+	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
+	if (blockdata->user1 == 1) 
+	{
+		MapSetBlockInPixels(x, y, Map::EMPTY);
+		return 1;
+	}
 	return 0;
 }

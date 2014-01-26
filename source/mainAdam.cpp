@@ -9,6 +9,7 @@
 #include "header/TurtleMonster.h"
 #include "header/Map.h"
 #include "header/Keyboard.h"
+#include "header/Menu.h"
 
 int mainAdam(void)
 {
@@ -53,6 +54,8 @@ int mainAdam(void)
 	BaseMonster orbs[numSprites];
 	Player mario;
 	mario.Init(&map);
+	Menu menu;
+	//menu.init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -75,15 +78,25 @@ int mainAdam(void)
 
 	while (!keyboard.keys[Keyboard::ESC])
 	{
+		/*if (menu.state == END)
+			break;*/
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		keyboard.update(ev);
 
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Update();
-			mario.Update(keyboard.keys);
+			/*if (menu.state == MENU)
+			{
+				menu.update(keyboard.keys);
+				menu.updateBackgrounds();
+			}
+			else
+			{*/
+				for (int i = 0; i < numSprites; i++)
+					orbs[i].Update();
+				mario.Update(keyboard.keys);
+			//}
 			render = true;
 
 		}
@@ -92,12 +105,19 @@ int mainAdam(void)
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
-			map.draw();
-			mario.Draw();
 
-			for (int i = 0; i < numSprites; i++)
-				orbs[i].Draw(map.xOff);
+			/*if (menu.state == MENU)
+			{
+				menu.drawBackgrounds();
+			}
+			else
+			{*/
+				map.draw();
+				mario.Draw();
 
+				for (int i = 0; i < numSprites; i++)
+					orbs[i].Draw(map.xOff);
+			//}
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}

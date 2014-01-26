@@ -27,7 +27,7 @@ void BaseMonster::Init()
 	x = 1;
 	x = 50;
 	y = 0;
-	velX = 1;
+	velX = 0.5;
 	velY = 0;
 	dirX = -1;
 	dirY = 1;
@@ -71,26 +71,29 @@ void BaseMonster::Update()
 		frameCount = 0;
 	}
 
-	x += velX * dirX;
-	y += velY * dirY;
 	
 	if ((x <= 0 && dirX == -1) || (x >= width - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
 	{
 		dirX *= -1;
 		//animationDirection *= 1;
 	}
+	else
+	{
+		x += velX * dirX;
+	}
 
 	if ((y >= height - frameHeight) || (Map::collided(this, 'y')))
 	{
 		velY = 0;
-		velX = 1;
+		//velX = 1;
 		//animationDirection *= 1;
 	}
 	else
 	{
-		velY += 10.0 / 120.0;
-		velX = 0.2;
+		velY += 10.0 / 60.0;
+		//velX = 0.5;
 	}
+	y += velY * dirY;
 
 	if(!live && !killedByShot)
 	{
@@ -104,8 +107,6 @@ void BaseMonster::Update()
 			{
 				show = !show;
 			}
-
-
 		}
 
 	}
@@ -132,7 +133,7 @@ void BaseMonster::Draw(float xOff)
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x - xOff, y, flag);
+			frameHeight, (int)x - xOff, (int)y, flag);
 	}
 }
 
