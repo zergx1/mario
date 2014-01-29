@@ -9,6 +9,7 @@
 #include "header/Map.h"
 #include "header/Keyboard.h"
 #include "header/Menu.h"
+#include "header/Bullet.h"
 
 int mainArtur(void)
 {
@@ -52,7 +53,8 @@ int mainArtur(void)
 	const int numSprites = 1;
 
 	BaseMonster orbs[numSprites];
-	
+	Bullet b;
+	b.Init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -83,10 +85,13 @@ int mainArtur(void)
 		keyboard.update(ev);
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
+			if(keyboard.keys[Keyboard::SPACE])
+				b.Init();
 			if(menu.state == MENU)
 			{
 				menu.update(keyboard.keys);
 				menu.updateBackgrounds();
+				b.Update();
 			}
 			else
 			{
@@ -108,6 +113,7 @@ int mainArtur(void)
 			if(menu.state == MENU)
 			{
 				menu.drawBackgrounds();
+				b.Draw(map.xOff);
 			}
 			else
 			{

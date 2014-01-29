@@ -90,7 +90,7 @@ void Menu::update(bool *keys)
 		if(current < 0)
 			current = 2;
 	}
-	if(keys[Keyboard::SPACE])
+	if(keys[Keyboard::ENTER])
 	{
 		switch(current)
 		{
