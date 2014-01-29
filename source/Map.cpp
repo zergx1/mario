@@ -58,34 +58,73 @@ int Map::collided(BaseCharacter* character, char axis)
 	
 	if (axis == 'x')
 	{
-	if (character->dirX == 1)
-		x += character->frameWidth;
+		x += character->dirX * character->velX;
+		if (character->dirX == 1)
+			x += character->frameWidth;
 
 		float yFloor = floor(y / mapblockwidth);
 		float yCeil = ceil(y / mapblockwidth);
 		x /= mapblockwidth;
 
 		if (!outOfStage(x, yFloor) && !outOfStage(x, yCeil))
-			return (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
-		
+		{
+			bool result = (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
+			int characterX = character->x + character->dirX * character->velX;
+			if (result == 1 && (characterX % 16 != 0))
+			{
+				character->x = characterX;
+				if (character->dirX == 1)	// adjustment to title 
+					character->x -= ((int)character->x % 16);
+				else
+					character->x += 16 - ((int)character->x % 16);
+
+			}
+			return result;
+		}
 	}
 
 	if (axis == 'y')
 	{
+		y += character->dirY * character->velY;
 		if (character->dirY == 1)
 			y += character->frameHeight;
+
 		float xFloor = floor(x / mapblockwidth);
 		float xCeil = ceil(x / mapblockwidth);
 		
 		y /= mapblockheight;
 
 		if (!outOfStage(xFloor, y) && !outOfStage(xCeil, y))
-			return (MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl);
+		{
+			bool result = MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl;
+			int characterY = character->y + character->dirY * character->velY;
+		
+			if (result)
+			{
+				character->y = characterY;
+				if (character->dirY == 1)	// adjustment to title 
+					character->y -= ((int)character->y % 16);
+				else
+					character->y += 16 - ((int)character->y % 16);
+
+				character->velY = 0;
+				
+			}
+			return result;
+		}
 		
 	}
 
 	return 0;
 
+}
+
+int Map::collided(int x, int y)
+{
+	std::cout << x / mapblockwidth << " " << y / mapblockheight;
+	BLKSTR *blockdata;
+	blockdata = MapGetBlock(x / mapblockwidth, y / mapblockheight);
+	return blockdata->tl;
 }
 
 int Map::outOfStage(int x, int y)
@@ -95,5 +134,25 @@ int Map::outOfStage(int x, int y)
 	if (y < 0 || y >= mapheight)
 		return 1;
 
+	return 0;
+}
+
+int Map::destroyBrick(BaseCharacter* character)
+{
+	int x = character->x + character->frameWidth / 2;
+	int y = character->y - 1;
+	
+	if (y < 0 || y >= mapblockheight * mapheight) // out of the map
+		return 0;
+
+	BLKSTR *blockdata;
+	blockdata = MapGetBlockInPixels(x, y);
+	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
+	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
+	if (blockdata->user1 == 1) 
+	{
+		MapSetBlockInPixels(x, y, Map::EMPTY);
+		return 1;
+	}
 	return 0;
 }

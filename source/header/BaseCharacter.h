@@ -12,8 +12,8 @@ public:
 	bool live;
 	bool show;
 
-	int x;	// current x coordinate
-	int y;	// current y coordinate
+	float x;	// current x coordinate
+	float y;	// current y coordinate
 	float velX;
 	float velY;
 	int dirX;

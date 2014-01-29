@@ -127,16 +127,14 @@ void Menu::updateBackgrounds()
 
 void Menu::drawBackgrounds()
 {
-		M.DrawBackground();
-
+	M.DrawBackground();
 	B.DrawBackground();
 	ALLEGRO_DISPLAY_MODE   disp_data;
-	//al_get_display_mode(1, &disp_data);
+	al_get_display_mode(1, &disp_data);
 	int h = al_get_bitmap_height(image);
 	int w = al_get_bitmap_width(image);
 
 	al_get_display_mode(1, &disp_data);
-	std::cout << disp_data.height << std::endl << disp_data.width;
 	al_draw_bitmap(image, disp_data.width/2-w/2, disp_data.height/2-h/2, 0);
 
 	//G.DrawBackground();
