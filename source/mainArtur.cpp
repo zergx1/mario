@@ -5,11 +5,11 @@
 #include <allegro5/allegro_ttf.h>
 #include "lib/mappy_A5.h"
 #include "header/BaseMonster.h"
+#include "header/Player.h"
 #include "header/TurtleMonster.h"
 #include "header/Map.h"
 #include "header/Keyboard.h"
 #include "header/Menu.h"
-#include "header/Bullet.h"
 
 int mainArtur(void)
 {
@@ -34,7 +34,7 @@ int mainArtur(void)
 		return -1;
 	int i = al_get_num_display_modes();
 
-	al_get_display_mode(0, &disp_data);
+	al_get_display_mode(1, &disp_data);
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
@@ -48,13 +48,14 @@ int mainArtur(void)
 	al_init_acodec_addon();
 
 	al_reserve_samples(1);
-	Menu menu;
-	menu.init();
+
 	const int numSprites = 1;
 
 	BaseMonster orbs[numSprites];
-	Bullet b;
-	b.Init();
+	Player mario;
+	mario.Init(&map);
+	Menu menu;
+	menu.init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -77,57 +78,46 @@ int mainArtur(void)
 
 	while (!keyboard.keys[Keyboard::ESC])
 	{
-		if(menu.state == END)
+		if (menu.state == END)
 			break;
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
-
 		keyboard.update(ev);
+
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			if(keyboard.keys[Keyboard::SPACE])
-				b.Init();
-			if(menu.state == MENU)
+			if (menu.state == MENU)
 			{
 				menu.update(keyboard.keys);
 				menu.updateBackgrounds();
-				b.Update();
 			}
 			else
 			{
-				map.update(keyboard.keys);
-			
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Update();
+				mario.Update(keyboard.keys);
 			}
-
 			render = true;
 
-			
 		}
 
 
 		if (render && al_is_event_queue_empty(event_queue))
 		{
 			render = false;
-			if(menu.state == MENU)
+
+			if (menu.state == MENU)
 			{
 				menu.drawBackgrounds();
-				b.Draw(map.xOff);
 			}
 			else
 			{
 				map.draw();
-				//orbs[0].x -= xOff;
-				/*if (xOff > orbs[0].x + orbs[0].frameWidth)
-					orbs[0].show = false;
-				else
-					orbs[0].show = true;*/
+				mario.Draw();
 
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Draw(map.xOff);
 			}
-
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}

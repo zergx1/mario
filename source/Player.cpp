@@ -2,6 +2,7 @@
 #include "header/Keyboard.h"
 #include <iostream>
 #include <cmath>
+
 Player::Player(void)
 {
 }
@@ -13,6 +14,7 @@ Player::~Player(void)
 
 void Player::Init(Map* map)
 {
+	space_clicked = false;
 	this->map = map;
 	this->lives = 3;
 	this->x = 0;
@@ -47,6 +49,10 @@ void Player::Init(Map* map)
 	animationColumns = 4;
 	animationDirection = 1;
 	score = 0;
+	b = new Bullet[2];
+
+	for(int i=0;i<2;i++)
+		b[i].Init();
 }
 
 void Player::Update(bool *keys)
@@ -56,7 +62,22 @@ void Player::Update(bool *keys)
 	int width = 320;
 	int height = 240;
 	
-
+	if (keys[Keyboard::SPACE])	// go to the left
+	{
+		space_clicked = true;
+	}
+	else if(space_clicked && !keys[Keyboard::SPACE])
+	{
+		space_clicked = false;
+		for(int i=0;i<2;i++)
+		{
+			if(!b[i].live && !b[i].show)
+			{
+				b[i].Shoot(x, y, dirX);
+				break;
+			}
+		}
+	}
 	if (keys[Keyboard::LEFT])	// go to the left
 	{
 		dirX = -1;
@@ -133,6 +154,10 @@ void Player::Update(bool *keys)
 		al_play_sample_instance(die);
 		//al_play_sample(die, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
 	}
+	for(int i=0;i<2;i++)
+	{
+		b[i].Update();
+	}
 
 }
 
@@ -140,7 +165,10 @@ void Player::Draw()
 {
 	int fx = curFrame * frameWidth;
 	int fy = 0;
-
+	for(int i=0;i<2;i++)
+	{
+		b[i].Draw(map->xOff);
+	}
 	if (show)
 	{
 		int flag = 0;
