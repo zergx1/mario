@@ -15,13 +15,22 @@ Player::~Player(void)
 void Player::Init(Map* map)
 {
 	space_clicked = false;
+	state = SMALL;
+	blinking_time = 120;
+	current_blinking_time = 0;
+	blinking = false;
+
 	this->map = map;
 	this->lives = 3;
 	this->x = 0;
 	this->y = 0;
 	this->live = true;
+	small_mario = al_load_bitmap("Sprites/small_mario.png");
+	big_mario = al_load_bitmap("Sprites/big_mario.png");
+	al_convert_mask_to_alpha(small_mario, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(big_mario, al_map_rgb(0, 0, 0));
 
-	image = al_load_bitmap("Sprites/small_mario.png");
+	image = small_mario;
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	jump = al_create_sample_instance(al_load_sample("Audio/jump.ogg"));
@@ -68,6 +77,11 @@ void Player::Update(bool *keys)
 	}
 	else if(space_clicked && !keys[Keyboard::SPACE])
 	{
+		if(state == SMALL)
+			changeStatus(BIG);
+		else
+			changeStatus(SMALL);
+		
 		space_clicked = false;
 		for(int i=0;i<2;i++)
 		{
@@ -159,6 +173,51 @@ void Player::Update(bool *keys)
 		b[i].Update();
 	}
 
+	if(blinking)
+	{
+		if(current_blinking_time++ >= blinking_time)
+		{
+			blinking = false;
+			current_blinking_time = 0;
+			if(state == SMALL)
+					{
+						image = small_mario;
+						frameHeight = 16;
+						//y += 16;
+
+					}
+			else if(state == BIG)
+					{
+						image = big_mario;
+						frameHeight = 32;
+						//y -= 16;
+					}
+		}
+		else
+		{
+			//if(timeToClear/(deathBlinks - currentdeathBlinks) <= currentTimeToClear  )
+		if(current_blinking_time % 10 == 0 )
+			{
+
+					if(image == small_mario)
+					{
+						image = big_mario;
+						frameHeight = 32;
+					y -= 16;
+					}
+					else
+					{
+						image = small_mario;
+						frameHeight = 16;
+						y += 16;
+
+					}
+
+				//show = !show;
+			}
+		}
+	}
+
 }
 
 void Player::Draw()
@@ -177,6 +236,25 @@ void Player::Draw()
 		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - map->xOff, y, flag);
 	}
 }
+
+void Player::changeStatus(MARIO s)
+{
+	state = s;
+	blinking = true;
+	if(state == SMALL)
+	{
+		image = small_mario;
+		frameHeight = 16;
+	}
+	else if(state == BIG)
+	{
+		image = big_mario;
+		frameHeight = 32;
+		y -= 16;
+
+	}
+}
+
 
 void Player::animation()
 {
