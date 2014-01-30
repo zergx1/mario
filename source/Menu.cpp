@@ -8,7 +8,8 @@ Menu::Menu(void)
 
 void Menu::init()
 {
-	state = MENU;
+	//state = MENU;
+	state = GAME;
 	ALLEGRO_BITMAP *title = NULL;
 	title = al_load_bitmap("menu.png");
 
@@ -90,7 +91,7 @@ void Menu::update(bool *keys)
 		if(current < 0)
 			current = 2;
 	}
-	if(keys[Keyboard::SPACE])
+	if(keys[Keyboard::ENTER])
 	{
 		switch(current)
 		{
