@@ -4,9 +4,9 @@
 class Keyboard
 {
 public:
-	bool keys[9];
+	enum KEYS{ UP, DOWN, LEFT, RIGHT, ESC, SPACE, ENTER, Z, X, SIZE_KEYS };
+	bool keys[SIZE_KEYS];
 	int numberButtons;
-	enum KEYS{ UP, DOWN, LEFT, RIGHT, ESC, SPACE, ENTER, Z, X };
 public:
 	Keyboard(void);
 	~Keyboard(void);

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <allegro5/allegro_native_dialog.h>
 #include "header/Keyboard.h"
+#include "header/Sound.h"
 
 Map::Map(void)
 {
@@ -19,13 +20,14 @@ int Map::init(char *path)
 	this->MAP_PATH = path;
 	al_get_display_mode(1, &disp_data);
 	std::cout << disp_data.height << std::endl << disp_data.width;
-	int status = MapLoad(path, 1);
+	int status = MapLoad(path, true);
 	if (status)
 	{
 		al_show_native_message_box(al_get_current_display(), "Critical error", "", "Given map doesn't exist", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -5;
 	}
 	xOff = 0;
+
 	return status;
 }
 
@@ -36,11 +38,13 @@ void Map::del()
 
 void Map::draw()
 {
+	MapUpdateAnims();
 	MapDrawBG(this->xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
 }
 
 void Map::update(bool *keys)
 {
+	
 	xOff += keys[Keyboard::RIGHT];
 
 	if (xOff < 0)
@@ -53,6 +57,7 @@ void Map::update(bool *keys)
 int Map::collided(BaseCharacter* character, char axis)
 {
 	BLKSTR *blockdata;
+	BLKSTR *blockdata2;
 	float x = character->x;
 	float y = character->y;
 	
@@ -68,9 +73,15 @@ int Map::collided(BaseCharacter* character, char axis)
 
 		if (!outOfStage(x, yFloor) && !outOfStage(x, yCeil))
 		{
-			bool result = (MapGetBlock(x, yFloor)->tl || MapGetBlock(x, yCeil)->tl);
+			blockdata = MapGetBlock(x, yFloor);
+			blockdata2 = MapGetBlock(x, yCeil);
+			if (blockdata->user1 == COIN)
+				takeCoin(character, x, yFloor);
+			if (blockdata2->user1 == COIN)
+				takeCoin(character, x, yCeil);
+			bool collided = (blockdata->tl || blockdata2->tl);
 			int characterX = character->x + character->dirX * character->velX;
-			if (result == 1 && (characterX % 16 != 0))
+			if (collided == 1 && (characterX % 16 != 0))
 			{
 				character->x = characterX;
 				if (character->dirX == 1)	// adjustment to title 
@@ -79,7 +90,7 @@ int Map::collided(BaseCharacter* character, char axis)
 					character->x += 16 - ((int)character->x % 16);
 
 			}
-			return result;
+			return collided;
 		}
 	}
 
@@ -96,10 +107,16 @@ int Map::collided(BaseCharacter* character, char axis)
 
 		if (!outOfStage(xFloor, y) && !outOfStage(xCeil, y))
 		{
-			bool result = MapGetBlock(xFloor, y)->tl || MapGetBlock(xCeil, y)->tl;
+			blockdata = MapGetBlock(xFloor, y);
+			blockdata2 = MapGetBlock(xCeil, y);
+			if (blockdata->user1 == COIN)
+				takeCoin(character, xFloor, y);
+			if (blockdata2->user1 == COIN)
+				takeCoin(character, xCeil, y);
+			bool collided = blockdata->tl || blockdata2->tl;
 			int characterY = character->y + character->dirY * character->velY;
 		
-			if (result)
+			if (collided)
 			{
 				character->y = characterY;
 				if (character->dirY == 1)	// adjustment to title 
@@ -110,7 +127,7 @@ int Map::collided(BaseCharacter* character, char axis)
 				character->velY = 0;
 				
 			}
-			return result;
+			return collided;
 		}
 		
 	}
@@ -149,10 +166,23 @@ int Map::destroyBrick(BaseCharacter* character)
 	blockdata = MapGetBlockInPixels(x, y);
 	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
 	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
-	if (blockdata->user1 == 1) 
+	if (blockdata->user1 == 2)  // brick
 	{
 		MapSetBlockInPixels(x, y, Map::EMPTY);
 		return 1;
 	}
+	if (blockdata->user1 == 1)
+	{
+		MapSetBlockInPixels(x, y, Map::SOLID);
+		return 1;
+	}
 	return 0;
+}
+
+void Map::takeCoin(BaseCharacter* character, int x, int y)
+{
+	if (character->canTakeCoin)
+	{
+		MapSetBlock(x, y, Map::EMPTY);
+	}
 }

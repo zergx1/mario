@@ -38,4 +38,9 @@ void BaseCharacter::Kill()
 
 }
 
+void BaseCharacter::takeCoin()
+{
+
+}
+
 

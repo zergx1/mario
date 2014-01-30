@@ -11,6 +11,7 @@ class BaseCharacter
 public:
 	bool live;
 	bool show;
+	bool canTakeCoin;
 
 	float x;	// current x coordinate
 	float y;	// current y coordinate
@@ -40,5 +41,6 @@ public:
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
+	virtual void takeCoin();
 	
 };

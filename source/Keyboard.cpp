@@ -15,7 +15,7 @@ Keyboard::~Keyboard(void)
 
 int Keyboard::init(ALLEGRO_DISPLAY *display)
 {
-	for (int i = 0; i < 9; i++)
+	for (int i = 0; i < SIZE_KEYS; i++)
 	{
 		keys[i] = false;
 	}

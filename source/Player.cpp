@@ -1,5 +1,5 @@
 #include "header/Player.h"
-#include "header/Keyboard.h"
+#include "header/Sound.h"
 #include <iostream>
 #include <cmath>
 Player::Player(void)
@@ -18,17 +18,16 @@ void Player::Init(Map* map)
 	this->x = 0;
 	this->y = 0;
 	this->live = true;
+	this->jump = false;
+	this->canTakeCoin = true;
+
+	for (int i = 0; i < Keyboard::SIZE_KEYS; i++)
+	{
+		oldKeys[i] = false;
+	}
 
 	image = al_load_bitmap("Sprites/small_mario.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
-
-	jump = al_create_sample_instance(al_load_sample("Audio/jump.ogg"));
-	die = al_create_sample_instance(al_load_sample("Audio/mario_dies.ogg"));
-	breakBrick = al_create_sample_instance(al_load_sample("Audio/break_brick.ogg"));
-
-	al_attach_sample_instance_to_mixer(jump, al_get_default_mixer());
-	al_attach_sample_instance_to_mixer(die, al_get_default_mixer());
-	al_attach_sample_instance_to_mixer(breakBrick, al_get_default_mixer());
 
 	velX = 1;
 	velY = 0;
@@ -49,8 +48,9 @@ void Player::Init(Map* map)
 	score = 0;
 }
 
-void Player::Update(bool *keys)
+void Player::Update(bool keys[])
 {
+	bool brick = false;
 	if (!live)
 		return;
 	int width = 320;
@@ -68,19 +68,24 @@ void Player::Update(bool *keys)
 		velX = 1;
 	}
 
-	if (keys[Keyboard::UP] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
+	if (!oldKeys[Keyboard::UP] && keys[Keyboard::UP] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
 	{
+		std::cout << "Jump bitch\n";
+		jump = true;
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		//al_play_sample(jump, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
-		al_play_sample_instance(jump);
-		velY = 3.0;
+		velY = 5.0;
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{
 			velY = 0;
 			dirY = 1;
+			brick = true;
+		}
+		else
+		{
+		Sound::play(Sound::JUMP);
 		}
 	}
 	
@@ -99,8 +104,10 @@ void Player::Update(bool *keys)
 
 	y += dirY * velY;
 
-	if (velY == 0 && dirY == 1) // player is on the ground 
+	if (velY == 0 && dirY == 1 && !jump) // player is on the ground 
 	{
+		std::cout << "Ground\n";
+
 		// start animation again
 		startFrame = 0;
 		maxFrame = 2;
@@ -108,14 +115,14 @@ void Player::Update(bool *keys)
 			curFrame = 0;
 	}
 
-	if (velY <= 0 && dirY == -1) // start falling down
+	if (velY <= 0 && dirY == -1 || brick) // start falling down
 	{
+		std::cout << "Start falling down\n";
 		velY = 0;
 		dirY = 1;
 		if (map->destroyBrick(this) == 1) // break brick
 		{
-			al_play_sample_instance(breakBrick);
-			//al_play_sample(breakBrick, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+			Sound::play(Sound::BREAK_BRICK);
 			score += 100;	// add point
 		}
 	}
@@ -124,16 +131,24 @@ void Player::Update(bool *keys)
 	
 	if (!Map::collided(this, 'y'))
 	{
-		velY += dirY * 10.0 / 60.0;	
+		velY += dirY * 10.0 / 60.0;	 // gravity
+	}
+	else
+	{
+		jump = false;
 	}
 
 	if (y >= height)
 	{
 		live = false;
-		al_play_sample_instance(die);
-		//al_play_sample(die, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, 0);
+		Sound::play(Sound::MARIO_DIE);
 	}
 
+	/*for (int i = 0; i < Keyboard::SIZE_KEYS; i++)
+	{
+		oldKeys[i] = keys[i];
+	}*/
+	oldKeys[Keyboard::UP] = keys[Keyboard::UP]; // i need to store only old up key value
 }
 
 void Player::Draw()
@@ -162,4 +177,10 @@ void Player::animation()
 
 		frameCount = 0;
 	}
+}
+
+void Player::takeCoin()
+{
+	score += 100;
+	Sound::play(Sound::COIN);
 }

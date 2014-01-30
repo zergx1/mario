@@ -6,7 +6,8 @@ class Map
 {
 	static const int BRICK = 49;
 	static const int EMPTY = 44;
-	static const int SOLID = 12;
+	static const int SOLID = 12; //  after destroy quote block
+	static const int COIN = 232;
 public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
@@ -20,6 +21,7 @@ public:
 	void draw();
 	void update(bool* keys);
 	int destroyBrick(BaseCharacter* character);
+	static void takeCoin(BaseCharacter* character, int x, int y);
 	static int collided(BaseCharacter* character, char axis);
 	static int collided(int x, int y);
 	static int outOfStage(int x, int y);
