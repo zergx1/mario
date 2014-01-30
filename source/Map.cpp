@@ -44,7 +44,6 @@ void Map::draw()
 
 void Map::update(bool *keys)
 {
-	
 	xOff += keys[Keyboard::RIGHT];
 
 	if (xOff < 0)
@@ -67,18 +66,18 @@ int Map::collided(BaseCharacter* character, char axis)
 		if (character->dirX == 1)
 			x += character->frameWidth;
 
-		float yFloor = floor(y / mapblockwidth);
-		float yCeil = ceil(y / mapblockwidth);
+		float yBOTTOM = (y + character->frameHeight - 1) / mapblockheight;	//floor(y / mapblockheight);
+		float yTOP = y / mapblockheight;	// ceil(y / mapblockwidth);
 		x /= mapblockwidth;
-
-		if (!outOfStage(x, yFloor) && !outOfStage(x, yCeil))
+		//std::cout << yBOTTOM << " " << yTOP << "\n";
+		if (!outOfStage(x, yBOTTOM) && !outOfStage(x, yTOP))
 		{
-			blockdata = MapGetBlock(x, yFloor);
-			blockdata2 = MapGetBlock(x, yCeil);
+			blockdata = MapGetBlock(x, yBOTTOM);
+			blockdata2 = MapGetBlock(x, yTOP);
 			if (blockdata->user1 == COIN)
-				takeCoin(character, x, yFloor);
+				takeCoin(character, x, yBOTTOM);
 			if (blockdata2->user1 == COIN)
-				takeCoin(character, x, yCeil);
+				takeCoin(character, x, yTOP);
 			bool collided = (blockdata->tl || blockdata2->tl);
 			int characterX = character->x + character->dirX * character->velX;
 			if (collided == 1 && (characterX % 16 != 0))
@@ -100,19 +99,19 @@ int Map::collided(BaseCharacter* character, char axis)
 		if (character->dirY == 1)
 			y += character->frameHeight;
 
-		float xFloor = floor(x / mapblockwidth);
-		float xCeil = ceil(x / mapblockwidth);
+		float xRIGHT = (x + character->frameWidth - 1) / mapblockwidth;
+		float xLEFT = x / mapblockwidth;
 		
 		y /= mapblockheight;
 
-		if (!outOfStage(xFloor, y) && !outOfStage(xCeil, y))
+		if (!outOfStage(xLEFT, y) && !outOfStage(xRIGHT, y))
 		{
-			blockdata = MapGetBlock(xFloor, y);
-			blockdata2 = MapGetBlock(xCeil, y);
+			blockdata = MapGetBlock(xLEFT, y);
+			blockdata2 = MapGetBlock(xRIGHT, y);
 			if (blockdata->user1 == COIN)
-				takeCoin(character, xFloor, y);
+				takeCoin(character, xLEFT, y);
 			if (blockdata2->user1 == COIN)
-				takeCoin(character, xCeil, y);
+				takeCoin(character, xRIGHT, y);
 			bool collided = blockdata->tl || blockdata2->tl;
 			int characterY = character->y + character->dirY * character->velY;
 		
@@ -184,5 +183,6 @@ void Map::takeCoin(BaseCharacter* character, int x, int y)
 	if (character->canTakeCoin)
 	{
 		MapSetBlock(x, y, Map::EMPTY);
+		character->takeCoin();
 	}
 }

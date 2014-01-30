@@ -37,10 +37,10 @@ public:
 	~BaseCharacter(void);
 	virtual void Init();
 	virtual void Update();
-	virtual void Draw();
+	virtual void Draw(int flag = 0);
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
 	virtual void takeCoin();
-	
+	virtual void collisionWithOther(BaseCharacter* character);
 };

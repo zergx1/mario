@@ -93,8 +93,10 @@ int mainAdam(void)
 			}
 			else
 			{*/
-				for (int i = 0; i < numSprites; i++)
+			for (int i = 0; i < numSprites; i++){
 					orbs[i].Update();
+					mario.collisionWithOther(&orbs[i]);
+			}
 				mario.Update(keyboard.keys);
 			//}
 			render = true;

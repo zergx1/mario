@@ -14,11 +14,13 @@ Player::~Player(void)
 
 void Player::Init(Map* map)
 {
+	BaseCharacter::Init();
 	space_clicked = false;
 	currentState = SMALL;
 	blinking_time = 60;
 	current_blinking_time = 0;
 	blinking = false;
+	invisible = false;
 
 	this->map = map;
 	this->lives = 3;
@@ -69,24 +71,24 @@ void Player::Update(bool keys[])
 {
 	bool brick = false;
 	if (!live)
+	{
+		Kill();
 		return;
+	}
 	int width = 320;
 	int height = 240;
 	
-	if (keys[Keyboard::SPACE])	// go to the left
-	{
-		space_clicked = true;
-	}
-	else if(space_clicked && !keys[Keyboard::SPACE])
-	{
+	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
+	{	
 		if (currentState == SMALL)
 			changeStatus(BIG);
 		else if (currentState == BIG)
 			changeStatus(SUPER);
 		else
 			changeStatus(SMALL);
-		
-		space_clicked = false;
+	}
+	else if (!oldKeys[Keyboard::SPACE] && keys[Keyboard::SPACE])
+	{
 		for(int i=0;i<2;i++)
 		{
 			if(!b[i].live && !b[i].show)
@@ -105,6 +107,14 @@ void Player::Update(bool keys[])
 	{
 		dirX = 1;
 		velX = 1;
+	}
+	else if (keys[Keyboard::DOWN] && currentState != SMALL) // go to the down
+	{
+		std::cout << "DOWN\n";
+		curFrame = 4;
+		Draw();
+		return;
+
 	}
 
 	if (!oldKeys[Keyboard::UP] && keys[Keyboard::UP] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
@@ -145,7 +155,7 @@ void Player::Update(bool keys[])
 
 	if (velY == 0 && dirY == 1 && !jump) // player is on the ground 
 	{
-		std::cout << "Ground\n";
+		//std::cout << "Ground\n";
 
 		// start animation again
 		startFrame = 0;
@@ -175,11 +185,11 @@ void Player::Update(bool keys[])
 		jump = false;
 	}
 
-	if (y >= height)
+	if (y > height + frameHeight)
 	{
-		live = false;
-		Sound::play(Sound::MARIO_DIE);
+		Kill();
 	}
+
 	for(int i=0;i<2;i++)
 	{
 		b[i].Update();
@@ -191,9 +201,12 @@ void Player::Update(bool keys[])
 		oldKeys[i] = keys[i];
 	}*/
 	oldKeys[Keyboard::UP] = keys[Keyboard::UP]; // i need to store only old up key value
+	oldKeys[Keyboard::SPACE] = keys[Keyboard::SPACE]; // i need to store only old up key value
+	oldKeys[Keyboard::ENTER] = keys[Keyboard::ENTER]; // i need to store only old up key value
+
 }
 
-void Player::Draw()
+void Player::Draw(int flag)
 {
 	int fx = curFrame * frameWidth;
 	int fy = 0;
@@ -203,14 +216,50 @@ void Player::Draw()
 	}
 	if (show)
 	{
-		int flag = 0;
 		if (dirX == -1)
 			flag = ALLEGRO_FLIP_HORIZONTAL;
 		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - map->xOff, y, flag);
 	}
 }
 
-void Player::changeStatus(MARIO s)
+void Player::Kill()
+{
+	if (live)
+	{
+		Sound::play(Sound::MARIO_DIE);
+		dirY = -1;
+		velY = 3;
+		lives--;
+		live = false;
+		startFrame = 3;
+		maxFrame = 4;
+		curFrame = 3;
+	}
+	else
+	{
+		if (y <= 240 + frameHeight)
+		{
+			velY += dirY * 10.0 / 60.0;	 // gravity
+			if (velY <= 0)
+				dirY = 1;
+			y += dirY * velY;
+		}
+		else
+		{
+			changeStatus(SMALL);
+			x = map->xOff;
+			y = 0;
+			live = true;
+			startFrame = 0;
+			maxFrame = 2;
+			curFrame = 0;
+			//al_rest(2);
+		}
+
+	}
+
+}
+void Player::changeStatus(int s)
 {
 	currentState = s;
 	blinking = true;
@@ -237,7 +286,6 @@ void Player::changeStatus(MARIO s)
 	}
 }
 
-
 void Player::animation()
 {
 	if (++frameCount >= frameDelay)
@@ -254,6 +302,7 @@ void Player::animation()
 
 void Player::takeCoin()
 {
+	std::cout << "Take coin \n";
 	score += 100;
 	Sound::play(Sound::COIN);
 }
@@ -316,6 +365,50 @@ void Player::transformation()
 					}
 				}
 
+			}
+		}
+	}
+}
+
+void Player::collisionWithOther(BaseCharacter* character)
+{
+	// bullets
+	b[0].collisionWithOther(character);
+	b[1].collisionWithOther(character);
+	if (character->live)
+	{
+
+		float myXLEFT = x;
+		float myYTOP = y;
+		float myXRIGHT = x + frameWidth;
+		float myYBOTTOM = y + frameHeight;
+
+		float xLEFT = character->x;
+		float yTOP = character->y;
+		float xRIGHT = character->x + character->frameWidth;
+		float yBOTTOM = character->y + character->frameHeight;
+
+		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
+		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
+		if (horizontal && vertical && !blinking)
+		{
+			if (velY > 0 && this->live)
+			{
+				character->Kill();
+				velY = 2;
+				dirY = -1;
+			}
+			else
+			{
+				if (currentState == SMALL)
+				{
+					this->Kill();
+				}
+				else
+				{
+					currentState--;
+					changeStatus(currentState);
+				}
 			}
 		}
 	}

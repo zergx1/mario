@@ -12,12 +12,13 @@ private:
 	bool oldKeys[Keyboard::SIZE_KEYS];
 	Map* map;
 	bool jump;
+	bool invisible;
 
 	ALLEGRO_BITMAP *small_mario;
 	ALLEGRO_BITMAP *big_mario;
 	ALLEGRO_BITMAP *super_mario;
 
-	MARIO currentState;
+	int currentState;
 
 	int blinking_time;
 	int current_blinking_time;
@@ -31,10 +32,12 @@ public:
 	~Player(void);
 	virtual void Init(Map* map);
 	virtual void Update(bool keys[]);
-	void changeStatus(MARIO s);
-	virtual void Draw();
+	void changeStatus(int s);
+	virtual void Draw(int flag = 0);
+	virtual void Kill();
 	virtual void animation();
 	virtual void transformation();
 	virtual void takeCoin();
+	virtual void collisionWithOther(BaseCharacter* character);
 };
 

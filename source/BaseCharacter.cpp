@@ -10,6 +10,9 @@ BaseCharacter::~BaseCharacter(void)
 
 void BaseCharacter::Init()
 {
+	live = true;
+	show = true;
+	canTakeCoin = false;
 }
 
 void BaseCharacter::Update()
@@ -18,7 +21,7 @@ void BaseCharacter::Update()
 }
 
 
-void BaseCharacter::Draw()
+void BaseCharacter::Draw(int flag)
 {
 
 }
@@ -43,4 +46,8 @@ void BaseCharacter::takeCoin()
 
 }
 
+void BaseCharacter::collisionWithOther(BaseCharacter* character)
+{
+
+}
 

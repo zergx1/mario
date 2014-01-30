@@ -138,8 +138,33 @@ void Bullet::Kill()
 }
 
 
-
-
 Bullet::~Bullet(void)
 {
+}
+
+void Bullet::collisionWithOther(BaseCharacter* character)
+{
+	if (live)
+	{
+		float myXLEFT = x;
+		float myYTOP = y;
+		float myXRIGHT = x + frameWidth;
+		float myYBOTTOM = y + frameHeight;
+
+		float xLEFT = character->x;
+		float yTOP = character->y;
+		float xRIGHT = character->x + character->frameWidth;
+		float yBOTTOM = character->y + character->frameHeight;
+
+		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
+		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
+		if (horizontal && vertical && character->live)
+		{
+			character->KillByShot();
+			Kill();
+						
+		}
+	}
+
+
 }

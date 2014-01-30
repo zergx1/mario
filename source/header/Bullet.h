@@ -15,6 +15,7 @@ public:
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
+	virtual void collisionWithOther(BaseCharacter* character);
 	~Bullet(void);
 };
 

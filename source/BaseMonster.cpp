@@ -17,6 +17,7 @@ BaseMonster::~BaseMonster(void)
 
 void BaseMonster::Init()
 {
+	BaseCharacter::Init();
 	live = true;
 	show = true;
 	killedByShot = false;
@@ -71,6 +72,24 @@ void BaseMonster::Update()
 		frameCount = 0;
 	}
 
+	if (!live && !killedByShot)
+	{
+
+		if (currentTimeToClear++ >= timeToClear)
+			show = false;
+		else
+		{
+			//if(timeToClear/(deathBlinks - currentdeathBlinks) <= currentTimeToClear  )
+			if (currentTimeToClear % 10 == 0)
+			{
+				show = !show;
+			}
+		}
+
+	}
+
+	if (!live)	// trick do spadania 
+		return;
 	
 	if ((x <= 0 && dirX == -1) || (x >= width - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
 	{
@@ -95,21 +114,6 @@ void BaseMonster::Update()
 	}
 	y += velY * dirY;
 
-	if(!live && !killedByShot)
-	{
-
-		if(currentTimeToClear++ >= timeToClear)
-			show = false;
-		else
-		{
-			//if(timeToClear/(deathBlinks - currentdeathBlinks) <= currentTimeToClear  )
-		if(currentTimeToClear % 10 == 0 )
-			{
-				show = !show;
-			}
-		}
-
-	}
 
 }
 
@@ -154,6 +158,8 @@ void BaseMonster::Kill()
 {
 	live = false;
 	velX = 0;
+	//velY = 3;
+	//dirY = -1;
 	startFrame = 0;
 	maxFrame = 1;
 	al_play_sample(death_sound, 1, 0, 1, ALLEGRO_PLAYMODE_ONCE, NULL);
