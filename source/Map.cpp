@@ -172,7 +172,8 @@ int Map::destroyBrick(BaseCharacter* character)
 	}
 	if (blockdata->user1 == 1)
 	{
-		
+		item->Init(MUSHROOM, x - 16, y - 16);
+		item->LeaveBox();
 		Sound::play(Sound::BUMP);
 		MapSetBlockInPixels(x, y, Map::SOLID_ID);
 		return 1;

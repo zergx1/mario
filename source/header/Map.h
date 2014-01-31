@@ -1,6 +1,11 @@
+#ifndef MAP_H_INCLUDED
+#define MAP_H_INCLUDED
 #pragma once
 #include "lib/mappy_A5.h"
 #include "BaseCharacter.h"
+#include "Item.h"
+
+class Item;
 
 class Map
 {
@@ -20,10 +25,14 @@ public:
 	void del();
 	void draw();
 	void update(bool* keys);
+
+
 	int destroyBrick(BaseCharacter* character);
+	Item *item;
 	static void takeCoin(BaseCharacter* character, int x, int y);
 	static int collided(BaseCharacter* character, char axis);
 	static int collided(int x, int y);
 	static int outOfStage(int x, int y);
 };
 
+#endif

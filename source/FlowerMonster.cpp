@@ -19,6 +19,10 @@ void FlowerMonster::Init()
 	velX = 0;
 	velY = 0.6;
 	waitY = 200;
+	y = 80;
+	startY = y;
+	currentWaitY = 0;
+
 
 }
 
@@ -53,8 +57,60 @@ void FlowerMonster::Kill()
 
 void FlowerMonster::Update()
 {
-	BaseMonster::Update();
+	if(++frameCount >= frameDelay)
+	{
+
+			curFrame += animationDirection;
+			if(curFrame >= maxFrame && animationColumns > 0)
+				curFrame = startFrame;
+			else if(curFrame <= startFrame && animationColumns > 0)
+				curFrame = maxFrame - 1;
+
+
+		frameCount = 0;
+	}
+
+	x += velX * dirX;
+	if(currentWaitY == 0 || currentWaitY > waitY)
+	{
+		currentWaitY = 0;
+		y += velY * dirY;
+	}
+
+	//if((x <= 0 && dirX == -1) || 
+	//	(x >= width - frameWidth && dirX == 1))
+	//{
+	//	dirX *= -1;
+	//	animationDirection *= 1;
+	//}
+	if(currentWaitY > 0)
+		currentWaitY++;
+	else if((y <= startY-frameHeight && dirY == -1) || (y >= startY && dirY == 1))
+	{
+		currentWaitY = 1;
+		dirY *= -1;
+		animationDirection *= 1;
+	}
+	if(!live && !killedByShot)
+	{
+
+		if(currentTimeToClear++ >= timeToClear)
+			show = false;
+		else
+		{
+			//if(timeToClear/(deathBlinks - currentdeathBlinks) <= currentTimeToClear  )
+		if(currentTimeToClear % 10 == 0 )
+			{
+				show = !show;
+			}
+
+
+		}
+
+	}
+
 }
+
 
 void FlowerMonster::Hit()
 {

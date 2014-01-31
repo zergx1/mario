@@ -10,6 +10,7 @@
 #include "header/Map.h"
 #include "header/Keyboard.h"
 #include "header/Menu.h"
+#include "header/FlowerMonster.h"
 
 int mainArtur(void)
 {
@@ -56,6 +57,10 @@ int mainArtur(void)
 	mario.Init(&map);
 	Menu menu;
 	menu.init();
+	//Item item;
+	//FlowerMonster f;
+//	item.Init(FLOWER);
+	//f.Init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -80,6 +85,11 @@ int mainArtur(void)
 	{
 		if (menu.state == END)
 			break;
+		if(keyboard.keys[Keyboard::ENTER])
+		{
+			//item.LeaveBox();
+		}
+
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		keyboard.update(ev);
@@ -96,6 +106,10 @@ int mainArtur(void)
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Update();
 				mario.Update(keyboard.keys);
+				if( map.item->live)
+					map.item->Update();
+				//f.Update();
+				//item.Update();
 			}
 			render = true;
 
@@ -114,6 +128,10 @@ int mainArtur(void)
 			{
 				map.draw();
 				mario.Draw();
+				if( map.item->live)
+					map.item->Draw(map.xOff);
+				//f.Draw();
+				//item.Draw(map.xOff);
 
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Draw(map.xOff);
