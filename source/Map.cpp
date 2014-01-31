@@ -74,9 +74,9 @@ int Map::collided(BaseCharacter* character, char axis)
 		{
 			blockdata = MapGetBlock(x, yBOTTOM);
 			blockdata2 = MapGetBlock(x, yTOP);
-			if (blockdata->user1 == COIN)
+			if (blockdata->user1 == COIN_ID)
 				takeCoin(character, x, yBOTTOM);
-			if (blockdata2->user1 == COIN)
+			if (blockdata2->user1 == COIN_ID)
 				takeCoin(character, x, yTOP);
 			bool collided = (blockdata->tl || blockdata2->tl);
 			int characterX = character->x + character->dirX * character->velX;
@@ -101,16 +101,16 @@ int Map::collided(BaseCharacter* character, char axis)
 
 		float xRIGHT = (x + character->frameWidth - 1) / mapblockwidth;
 		float xLEFT = x / mapblockwidth;
-		
+		std::cout << xLEFT << " " << xRIGHT << "\n";
 		y /= mapblockheight;
 
 		if (!outOfStage(xLEFT, y) && !outOfStage(xRIGHT, y))
 		{
 			blockdata = MapGetBlock(xLEFT, y);
 			blockdata2 = MapGetBlock(xRIGHT, y);
-			if (blockdata->user1 == COIN)
+			if (blockdata->user1 == COIN_ID)
 				takeCoin(character, xLEFT, y);
-			if (blockdata2->user1 == COIN)
+			if (blockdata2->user1 == COIN_ID)
 				takeCoin(character, xRIGHT, y);
 			bool collided = blockdata->tl || blockdata2->tl;
 			int characterY = character->y + character->dirY * character->velY;
@@ -165,14 +165,16 @@ int Map::destroyBrick(BaseCharacter* character)
 	blockdata = MapGetBlockInPixels(x, y);
 	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
 	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
-	if (blockdata->user1 == 2)  // brick
+	if (blockdata->user1 == 2 && character->currentState != SMALL)  // brick
 	{
-		MapSetBlockInPixels(x, y, Map::EMPTY);
+		MapSetBlockInPixels(x, y, Map::EMPTY_ID);
 		return 1;
 	}
 	if (blockdata->user1 == 1)
 	{
-		MapSetBlockInPixels(x, y, Map::SOLID);
+		
+		Sound::play(Sound::BUMP);
+		MapSetBlockInPixels(x, y, Map::SOLID_ID);
 		return 1;
 	}
 	return 0;
@@ -182,7 +184,7 @@ void Map::takeCoin(BaseCharacter* character, int x, int y)
 {
 	if (character->canTakeCoin)
 	{
-		MapSetBlock(x, y, Map::EMPTY);
+		MapSetBlock(x, y, Map::EMPTY_ID);
 		character->takeCoin();
 	}
 }

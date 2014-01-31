@@ -6,6 +6,9 @@
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
 
+
+enum MARIO{ SMALL, BIG, SUPER };
+
 class BaseCharacter
 {
 public:
@@ -30,6 +33,7 @@ public:
 	int animationDirection;
 	int score;
 	int lives;
+	int currentState;
 
 	ALLEGRO_BITMAP *image;
 	ALLEGRO_SAMPLE *death_sound;

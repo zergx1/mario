@@ -4,10 +4,10 @@
 
 class Map
 {
-	static const int BRICK = 49;
-	static const int EMPTY = 44;
-	static const int SOLID = 12; //  after destroy quote block
-	static const int COIN = 232;
+	static const int BRICK_ID = 49;
+	static const int EMPTY_ID = 44;
+	static const int SOLID_ID = 12; //  after destroy quote block
+	static const int COIN_ID = 232;
 public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
