@@ -21,7 +21,7 @@ void Item::Init(TYPE t, float x1, float y1)
 	show = false;
 	status = HIDDEN;
 	type = t;
-	exitSpeed = 0.5;
+	exitSpeed = 0.1;
 
 	//x = 1;
 	//x = 50;
@@ -71,7 +71,7 @@ void Item::Update()
 {
 	if(status == LEAVING)
 	{
-		y -= 0.3;
+		y -= exitSpeed;
 		if(y <= startY-frameHeight)
 		{
 			status = LEFT;
@@ -93,7 +93,7 @@ void Item::Update()
 		frameCount = 0;
 	}
 
-	if (!live)	// trick do spadania 
+	if (!live || status != LEFT)	// trick do spadania 
 		return;
 	
 	if ((x <= 0 && dirX == -1) || (x >= width3 - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
@@ -106,7 +106,7 @@ void Item::Update()
 		x += velX * dirX;
 	}
 
-	if ((y >= height3 - frameHeight) || (Map::collided(this, 'y')))
+	if ( (y >= height3 - frameHeight) || (Map::collided(this, 'y')))
 	{
 		velY = 0;
 		//velX = 1;
