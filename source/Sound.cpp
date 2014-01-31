@@ -30,13 +30,13 @@ namespace Sound{
 
 	void play(int sound, ALLEGRO_PLAYMODE playmode)
 	{
-		init();
-		al_set_sample_instance_playmode(Sound::sounds[sound].inst, playmode);
-		al_play_sample_instance(Sound::sounds[sound].inst);
+		//init();
+		//al_set_sample_instance_playmode(Sound::sounds[sound].inst, playmode);
+		//al_play_sample_instance(Sound::sounds[sound].inst);
 	}
 
 	void play(int sound)
 	{
-		play(sound, ALLEGRO_PLAYMODE_ONCE);
+		//play(sound, ALLEGRO_PLAYMODE_ONCE);
 	}
 }

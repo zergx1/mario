@@ -71,7 +71,7 @@ void Item::Update()
 {
 	if(status == LEAVING)
 	{
-		y -= 0.1;
+		y -= 0.3;
 		if(y <= startY-frameHeight)
 		{
 			status = LEFT;
