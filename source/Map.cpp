@@ -27,7 +27,7 @@ int Map::init(char *path)
 		return -5;
 	}
 	xOff = 0;
-
+	item = new Item();
 	return status;
 }
 
@@ -173,6 +173,8 @@ int Map::destroyBrick(BaseCharacter* character)
 	if (blockdata->user1 == 1)
 	{
 		MapSetBlockInPixels(x, y, Map::SOLID);
+		item->Init(MUSHROOM, x-16, y-16);
+		item->LeaveBox();
 		return 1;
 	}
 	return 0;

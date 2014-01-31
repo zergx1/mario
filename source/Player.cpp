@@ -110,7 +110,7 @@ void Player::Update(bool keys[])
 	}
 	else if (keys[Keyboard::DOWN] && currentState != SMALL) // go to the down
 	{
-		std::cout << "DOWN\n";
+		//std::cout << "DOWN\n";
 		curFrame = 4;
 		Draw();
 		return;
@@ -119,7 +119,7 @@ void Player::Update(bool keys[])
 
 	if (!oldKeys[Keyboard::UP] && keys[Keyboard::UP] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
 	{
-		std::cout << "Jump bitch\n";
+		//std::cout << "Jump bitch\n";
 		jump = true;
 		startFrame = 2;
 		maxFrame = 3;
@@ -166,7 +166,7 @@ void Player::Update(bool keys[])
 
 	if (velY <= 0 && dirY == -1 || brick) // start falling down
 	{
-		std::cout << "Start falling down\n";
+		//std::cout << "Start falling down\n";
 		velY = 0;
 		dirY = 1;
 		if (map->destroyBrick(this) == 1) // break brick
@@ -302,7 +302,7 @@ void Player::animation()
 
 void Player::takeCoin()
 {
-	std::cout << "Take coin \n";
+	//std::cout << "Take coin \n";
 	score += 100;
 	Sound::play(Sound::COIN);
 }
