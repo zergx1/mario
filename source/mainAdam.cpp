@@ -10,12 +10,14 @@
 #include "header/Map.h"
 #include "header/Keyboard.h"
 #include "header/Menu.h"
+#include "header\Text.h"
 
 int mainAdam(void)
 {
 	//variables
 	Map map;
 	Keyboard keyboard;
+	Text text;
 	bool done = false;
 	bool render = false;
 
@@ -42,6 +44,7 @@ int mainAdam(void)
 		return -1;
 
 	//addon init
+	text.init();
 	keyboard.init(display);
 	al_init_image_addon();
 	al_install_audio();
@@ -114,7 +117,9 @@ int mainAdam(void)
 			}
 			else
 			{*/
+
 				map.draw();
+				text.draw(&mario);
 				mario.Draw();
 
 				for (int i = 0; i < numSprites; i++)

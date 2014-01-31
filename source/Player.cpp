@@ -124,7 +124,7 @@ void Player::Update(bool keys[])
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		velY = 5.0;
+		velY = 4.8;
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{

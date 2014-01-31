@@ -4,8 +4,6 @@
 #include "header/Keyboard.h"
 #include "header\Bullet.h"
 
-enum MARIO{ SMALL, BIG, SUPER };
-
 class Player: public BaseCharacter
 {
 private:
@@ -18,12 +16,9 @@ private:
 	ALLEGRO_BITMAP *big_mario;
 	ALLEGRO_BITMAP *super_mario;
 
-	int currentState;
-
 	int blinking_time;
 	int current_blinking_time;
 	bool blinking;
-
 
 public:
 	Bullet* b;
