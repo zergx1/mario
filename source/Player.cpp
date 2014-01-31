@@ -91,10 +91,13 @@ void Player::Update(bool keys[])
 	{
 		for(int i=0;i<2;i++)
 		{
-			if(!b[i].live && !b[i].show)
+			if(image == super_mario)
 			{
-				b[i].Shoot(x, y, dirX);
-				break;
+				if(!b[i].live && !b[i].show)
+				{
+					b[i].Shoot(x, y, dirX);
+					break;
+				}
 			}
 		}
 	}
