@@ -27,7 +27,7 @@ int Map::init(char *path)
 		return -5;
 	}
 	xOff = 0;
-
+	item = new Item();
 	return status;
 }
 
@@ -101,7 +101,7 @@ int Map::collided(BaseCharacter* character, char axis)
 
 		float xRIGHT = (x + character->frameWidth - 1) / mapblockwidth;
 		float xLEFT = x / mapblockwidth;
-		std::cout << xLEFT << " " << xRIGHT << "\n";
+		//std::cout << xLEFT << " " << xRIGHT << "\n";
 		y /= mapblockheight;
 
 		if (!outOfStage(xLEFT, y) && !outOfStage(xRIGHT, y))

@@ -13,7 +13,6 @@ namespace Sound{
 					BREAK_BRICK, COIN, BUMP,
 					POWER_UP, POWER_DOWN, POWER_2xUP,
 					SIZE_OF_SOUNDS };	
-
 	int init();
 	void play(int sound);	// play once
 	void play(int sound, ALLEGRO_PLAYMODE playmode);

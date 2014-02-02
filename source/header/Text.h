@@ -8,6 +8,12 @@ class Text
 {
 private:
 	ALLEGRO_FONT *font;
+	char name[6];
+	char* score;
+	char* live;
+	char* time;
+	char* coin;
+	char* level;
 public:
 	Text(void);
 	~Text(void);
@@ -17,8 +23,9 @@ public:
 	int width;
 	int height;
 
-	void draw(BaseCharacter *character);
+	void draw();
 	void init();
+	void update(BaseCharacter *character);
 	
 
 };

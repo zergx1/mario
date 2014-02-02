@@ -1,6 +1,8 @@
 #include "header\Text.h"
-#include "header/Keyboard.h"
+#include <stdlib.h>
 #include <iostream>
+#include <string>
+using std::string;
 Text::Text(void)
 {
 }
@@ -13,12 +15,30 @@ void Text::init()
 }
 
 
-void Text::draw(BaseCharacter *character)
+void Text::draw()
 {
 	al_draw_text(font, al_map_rgb(255, 255, 255), 3 * 15, 10, ALLEGRO_ALIGN_CENTRE, "MARIO");
-	//al_draw_text(font, al_map_rgb(255, 255, 255), 10, 25, ALLEGRO_ALIGN_CENTRE, character->score);
+	al_draw_text(font, al_map_rgb(255, 255, 255), 3 * 15, 25, ALLEGRO_ALIGN_CENTRE, name);
 }
 
+void Text::update(BaseCharacter *character)
+{
+	string player = "MARIO";
+	int divisor = 100000;
+	int temp = character->score;
+	for (int i = 0; i < 6; i++)
+	{
+		name[i] = (char) (temp / divisor) + 48;
+		if (temp / divisor != 0)
+			temp %= divisor;
+		divisor /= 10;
+	}
+	/*std::string s = std::to_string(character->score);
+	strncpy(name, s.c_str(), sizeof(name));
+	name[sizeof(name)-1] = 0;*/
+
+
+}
 
 Text::~Text(void)
 {

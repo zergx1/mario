@@ -101,6 +101,9 @@ int mainAdam(void)
 					mario.collisionWithOther(&orbs[i]);
 			}
 				mario.Update(keyboard.keys);
+				
+				if (map.item->live)
+					map.item->Update();
 			//}
 			render = true;
 
@@ -119,9 +122,11 @@ int mainAdam(void)
 			{*/
 
 				map.draw();
-				text.draw(&mario);
+				text.update(&mario);
+				text.draw();
 				mario.Draw();
-
+				if (map.item->live)
+					map.item->Draw(map.xOff);
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Draw(map.xOff);
 			//}

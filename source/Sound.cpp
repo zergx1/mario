@@ -4,11 +4,11 @@
 namespace Sound{
 
 	SoundStructure * sounds;
-	bool isInit = false;
+	bool isInitialized = false;
 
 	int init()
 	{
-		isInit = true;
+		isInitialized = true;
 		sounds = new SoundStructure[SIZE_OF_SOUNDS];
 
 		sounds[JUMP].inst = al_create_sample_instance(al_load_sample("Audio/jump.ogg"));
@@ -31,7 +31,8 @@ namespace Sound{
 
 	void play(int sound, ALLEGRO_PLAYMODE playmode)
 	{
-		init();
+		if (!isInitialized)
+			init();
 		al_set_sample_instance_playmode(Sound::sounds[sound].inst, playmode);
 		al_play_sample_instance(Sound::sounds[sound].inst);
 	}
