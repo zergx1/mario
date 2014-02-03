@@ -24,6 +24,9 @@ void Player::Init(Map* map)
 	blinking = false;
 	invisible = false;
 
+	pipeMoveState = NONE;
+	pipeCounter = 0;
+
 	this->map = map;
 	this->lives = 3;
 	this->x = 0;
@@ -81,15 +84,31 @@ void Player::Update(bool keys[])
 	}
 	int width = 320;
 	int height = 240;
-	
+	if(pipeMoveState == DOWN)
+	{
+		pipeCounter += 0.5;
+
+		if(pipeCounter > frameHeight)
+		{
+			pipeMoveState = NONE;
+			x = pipeMoveToX;
+			y = pipeMoveToY;
+			pipeCounter = 0;
+		}
+		return;
+
+	}
+
+
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
-		if (currentState == SMALL)
-			changeStatus(BIG);
-		else if (currentState == BIG)
-			changeStatus(SUPER);
-		else
-			changeStatus(SMALL);
+		pipeMove(x+50,y-50, DOWN);
+		//if (currentState == SMALL)
+		//	changeStatus(BIG);
+		//else if (currentState == BIG)
+		//	changeStatus(SUPER);
+		//else
+		//	changeStatus(SMALL);
 	}
 	else if (!oldKeys[Keyboard::SPACE] && keys[Keyboard::SPACE])
 	{
@@ -217,15 +236,22 @@ void Player::Draw(int flag)
 {
 	int fx = curFrame * frameWidth;
 	int fy = 0;
+	float extraX=0;
+	float extraY=0;
 	for(int i=0;i<2;i++)
 	{
 		b[i].Draw(map->xOff);
 	}
 	if (show)
 	{
+		if(pipeMoveState == DOWN)
+		{
+			extraY = pipeCounter;
+		}
+
 		if (dirX == -1)
 			flag = ALLEGRO_FLIP_HORIZONTAL;
-		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight, x - map->xOff, y, flag);
+		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight-extraY, x - map->xOff, y+extraY, flag);
 	}
 }
 
@@ -383,6 +409,15 @@ void Player::transformation()
 			}
 		}
 	}
+}
+
+void Player::pipeMove(int toX, int toY, PIPE_MOVE from)
+{
+	pipeMoveToX = toX;
+	pipeMoveToY = toY;
+	pipeMoveState = from;
+	Sound::play(Sound::PIPE);
+
 }
 
 void Player::collisionWithOther(BaseCharacter* character)
