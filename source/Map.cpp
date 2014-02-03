@@ -4,6 +4,7 @@
 #include <allegro5/allegro_native_dialog.h>
 #include "header/Keyboard.h"
 #include "header/Sound.h"
+#include "header/GlobalObjects.h"
 
 Map::Map(void)
 {
@@ -39,7 +40,7 @@ void Map::del()
 void Map::draw()
 {
 	MapUpdateAnims();
-	MapDrawBG(this->xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
+	MapDrawBG(xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
 }
 
 void Map::update(bool *keys)
@@ -153,7 +154,7 @@ int Map::outOfStage(int x, int y)
 	return 0;
 }
 
-int Map::destroyBrick(BaseCharacter* character)
+int Map::destroyBlock(BaseCharacter* character)
 {
 	int x = character->x + character->frameWidth / 2;
 	int y = character->y - 1;
@@ -165,10 +166,19 @@ int Map::destroyBrick(BaseCharacter* character)
 	blockdata = MapGetBlockInPixels(x, y);
 	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
 	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
-	if (blockdata->user1 == BRICK_ID && character->currentState != SMALL)  // brick
+	if (blockdata->user1 == BRICK_ID)  // brick
 	{
-		MapSetBlockInPixels(x, y, EMPTY_ID);
-		character->y -= 8; // a little bit more up
+		if (character->currentState != SMALL)
+		{
+			MapSetBlockInPixels(x, y, EMPTY_ID);
+			character->y -= 8; // a little bit more up
+			character->score += 50;
+			Sound::play(Sound::BREAK_BRICK);
+		}
+		else
+		{
+			simpleAnimation.Init(x / 16 * 16, y / 16 * 16, BRICK_ID);
+		}
 		return BRICK_ID;
 	}
 	if (blockdata->user1 == QUESTION_ID)
@@ -180,7 +190,7 @@ int Map::destroyBrick(BaseCharacter* character)
 
 		item->LeaveBox();
 		Sound::play(Sound::BUMP);
-		MapSetBlockInPixels(x, y, SOLID_ID);
+		simpleAnimation.Init(x / 16 * 16, y / 16 * 16, QUESTION_ID);
 		return QUESTION_ID;
 	}
 	return 0;

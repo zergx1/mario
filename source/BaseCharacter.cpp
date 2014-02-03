@@ -51,7 +51,7 @@ void BaseCharacter::collisionWithOther(BaseCharacter* character)
 
 }
 
-void BaseCharacter::takeItem()
+void BaseCharacter::takeItem(BaseCharacter* character)
 {
 
 }

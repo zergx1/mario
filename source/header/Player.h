@@ -43,6 +43,6 @@ public:
 	virtual void takeCoin();
 	virtual void pipeMove(int toX, int toY, PIPE_MOVE from);
 	virtual void collisionWithOther(BaseCharacter* character);
-	virtual void takeItem();
+	virtual void takeItem(BaseCharacter* character);
 };
 

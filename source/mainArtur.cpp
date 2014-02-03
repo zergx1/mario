@@ -106,8 +106,11 @@ int mainArtur(void)
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Update();
 				mario.Update(keyboard.keys);
-				if( map.item->live)
-					map.item->Update(&mario);
+				if (map.item->live)
+				{
+					map.item->Update();
+					map.item->collisionWithOther(&mario);
+				}
 				//f.Update();
 				//item.Update();
 			}
@@ -129,12 +132,12 @@ int mainArtur(void)
 				map.draw();
 				mario.Draw();
 				if( map.item->live)
-					map.item->Draw(map.xOff);
+					map.item->Draw();
 				//f.Draw();
-				//item.Draw(map.xOff);
+				//item.Draw(xOff);
 
 				for (int i = 0; i < numSprites; i++)
-					orbs[i].Draw(map.xOff);
+					orbs[i].Draw();
 			}
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

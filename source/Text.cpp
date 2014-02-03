@@ -46,6 +46,11 @@ void Text::draw()
 	al_draw_text(font, al_map_rgb(255, 255, 255), x += 80, row1, ALLEGRO_ALIGN_CENTRE, "TIME");
 	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, time);
 	
+	for (int i = 0; i < vecFloatingText.size(); i++)
+	{
+		FloatingTextStruct text = vecFloatingText[i];
+		al_draw_text(font, al_map_rgb(255, 255, 255), text.x - xOff, text.y, ALLEGRO_ALIGN_CENTRE,text.score);
+	}
 }
 
 void Text::update(BaseCharacter *character)
@@ -107,23 +112,43 @@ void Text::update(BaseCharacter *character)
 		counterTemp = 0;
 	}
 
+	// TIMER
 	if (counter == 10)
 		Sound::play(Sound::HURRY);
 	if (counter == 0)
 		character->Kill();
 
+	// FLOATING TEXT WITH SCORE
+	for (int i = 0; i < vecFloatingText.size(); i++)
+	{
+		FloatingTextStruct &text = vecFloatingText[i];
+		text.y -= 1;
+		text.counter--;
+		if (text.counter == 0 || text.y < 0)
+		{
+			vecFloatingText.erase(vecFloatingText.begin() + i);
+			i--;
+		}
+		
+	}
+
 }
 
 void Text::floatingScore(int x, int y, char *score)
 {
-	al_draw_text(font, al_map_rgb(255, 255, 255), x, y, ALLEGRO_ALIGN_CENTRE, score);
+	FloatingTextStruct text =
+	{
+		x, y, 60, score
+	};
+	vecFloatingText.push_back(text);
 }
 
 void Text::floatingScore(int x, int y, int score)
 {
 	int size = 1;
 	int divisor = 1;
-	while (score / divisor != 0)
+	
+	while (score / (10 * divisor) != 0)
 	{
 		divisor *= 10;
 		size++;

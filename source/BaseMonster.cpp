@@ -3,7 +3,6 @@
 #include <math.h>
 #include <iostream>
 
-
 int width = 320;
 int height = 240;
 
@@ -114,7 +113,7 @@ void BaseMonster::Update()
 }
 
 
-void BaseMonster::Draw(float xOff)
+void BaseMonster::Draw()
 {
 	
 	int fx = (curFrame % animationColumns) * frameWidth;
