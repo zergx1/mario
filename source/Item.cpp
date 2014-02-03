@@ -67,7 +67,7 @@ void Item::Init(TYPE t, float x1, float y1)
 
 }
 
-void Item::Update()
+void Item::Update(BaseCharacter* character)
 {
 	if(status == LEAVING)
 	{
@@ -96,7 +96,10 @@ void Item::Update()
 	if (!live || status != LEFT)	// trick do spadania 
 		return;
 	
-	if ((x <= 0 && dirX == -1) || (x >= width3 - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
+	if (x < 0 || y > height3)
+		live = false;
+
+	if ( (x >= width3 - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
 	{
 		dirX *= -1;
 		//animationDirection *= 1;
@@ -119,7 +122,7 @@ void Item::Update()
 	}
 	y += velY * dirY;
 
-
+	collisionWithOther(character);
 }
 
 void Item::LeaveBox()
@@ -128,7 +131,8 @@ void Item::LeaveBox()
 	show = true;
 	live = true;
 	status = LEAVING;
-	Sound::play(Sound::POWER_2xUP);
+	Sound::play(Sound::POWER_APPEARS);
+
 }
 
 void Item::Draw(float xOff)
@@ -170,4 +174,26 @@ void Item::Kill()
 
 }
 
+void Item::collisionWithOther(BaseCharacter* character)
+{
+	if (live)
+	{
+		float myXLEFT = x;
+		float myYTOP = y;
+		float myXRIGHT = x + frameWidth;
+		float myYBOTTOM = y + frameHeight;
 
+		float xLEFT = character->x;
+		float yTOP = character->y;
+		float xRIGHT = character->x + character->frameWidth;
+		float yBOTTOM = character->y + character->frameHeight;
+
+		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
+		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
+		if (horizontal && vertical && character->live)
+		{
+			character->takeItem();
+			live = false;
+		}
+	}
+}

@@ -21,11 +21,12 @@ public:
 	Item(void);
 	virtual void Init(TYPE t, float x, float y);
 	virtual void LeaveBox();
-	virtual void Update();
+	virtual void Update(BaseCharacter* character);
 	virtual void Draw(float xOff);
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
+	virtual void collisionWithOther(BaseCharacter* character);
 	~Item(void);
 };
 

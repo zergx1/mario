@@ -165,22 +165,23 @@ int Map::destroyBrick(BaseCharacter* character)
 	blockdata = MapGetBlockInPixels(x, y);
 	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
 	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
-	if (blockdata->user1 == 2 && character->currentState != SMALL)  // brick
+	if (blockdata->user1 == BRICK_ID && character->currentState != SMALL)  // brick
 	{
-		MapSetBlockInPixels(x, y, Map::EMPTY_ID);
-		return 1;
+		MapSetBlockInPixels(x, y, EMPTY_ID);
+		character->y -= 8; // a little bit more up
+		return BRICK_ID;
 	}
-	if (blockdata->user1 == 1)
+	if (blockdata->user1 == QUESTION_ID)
 	{
 		if(character->currentState == 0)
-			item->Init(MUSHROOM, x-8, y-16);
+			item->Init(MUSHROOM, x / 16 * 16, y-16);
 		else
-			item->Init(FLOWER, x-8, y-16);
+			item->Init(FLOWER, x / 16 * 16, y - 16);
 
 		item->LeaveBox();
 		Sound::play(Sound::BUMP);
-		MapSetBlockInPixels(x, y, Map::SOLID_ID);
-		return 1;
+		MapSetBlockInPixels(x, y, SOLID_ID);
+		return QUESTION_ID;
 	}
 	return 0;
 }
@@ -189,7 +190,8 @@ void Map::takeCoin(BaseCharacter* character, int x, int y)
 {
 	if (character->canTakeCoin)
 	{
-		MapSetBlock(x, y, Map::EMPTY_ID);
+		MapSetBlock(x, y, EMPTY_ID);
 		character->takeCoin();
+		
 	}
 }

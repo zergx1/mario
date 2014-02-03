@@ -91,21 +91,18 @@ void BaseMonster::Update()
 	if (!live)	// trick do spadania 
 		return;
 	
-	if ((x <= 0 && dirX == -1) || (x >= width - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
+	if (Map::collided(this, 'x'))
 	{
 		dirX *= -1;
-		//animationDirection *= 1;
 	}
 	else
 	{
 		x += velX * dirX;
 	}
 
-	if ((y >= height - frameHeight) || (Map::collided(this, 'y')))
+	if (Map::collided(this, 'y'))
 	{
 		velY = 0;
-		//velX = 1;
-		//animationDirection *= 1;
 	}
 	else
 	{
@@ -114,12 +111,12 @@ void BaseMonster::Update()
 	}
 	y += velY * dirY;
 
-
 }
 
 
 void BaseMonster::Draw(float xOff)
 {
+	
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
 	int flag = 0;
@@ -133,6 +130,10 @@ void BaseMonster::Draw(float xOff)
 		}
 		else
 			fy = fy - 8;
+	}
+	if (y > height || x < xOff)
+	{
+		live = false;	
 	}
 	if(show)
 	{

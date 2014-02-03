@@ -107,7 +107,7 @@ int mainArtur(void)
 					orbs[i].Update();
 				mario.Update(keyboard.keys);
 				if( map.item->live)
-					map.item->Update();
+					map.item->Update(&mario);
 				//f.Update();
 				//item.Update();
 			}

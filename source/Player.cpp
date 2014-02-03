@@ -40,6 +40,7 @@ void Player::Init(Map* map)
 	small_mario = al_load_bitmap("Sprites/small_mario.png");
 	big_mario = al_load_bitmap("Sprites/big_mario.png");
 	super_mario = al_load_bitmap("Sprites/super_mario.png");
+
 	al_convert_mask_to_alpha(small_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(big_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(super_mario, al_map_rgb(0, 0, 0));
@@ -64,6 +65,7 @@ void Player::Init(Map* map)
 	animationColumns = 4;
 	animationDirection = 1;
 	score = 0;
+	coins = 0;
 	b = new Bullet[2];
 
 	for(int i=0;i<2;i++)
@@ -191,7 +193,7 @@ void Player::Update(bool keys[])
 		//std::cout << "Start falling down\n";
 		velY = 0;
 		dirY = 1;
-		if (map->destroyBrick(this) == 1) // break brick
+		if (map->destroyBrick(this) == BRICK_ID) // break brick
 		{
 			Sound::play(Sound::BREAK_BRICK);
 			score += 100;	// add point
@@ -290,6 +292,8 @@ void Player::Kill()
 }
 void Player::changeStatus(int s)
 {
+	if (s < 0 || s > 2)
+		s = 0;
 	currentState = s;
 	blinking = true;
 	if (currentState == SMALL)
@@ -311,7 +315,7 @@ void Player::changeStatus(int s)
 		image = super_mario;
 		frameHeight = 32;
 		//y -= 16;
-		Sound::play(Sound::POWER_2xUP);
+		Sound::play(Sound::POWER_UP);
 	}
 }
 
@@ -332,8 +336,14 @@ void Player::animation()
 void Player::takeCoin()
 {
 	//std::cout << "Take coin \n";
-	score += 100;
+	coins++;
 	Sound::play(Sound::COIN);
+	if (coins == 100)
+	{
+		coins = 0;
+		lives++;
+		Sound::play(Sound::GAIN_LIFE);
+	}
 }
 
 void Player::transformation()
@@ -450,4 +460,13 @@ void Player::collisionWithOther(BaseCharacter* character)
 			}
 		}
 	}
+}
+
+void Player::takeItem()
+{
+	score += 1000;
+	if (currentState != 2)
+		changeStatus(++currentState);
+	else
+		Sound::play(Sound::POWER_UP);
 }

@@ -7,12 +7,13 @@
 
 class Item;
 
-class Map
-{
 	static const int BRICK_ID = 49;
 	static const int EMPTY_ID = 44;
+	static const int QUESTION_ID = 229;
 	static const int SOLID_ID = 12; //  after destroy quote block
 	static const int COIN_ID = 232;
+class Map
+{
 public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
@@ -33,6 +34,7 @@ public:
 	static int collided(BaseCharacter* character, char axis);
 	static int collided(int x, int y);
 	static int outOfStage(int x, int y);
+
 };
 
 #endif
