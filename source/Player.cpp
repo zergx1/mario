@@ -15,6 +15,8 @@ Player::~Player(void)
 void Player::Init(Map* map)
 {
 	BaseCharacter::Init();
+	name = new char[6];
+	name = "MARIO\0";
 	space_clicked = false;
 	currentState = SMALL;
 	blinking_time = 60;

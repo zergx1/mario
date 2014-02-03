@@ -1,8 +1,8 @@
 #include "header\Text.h"
-#include <stdlib.h>
+#include "header/Sound.h"
 #include <iostream>
-#include <string>
-using std::string;
+
+
 Text::Text(void)
 {
 }
@@ -16,6 +16,8 @@ void Text::init()
 	image = al_load_bitmap("Sprites/timer.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
+	counter = 30;	// time
+	counterTemp = 0;
 	startFrame = 0;
 	maxFrame = 2;
 	curFrame = 0;
@@ -31,7 +33,7 @@ void Text::draw()
 	int x = 0;
 	int row1 = 10;
 	int row2 = 25;
-	al_draw_text(font, al_map_rgb(255, 255, 255), x += 3 * 15, row1, ALLEGRO_ALIGN_CENTRE, "MARIO");
+	al_draw_text(font, al_map_rgb(255, 255, 255), x += 3 * 15, row1, ALLEGRO_ALIGN_CENTRE, name);
 	al_draw_text(font, al_map_rgb(255, 255, 255), 3 * 15, row2, ALLEGRO_ALIGN_CENTRE, score);
 
 	int fx = curFrame * frameWidth;
@@ -42,13 +44,16 @@ void Text::draw()
 	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, "1-1");
 
 	al_draw_text(font, al_map_rgb(255, 255, 255), x += 80, row1, ALLEGRO_ALIGN_CENTRE, "TIME");
-	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, "xxx");
+	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, time);
 	
 }
 
 void Text::update(BaseCharacter *character)
 {
-	// animation
+	// NAME
+	name = character->name;
+
+	// ANIMATION
 	if (++frameCount >= frameDelay)
 	{
 
@@ -58,8 +63,6 @@ void Text::update(BaseCharacter *character)
 
 		frameCount = 0;
 	}
-
-	string player = "MARIO";
 
 	// SCORE
 	int divisor = 100000;
@@ -71,6 +74,7 @@ void Text::update(BaseCharacter *character)
 			temp %= divisor;
 		divisor /= 10;
 	}
+	score[7] = '\0';	// end of array
 
 	// COINS
 	divisor = 10;
@@ -84,10 +88,29 @@ void Text::update(BaseCharacter *character)
 			temp %= divisor;
 		divisor /= 10;
 	}
-	/*std::string s = std::to_string(character->score);
-	strncpy(name, s.c_str(), sizeof(name));
-	name[sizeof(name)-1] = 0;*/
+	coin[3] = '\0';	// end of array
 
+	// TIMER
+	divisor = 100;
+	temp = counter;
+	for (int i = 0; i < 3; i++)
+	{
+		time[i] = (char)(temp / divisor) + 48;
+		if (temp / divisor != 0)
+			temp %= divisor;
+		divisor /= 10;
+	}
+	time[3] = '\0';	// end of array
+	if (++counterTemp == 60)
+	{
+		counter--;
+		counterTemp = 0;
+	}
+
+	if (counter == 10)
+		Sound::play(Sound::HURRY);
+	if (counter == 0)
+		character->Kill();
 
 }
 

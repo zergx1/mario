@@ -21,6 +21,7 @@ namespace Sound{
 		sounds[COIN].sample = al_load_sample("Audio/coin.ogg");
 		sounds[COIN].needSimultaneous = true;
 
+		sounds[HURRY].sample = al_load_sample("Audio/Hurry.ogg");
 		sounds[POWER_UP].sample = al_load_sample("Audio/Powerup.ogg");
 		sounds[POWER_DOWN].sample = al_load_sample("Audio/Power Down.ogg");
 		sounds[POWER_APPEARS].sample = al_load_sample("Audio/Powerup Appears.ogg");
