@@ -15,7 +15,11 @@
 int mainAdam(void)
 {
 	//variables
+	const int numSprites = 1;
+	BaseMonster orbs[numSprites];
+	Player mario;
 	Map map;
+	Menu menu;
 	Keyboard keyboard;
 	Text text;
 	bool done = false;
@@ -44,7 +48,6 @@ int mainAdam(void)
 		return -1;
 
 	//addon init
-	text.init();
 	keyboard.init(display);
 	al_init_image_addon();
 	al_install_audio();
@@ -52,20 +55,15 @@ int mainAdam(void)
 
 	al_reserve_samples(1);
 
-	const int numSprites = 1;
 
-	BaseMonster orbs[numSprites];
-	Player mario;
 	mario.Init(&map);
-	Menu menu;
+	text.init();
 	//menu.init();
 
 	if (map.init("Maps/test.fmp"))
 	{
 		return -5;
 	}
-	image = al_load_bitmap("Sprites/monster1.png");
-	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	for (int i = 0; i < numSprites; i++)
 		orbs[i].Init();
@@ -103,7 +101,7 @@ int mainAdam(void)
 				mario.Update(keyboard.keys);
 				
 				if (map.item->live)
-					map.item->Update();
+					map.item->Update(&mario);
 			//}
 			render = true;
 
@@ -138,7 +136,6 @@ int mainAdam(void)
 	map.del();
 	keyboard.del();
 
-	al_destroy_bitmap(image);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
 

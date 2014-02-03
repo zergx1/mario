@@ -34,5 +34,6 @@ public:
 	virtual void transformation();
 	virtual void takeCoin();
 	virtual void collisionWithOther(BaseCharacter* character);
+	virtual void takeItem();
 };
 

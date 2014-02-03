@@ -65,13 +65,14 @@ BLKSTR * MapGetBlock (int x, int y);
 void MapSetBlockInPixels (int x, int y, int blockid);
 void MapSetBlock (int x, int y, int blockid);
 int MapGetBlockID (int blockid, int userid);
-
+ANISTR * getAnim();
 /* All global variables used bt Mappy playback are here */
 extern int maperror;								/* Set to a MER_ error if something wrong happens */
 extern short int mapwidth, mapheight;				/* width/height in tiles */
 extern short int mapblockwidth, mapblockheight;	/* size in pixels of each tile */
 extern short int mapdepth;							/* colour depth of map - not necessarily the target bitmap */
 extern int mapblockgapx, mapblockgapy, mapblockstaggerx, mapblockstaggery; /* for computing offsets for block locations */
+
 /* End of Mappy globals */
 
 #define MER_NONE 0		/* All the horrible things that can go wrong */

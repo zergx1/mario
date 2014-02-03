@@ -32,6 +32,7 @@ public:
 	int animationColumns;
 	int animationDirection;
 	int score;
+	int coins;
 	int lives;
 	int currentState;
 
@@ -47,4 +48,5 @@ public:
 	virtual void KillByShot();
 	virtual void takeCoin();
 	virtual void collisionWithOther(BaseCharacter* character);
+	virtual void takeItem();
 };
