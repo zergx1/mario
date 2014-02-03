@@ -46,7 +46,7 @@ public:
 
 	BaseCharacter(void);
 	~BaseCharacter(void);
-	virtual void Init(Text *t);
+	virtual void Init();
 	virtual void Update();
 	virtual void Draw(int flag = 0);
 	virtual void Hit();
@@ -56,7 +56,5 @@ public:
 	virtual void collisionWithOther(BaseCharacter* character);
 	virtual void takeItem();
 
-	virtual void floatingScore(int x, int y, char *score);
-	virtual void floatingScore(int x, int y, int score);
 };
 #endif

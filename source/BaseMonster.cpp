@@ -15,9 +15,9 @@ BaseMonster::~BaseMonster(void)
 {
 }
 
-void BaseMonster::Init(Text *t)
+void BaseMonster::Init()
 {
-	BaseCharacter::Init(t);
+	BaseCharacter::Init();
 	live = true;
 	show = true;
 	killedByShot = false;

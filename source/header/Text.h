@@ -44,6 +44,8 @@ public:
 	void draw();
 	void init();
 	void update(BaseCharacter *character);
+	void Text::floatingScore(int x, int y, char *score);
+	void Text::floatingScore(int x, int y, int score);
 
 };
 
