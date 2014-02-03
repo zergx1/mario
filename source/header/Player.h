@@ -4,6 +4,8 @@
 #include "header/Keyboard.h"
 #include "header\Bullet.h"
 
+enum PIPE_MOVE{NONE, RIGHT, DOWN, UP};
+
 class Player: public BaseCharacter
 {
 private:
@@ -11,6 +13,12 @@ private:
 	Map* map;
 	bool jump;
 	bool invisible;
+
+	PIPE_MOVE pipeMoveState;
+	bool inPipeMove;
+	float pipeMoveToX;
+	float pipeMoveToY;
+	float pipeCounter; // for moving effect
 
 	ALLEGRO_BITMAP *small_mario;
 	ALLEGRO_BITMAP *big_mario;
@@ -33,6 +41,7 @@ public:
 	virtual void animation();
 	virtual void transformation();
 	virtual void takeCoin();
+	virtual void pipeMove(int toX, int toY, PIPE_MOVE from);
 	virtual void collisionWithOther(BaseCharacter* character);
 };
 

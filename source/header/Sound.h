@@ -9,7 +9,7 @@ struct SoundStructure {
 };
 
 namespace Sound{
-	enum SOUNDS{	JUMP, MARIO_DIE,
+	enum SOUNDS{	PIPE,JUMP, MARIO_DIE,
 					BREAK_BRICK, COIN, BUMP,
 					POWER_UP, POWER_DOWN, POWER_2xUP,
 					SIZE_OF_SOUNDS };	

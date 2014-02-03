@@ -19,6 +19,8 @@ namespace Sound{
 		sounds[POWER_UP].inst = al_create_sample_instance(al_load_sample("Audio/Powerup.ogg"));
 		sounds[POWER_DOWN].inst = al_create_sample_instance(al_load_sample("Audio/Power Down.ogg"));
 		sounds[POWER_2xUP].inst = al_create_sample_instance(al_load_sample("Audio/Powerup Appears.ogg"));
+		sounds[PIPE].inst = al_create_sample_instance(al_load_sample("Audio/Pipe.ogg"));
+
 		//sounds[].inst = al_create_sample_instance(al_load_sample("")); // example to adding 
 
 		for (int i = 0; i < SIZE_OF_SOUNDS; i++)
