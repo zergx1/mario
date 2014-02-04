@@ -13,8 +13,8 @@ class TurtleMonster :
 public:
 
 	TurtleMonster(void);
-	virtual void Init();
-	virtual void Init(TURTLE s);
+	virtual void Init(int x0 = 0, int y0 = 0);
+	virtual void Init(int x0, int y0, TURTLE s);
 	virtual void Draw();
 	virtual void Update();
 

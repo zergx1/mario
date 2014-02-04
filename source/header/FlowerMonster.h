@@ -8,7 +8,8 @@ class FlowerMonster :
 public:
 
 	FlowerMonster(void);
-	virtual void Init();
+	virtual void Init(int x0 = 0, int y0 = 0);
+
 	virtual void Draw();
 	virtual void Update();
 

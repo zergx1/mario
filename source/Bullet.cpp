@@ -8,7 +8,7 @@ Bullet::Bullet(void)
 {
 }
 
-void Bullet::Init()
+void Bullet::Init(int x0, int y0)
 {
 
 	live = false;

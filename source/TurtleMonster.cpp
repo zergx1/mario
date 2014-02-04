@@ -6,9 +6,9 @@ TurtleMonster::TurtleMonster(void)
 {
 }
 
-void TurtleMonster::Init()
+void TurtleMonster::Init(int x0, int y0)
 {
-	BaseMonster::Init();
+	BaseMonster::Init(x0, y0);
 	lives = 3;
 	type = NORMAL;
 	image = al_load_bitmap("Sprites/turtle_monster.png");
@@ -28,9 +28,9 @@ void TurtleMonster::Init()
 
 }
 
-void TurtleMonster::Init(TURTLE s)
+void TurtleMonster::Init(int x0, int y0, TURTLE s)
 {
-	Init();
+	Init(x0, y0);
 	type = s;
 	if(s == NORMAL)
 	{

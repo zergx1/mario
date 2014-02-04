@@ -4,9 +4,9 @@ FlowerMonster::FlowerMonster(void)
 {
 }
 
-void FlowerMonster::Init()
+void FlowerMonster::Init(int x0, int y0)
 {
-	BaseMonster::Init();
+	BaseMonster::Init(x0, y0);
 	image = al_load_bitmap("Sprites/flower_monster.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(238, 243, 250));
 	frameWidth = 32;

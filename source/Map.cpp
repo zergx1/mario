@@ -191,16 +191,16 @@ int Map::destroyBlock(BaseCharacter* character)
 		if(choice <= 5)
 		{
 			if(character->currentState == 0)
-				item->Init(MUSHROOM, x / 16 * 16, y-16);
+				item->Init(x / 16 * 16, y-16, MUSHROOM);
 			else
-				item->Init(FLOWER, x / 16 * 16, y - 16);
+				item->Init(x / 16 * 16, y - 16, FLOWER);
 		}
 		else if(choice > 5 && choice <= 8)
 		{
 			//coincs
 		}
 		else
-			item->Init(STAR, x / 16 * 16, y-16);
+			item->Init(x / 16 * 16, y-16, STAR);
 
 
 		item->LeaveBox();

@@ -19,7 +19,7 @@ public:
 	float startY;
 
 	Item(void);
-	virtual void Init(TYPE t, float x, float y);
+	virtual void Init(float x, float y, TYPE t);
 	virtual void LeaveBox();
 	virtual void Update();
 	virtual void Draw();
