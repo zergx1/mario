@@ -1,15 +1,11 @@
-#ifndef BASECHARACTER_H_INCLUDED
-#define BASECHARACTER_H_INCLUDED
 #pragma once
-#include "Text.h"
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_audio.h>
 #include <allegro5/allegro_acodec.h>
-
-class Text;
+#include "header/GlobalObjects.h"
 
 enum MARIO{ SMALL, BIG, SUPER };
 class BaseCharacter
@@ -39,7 +35,6 @@ public:
 	int coins;
 	int lives;
 	int currentState;
-	Text *text;
 
 	ALLEGRO_BITMAP *image;
 	ALLEGRO_SAMPLE *death_sound;
@@ -54,7 +49,6 @@ public:
 	virtual void KillByShot();
 	virtual void takeCoin();
 	virtual void collisionWithOther(BaseCharacter* character);
-	virtual void takeItem();
+	virtual void takeItem(BaseCharacter* character);
 
 };
-#endif

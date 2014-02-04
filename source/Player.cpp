@@ -93,6 +93,7 @@ void Player::Update(bool keys[])
 			pipeMoveState = NONE;
 			x = pipeMoveToX;
 			y = pipeMoveToY;
+			xOff = x;
 			pipeCounter = 0;
 		}
 		return;
@@ -102,7 +103,9 @@ void Player::Update(bool keys[])
 
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
-		pipeMove(x+50,y-50, DOWN);
+
+		pipeMove(200*16,y-50, DOWN);
+		
 		//if (currentState == SMALL)
 		//	changeStatus(BIG);
 		//else if (currentState == BIG)
@@ -110,31 +113,36 @@ void Player::Update(bool keys[])
 		//else
 		//	changeStatus(SMALL);
 	}
-	else if (!oldKeys[Keyboard::SPACE] && keys[Keyboard::SPACE])
+	if (currentState == SUPER && !oldKeys[Keyboard::SPACE] && keys[Keyboard::SPACE])
 	{
 		for(int i=0;i<2;i++)
 		{
-			if(image == super_mario)
-			{
 				if(!b[i].live && !b[i].show)
 				{
 					b[i].Shoot(x, y, dirX);
 					break;
 				}
-			}
 		}
 	}
+
+	if (keys[Keyboard::SPACE])
+	{
+		velX = 2;
+	}
+	else
+	{
+		velX = 1;
+	}
+
 	if (keys[Keyboard::LEFT])	// go to the left
 	{
 		dirX = -1;
-		velX = 1;
 	}
-	else if (keys[Keyboard::RIGHT]) // go to the right
+	if (keys[Keyboard::RIGHT]) // go to the right
 	{
 		dirX = 1;
-		velX = 1;
 	}
-	else if (keys[Keyboard::DOWN] && currentState != SMALL) // go to the down
+	if (keys[Keyboard::DOWN] && currentState != SMALL && velY == 0) // go to the down
 	{
 		//std::cout << "DOWN\n";
 		curFrame = 4;
@@ -164,12 +172,12 @@ void Player::Update(bool keys[])
 		}
 	}
 	
-	if ((keys[Keyboard::LEFT] || keys[Keyboard::RIGHT]) && !(Map::collided(this, 'x')) && x + 1 * dirX >= map->xOff) // horizontal moves
+	if ((keys[Keyboard::LEFT] || keys[Keyboard::RIGHT]) && !(Map::collided(this, 'x')) && x + 1 * dirX >= xOff) // horizontal moves
 	{
 		animation();
 		x += velX * dirX;
 
-		if (x - map->xOff > 16 * 8) // map moves
+		if (x - xOff > 16 * 8) // map moves
 			map->update(keys);
 	}
 	else
@@ -195,11 +203,9 @@ void Player::Update(bool keys[])
 		//std::cout << "Start falling down\n";
 		velY = 0;
 		dirY = 1;
-		if (map->destroyBrick(this) == BRICK_ID) // break brick
-		{
-			Sound::play(Sound::BREAK_BRICK);
-			score += 100;	// add point
-		}
+		
+		map->destroyBlock(this); 
+
 	}
 
 	if (!Map::collided(this, 'y'))
@@ -240,7 +246,7 @@ void Player::Draw(int flag)
 	float extraY=0;
 	for(int i=0;i<2;i++)
 	{
-		b[i].Draw(map->xOff);
+		b[i].Draw(xOff);
 	}
 	if (show)
 	{
@@ -251,7 +257,7 @@ void Player::Draw(int flag)
 
 		if (dirX == -1)
 			flag = ALLEGRO_FLIP_HORIZONTAL;
-		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight-extraY, x - map->xOff, y+extraY, flag);
+		al_draw_bitmap_region(image, fx, fy, frameWidth, frameHeight-extraY, x - xOff, y+extraY, flag);
 	}
 }
 
@@ -280,7 +286,7 @@ void Player::Kill()
 		else
 		{
 			changeStatus(SMALL);
-			x = map->xOff;
+			x = xOff;
 			y = 0;
 			live = true;
 			startFrame = 0;
@@ -445,6 +451,8 @@ void Player::collisionWithOther(BaseCharacter* character)
 			if (velY > 0 && this->live)
 			{
 				character->Kill();
+				score += character->score;
+				globalText.floatingScore(character->x, character->y, character->score);
 				velY = 2;
 				dirY = -1;
 			}
@@ -464,9 +472,10 @@ void Player::collisionWithOther(BaseCharacter* character)
 	}
 }
 
-void Player::takeItem()
+void Player::takeItem(BaseCharacter* character)
 {
-	score += 1000;
+	globalText.floatingScore(character->x, character->y, character->score);
+	score += character->score;
 	if (currentState != 2)
 		changeStatus(++currentState);
 	else

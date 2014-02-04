@@ -7,17 +7,11 @@
 
 class Item;
 
-	static const int BRICK_ID = 49;
-	static const int EMPTY_ID = 44;
-	static const int QUESTION_ID = 229;
-	static const int SOLID_ID = 12; //  after destroy quote block
-	static const int COIN_ID = 232;
 class Map
 {
 public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
-	int xOff;
 	
 public:
 	Map(void);
@@ -28,7 +22,7 @@ public:
 	void update(bool* keys);
 
 
-	int destroyBrick(BaseCharacter* character);
+	int destroyBlock(BaseCharacter* character);
 	Item *item;
 	static void takeCoin(BaseCharacter* character, int x, int y);
 	static int collided(BaseCharacter* character, char axis);

@@ -22,6 +22,7 @@ void Item::Init(TYPE t, float x1, float y1)
 	status = HIDDEN;
 	type = t;
 	exitSpeed = 0.1;
+	score = 1000;
 
 	//x = 1;
 	//x = 50;
@@ -67,7 +68,7 @@ void Item::Init(TYPE t, float x1, float y1)
 
 }
 
-void Item::Update(BaseCharacter* character)
+void Item::Update()
 {
 	if(status == LEAVING)
 	{
@@ -122,7 +123,6 @@ void Item::Update(BaseCharacter* character)
 	}
 	y += velY * dirY;
 
-	collisionWithOther(character);
 }
 
 void Item::LeaveBox()
@@ -135,7 +135,7 @@ void Item::LeaveBox()
 
 }
 
-void Item::Draw(float xOff)
+void Item::Draw()
 {
 	int fx = (curFrame % animationColumns) * frameWidth;
 	int fy = (curFrame / animationColumns) * frameHeight;
@@ -157,9 +157,11 @@ void Item::Hit()
 
 void Item::KillByShot()
 {
-	Kill();
-	lives = 0;
-
+	if (status != LEAVING)
+	{
+		dirX *= -1;
+		velY = -2;
+	}
 }
 
 void Item::Kill()
@@ -192,7 +194,7 @@ void Item::collisionWithOther(BaseCharacter* character)
 		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
 		if (horizontal && vertical && character->live)
 		{
-			character->takeItem();
+			character->takeItem(this);
 			live = false;
 		}
 	}

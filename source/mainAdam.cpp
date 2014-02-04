@@ -10,7 +10,8 @@
 #include "header/Map.h"
 #include "header/Keyboard.h"
 #include "header/Menu.h"
-#include "header\Text.h"
+#include "header/GlobalObjects.h"
+
 
 int mainAdam(void)
 {
@@ -21,12 +22,11 @@ int mainAdam(void)
 	Map map;
 	Menu menu;
 	Keyboard keyboard;
-	Text text;
 	bool done = false;
 	bool render = false;
 
-	int xOff = 0;
-	int yOff = 0;
+	//int xOff = 0;
+	//int yOff = 0;
 
 	//allegro variable
 	ALLEGRO_DISPLAY *display = NULL;
@@ -57,7 +57,7 @@ int mainAdam(void)
 
 
 	mario.Init(&map);
-	text.init();
+	globalText.init();
 	//menu.init();
 
 	if (map.init("Maps/test.fmp"))
@@ -97,11 +97,16 @@ int mainAdam(void)
 			for (int i = 0; i < numSprites; i++){
 					orbs[i].Update();
 					mario.collisionWithOther(&orbs[i]);
+					simpleAnimation.collisionWithOther(&orbs[i]);
 			}
 				mario.Update(keyboard.keys);
-				
+				simpleAnimation.Update();
 				if (map.item->live)
-					map.item->Update(&mario);
+				{
+					map.item->Update();
+					map.item->collisionWithOther(&mario);
+					simpleAnimation.collisionWithOther(map.item);
+				}
 			//}
 			render = true;
 
@@ -120,13 +125,14 @@ int mainAdam(void)
 			{*/
 
 				map.draw();
-				text.update(&mario);
-				text.draw();
+				globalText.update(&mario);
+				globalText.draw();
 				mario.Draw();
+				simpleAnimation.Draw();
 				if (map.item->live)
-					map.item->Draw(map.xOff);
+					map.item->Draw();
 				for (int i = 0; i < numSprites; i++)
-					orbs[i].Draw(map.xOff);
+					orbs[i].Draw();
 			//}
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

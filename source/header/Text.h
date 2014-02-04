@@ -1,14 +1,19 @@
-#ifndef TEXT_H_INCLUDED
-#define TEXT_H_INCLUDED
 #pragma once
 #include <allegro5/allegro.h>
 #include <allegro5/allegro_font.h>
 #include <allegro5/allegro_ttf.h>
 #include <allegro5/allegro_image.h>
 #include "BaseCharacter.h"
+#include <vector>
+
+using std::vector;
 
 class BaseCharacter;
 
+struct FloatingTextStruct{
+	int x, y, counter;
+	char * score;
+};
 class Text
 {
 private:
@@ -32,6 +37,8 @@ private:
 	char live;
 	char time[4];
 	char* level;
+	vector<FloatingTextStruct> vecFloatingText;
+
 public:
 	Text(void);
 	~Text(void);
@@ -48,6 +55,3 @@ public:
 	void Text::floatingScore(int x, int y, int score);
 
 };
-
-#endif
-
