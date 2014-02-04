@@ -6,6 +6,7 @@ Settings settings;
 Text globalText;	// TOP text - statistic
 int xOff;			//	xOFF for map
 
+
 // ID of the blocks
 const int BRICK_ID = 49;
 const int EMPTY_ID = 44;

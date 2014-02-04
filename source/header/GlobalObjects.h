@@ -5,6 +5,7 @@
 #include "SimpleAnimation.h"
 #include "Settings.h"
 
+
 class Settings;
 class Text;
 class SimpleAnimation;
