@@ -183,10 +183,11 @@ int Map::destroyBlock(BaseCharacter* character)
 	}
 	if (blockdata->user1 == QUESTION_ID)
 	{
-		if(character->currentState == 0)
-			item->Init(MUSHROOM, x / 16 * 16, y-16);
-		else
-			item->Init(FLOWER, x / 16 * 16, y - 16);
+		item->Init(STAR, x / 16 * 16, y-16);
+		//if(character->currentState == 0)
+		//	item->Init(MUSHROOM, x / 16 * 16, y-16);
+		//else
+		//	item->Init(FLOWER, x / 16 * 16, y - 16);
 
 		item->LeaveBox();
 		Sound::play(Sound::BUMP);

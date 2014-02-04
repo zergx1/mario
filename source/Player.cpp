@@ -27,6 +27,10 @@ void Player::Init(Map* map)
 	pipeMoveState = NONE;
 	pipeCounter = 0;
 
+	incerdible=false; //if mario took star
+	incerdileTime=900;
+	currentIncredibleTime=0;
+
 	this->map = map;
 	this->lives = 3;
 	this->x = 0;
@@ -43,10 +47,17 @@ void Player::Init(Map* map)
 	big_mario = al_load_bitmap("Sprites/big_mario.png");
 	super_mario = al_load_bitmap("Sprites/super_mario.png");
 
+	inc_small_mario = al_load_bitmap("Sprites/inv_small_mario.png");
+	inc_big_mario = al_load_bitmap("Sprites/inv_big_mario.png");
+	inc_super_mario = al_load_bitmap("Sprites/inv_super_mario.png");
+
 	al_convert_mask_to_alpha(small_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(big_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(super_mario, al_map_rgb(0, 0, 0));
 
+	al_convert_mask_to_alpha(inc_small_mario, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(inc_big_mario, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(inc_super_mario, al_map_rgb(0, 0, 0));
 	image = small_mario;
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
@@ -100,12 +111,12 @@ void Player::Update(bool keys[])
 
 	}
 
-
+	updateIncerdible();
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
 
-		pipeMove(200*16,y-50, DOWN);
-		
+		//pipeMove(200*16,y-50, DOWN);
+		setIncerdible();
 		//if (currentState == SMALL)
 		//	changeStatus(BIG);
 		//else if (currentState == BIG)
@@ -471,6 +482,55 @@ void Player::collisionWithOther(BaseCharacter* character)
 		}
 	}
 }
+
+void Player::setIncerdible()
+{
+	incerdible = true;
+	currentIncredibleTime = 0;
+	Sound::play(Sound::POWER_APPEARS);
+
+}
+
+void Player::updateIncerdible()
+{
+	ALLEGRO_BITMAP *norm;
+	ALLEGRO_BITMAP *inc;
+	if(incerdible && currentIncredibleTime++ < incerdileTime)
+	{
+		switch(currentState)
+		{
+		case SMALL:
+			norm = small_mario;
+			inc = inc_small_mario;
+			break;
+		case BIG:
+			norm = big_mario;
+			inc = inc_big_mario;
+			break;
+		case SUPER:
+			norm = super_mario;
+			inc = inc_super_mario;
+			break;
+		}
+		if(currentIncredibleTime % 10 == 0)
+		{
+			if(image == norm)
+				image = inc;
+			else
+				image = norm;
+		}
+		if(currentIncredibleTime+1 >= incerdileTime)
+		{
+			incerdible =  false;
+			image = norm;
+			currentIncredibleTime = 0;
+		}
+
+	}
+
+
+}
+
 
 void Player::takeItem(BaseCharacter* character)
 {

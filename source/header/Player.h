@@ -14,6 +14,10 @@ private:
 	bool jump;
 	bool invisible;
 
+	bool incerdible; //if mario took star
+	int incerdileTime;
+	int currentIncredibleTime;
+
 	PIPE_MOVE pipeMoveState;
 	bool inPipeMove;
 	float pipeMoveToX;
@@ -23,6 +27,10 @@ private:
 	ALLEGRO_BITMAP *small_mario;
 	ALLEGRO_BITMAP *big_mario;
 	ALLEGRO_BITMAP *super_mario;
+
+	ALLEGRO_BITMAP *inc_small_mario;
+	ALLEGRO_BITMAP *inc_big_mario;
+	ALLEGRO_BITMAP *inc_super_mario;
 
 	int blinking_time;
 	int current_blinking_time;
@@ -40,6 +48,9 @@ public:
 	virtual void Kill();
 	virtual void animation();
 	virtual void transformation();
+	virtual void setIncerdible();
+	virtual void updateIncerdible();
+		
 	virtual void takeCoin();
 	virtual void pipeMove(int toX, int toY, PIPE_MOVE from);
 	virtual void collisionWithOther(BaseCharacter* character);

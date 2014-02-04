@@ -12,6 +12,7 @@
 #include "header/Menu.h"
 #include "header/FlowerMonster.h"
 #include "header/Text.h"
+#include "header\GlobalObjects.h"
 
 int mainArtur(void)
 {

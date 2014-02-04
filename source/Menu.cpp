@@ -10,7 +10,7 @@ void Menu::init()
 {
 
 	//state = MENU;
-	state = INFO;
+	state = GAME;
 	ALLEGRO_BITMAP *title = NULL;
 	title = al_load_bitmap("menu.png");
 
