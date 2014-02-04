@@ -23,7 +23,6 @@ int mainArtur(void)
 	bool done = false;
 	bool render = false;
 	settings.init();
-	std::cout<<settings.options["gravity"];
 
 	int xOff = 0;
 	int yOff = 0;

@@ -8,12 +8,14 @@ BaseCharacter::~BaseCharacter(void)
 {
 }
 
-void BaseCharacter::Init()
+void BaseCharacter::Init(int x0, int y0)
 {
 	live = true;
 	show = true;
 	canTakeCoin = false;
 	killsOtherMonsters = false;
+	x = x0;
+	y = y0;
 }
 
 void BaseCharacter::Update()

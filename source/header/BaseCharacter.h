@@ -42,7 +42,7 @@ public:
 
 	BaseCharacter(void);
 	~BaseCharacter(void);
-	virtual void Init();
+	virtual void Init(int x0 = 0, int y0 = 0);
 	virtual void Update();
 	virtual void Draw(int flag = 0);
 	virtual void Hit();

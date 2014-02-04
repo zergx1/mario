@@ -14,9 +14,9 @@ Item::~Item(void)
 {
 }
 
-void Item::Init(TYPE t, float x1, float y1)
+void Item::Init(float x1, float y1, TYPE t)
 {
-	BaseCharacter::Init();
+	BaseCharacter::Init(x1, y1);
 	live = false;
 	show = false;
 	status = HIDDEN;

@@ -26,7 +26,7 @@ class BaseMonster: public BaseCharacter
 		ALLEGRO_BITMAP *image;
 		ALLEGRO_SAMPLE *death_sound;
 		BaseMonster(void);
-		virtual void Init();
+		virtual void Init(int x0 = 0, int y0 = 0);
 		virtual void Update();
 		virtual void Draw();
 		virtual void Hit();
