@@ -3,7 +3,7 @@
 #include "lib/mappy_A5.h"
 #include "BaseCharacter.h"
 class BaseCharacter;
-class SimpleAnimation
+class BumpingBlockAnimation
 {
 private:
 	int x;
@@ -12,14 +12,15 @@ private:
 	int dirY;
 	int animationDuration;
 	int type;
-	bool active;
+	int background;
 	ALLEGRO_BITMAP *image;
 public:
-	SimpleAnimation(void);
-	virtual void Init(int x, int y, int type);
+	bool active;
+	BumpingBlockAnimation(void);
+	virtual void Init(int x, int y, BLKSTR *blockdata);
 	virtual void Update();
 	virtual void Draw();
 	virtual void collisionWithOther(BaseCharacter* character);
-	~SimpleAnimation(void);
+	~BumpingBlockAnimation(void);
 };
 

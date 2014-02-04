@@ -1,10 +1,10 @@
-#include "header\SimpleAnimation.h"
+#include "header\BumpingBlockAnimation.h"
 
-SimpleAnimation::SimpleAnimation(void)
+BumpingBlockAnimation::BumpingBlockAnimation(void)
 {
 }
 
-void SimpleAnimation::Init(int x, int y, int type)
+void BumpingBlockAnimation::Init(int x, int y, BLKSTR *blockdata)
 {
 	this->active = true;
 	this->x = x;
@@ -12,15 +12,19 @@ void SimpleAnimation::Init(int x, int y, int type)
 	this->yOffset = y - 8;
 	this->dirY = -1;
 	this->animationDuration = 1;
-	this->type = type;
+	this->type = blockdata->user1;
+	this->background = blockdata->user2;
 	if (type == BRICK_ID)
 		this->image = al_load_bitmap("Sprites/brick.png");
+	else if (type == BRICK_DARK_ID)
+		this->image = al_load_bitmap("Sprites/brick_dark.png");
 	else if (type == QUESTION_ID)
 		this->image = al_load_bitmap("Sprites/solid.png");
-	MapSetBlockInPixels(x, y, EMPTY_ID);
+
+	MapSetBlockInPixels(x, y, background);
 }
 
-void SimpleAnimation::Update()
+void BumpingBlockAnimation::Update()
 {
 	if (active)
 	{
@@ -30,6 +34,8 @@ void SimpleAnimation::Update()
 			active = false;
 			if (type == BRICK_ID)
 				MapSetBlockInPixels(x, y, BRICK_ID);
+			else if (type == BRICK_DARK_ID)
+				MapSetBlockInPixels(x, y, BRICK_DARK_ID);
 			else if (type == QUESTION_ID)
 				MapSetBlockInPixels(x, y, SOLID_ID);
 		}
@@ -38,7 +44,7 @@ void SimpleAnimation::Update()
 	}
 }
 
-void SimpleAnimation::Draw()
+void BumpingBlockAnimation::Draw()
 {
 	if (active)
 	{
@@ -47,11 +53,11 @@ void SimpleAnimation::Draw()
 	
 }
 
-SimpleAnimation::~SimpleAnimation(void)
+BumpingBlockAnimation::~BumpingBlockAnimation(void)
 {
 }
 
-void SimpleAnimation::collisionWithOther(BaseCharacter* character)
+void BumpingBlockAnimation::collisionWithOther(BaseCharacter* character)
 {
 	if (active)
 	{

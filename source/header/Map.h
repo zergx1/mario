@@ -12,6 +12,7 @@ class Map
 public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
+	Item *item;
 	
 public:
 	Map(void);
@@ -20,11 +21,9 @@ public:
 	void del();
 	void draw();
 	void update(bool* keys);
-
-
 	int destroyBlock(BaseCharacter* character);
-	Item *item;
-	static void takeCoin(BaseCharacter* character, int x, int y);
+	void cleanInactiveAnim();
+	static void takeCoin(BaseCharacter* character, int x, int y, int background);
 	static int collided(BaseCharacter* character, char axis);
 	static int collided(int x, int y);
 	static int outOfStage(int x, int y);

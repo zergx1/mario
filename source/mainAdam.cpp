@@ -97,15 +97,20 @@ int mainAdam(void)
 			for (int i = 0; i < numSprites; i++){
 					orbs[i].Update();
 					mario.collisionWithOther(&orbs[i]);
-					simpleAnimation.collisionWithOther(&orbs[i]);
+					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+						bumpingBlockAnimation[v].collisionWithOther(&orbs[i]);
 			}
 				mario.Update(keyboard.keys);
-				simpleAnimation.Update();
+				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+					bumpingBlockAnimation[v].Update();
+				for (int v = 0; v < destroyBrickAnimation.size(); v++)
+					destroyBrickAnimation[v].Update();
 				if (map.item->live)
 				{
 					map.item->Update();
 					map.item->collisionWithOther(&mario);
-					simpleAnimation.collisionWithOther(map.item);
+					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+						bumpingBlockAnimation[v].collisionWithOther(map.item);
 				}
 			//}
 			render = true;
@@ -127,8 +132,11 @@ int mainAdam(void)
 				map.draw();
 				globalText.update(&mario);
 				globalText.draw();
-				mario.Draw();
-				simpleAnimation.Draw();
+				mario.Draw(); 
+				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+					bumpingBlockAnimation[v].Draw();
+				for (int v = 0; v < destroyBrickAnimation.size(); v++)
+					destroyBrickAnimation[v].Draw();
 				if (map.item->live)
 					map.item->Draw();
 				for (int i = 0; i < numSprites; i++)

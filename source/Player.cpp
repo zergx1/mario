@@ -103,8 +103,7 @@ void Player::Update(bool keys[])
 
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
-
-		pipeMove(200*16,y-50, DOWN);
+		pipeMove(201*16,y-50, DOWN);
 		
 		//if (currentState == SMALL)
 		//	changeStatus(BIG);
@@ -158,7 +157,9 @@ void Player::Update(bool keys[])
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		velY = 4.8;
+		
+		velY = keys[Keyboard::SPACE] ? superVel0 : normalVel0;
+		std::cout << "vel = " << velY << "\n";
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{

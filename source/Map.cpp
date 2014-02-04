@@ -76,9 +76,9 @@ int Map::collided(BaseCharacter* character, char axis)
 			blockdata = MapGetBlock(x, yBOTTOM);
 			blockdata2 = MapGetBlock(x, yTOP);
 			if (blockdata->user1 == COIN_ID)
-				takeCoin(character, x, yBOTTOM);
+				takeCoin(character, x, yBOTTOM, blockdata->user2);
 			if (blockdata2->user1 == COIN_ID)
-				takeCoin(character, x, yTOP);
+				takeCoin(character, x, yTOP, blockdata2->user2);
 			bool collided = (blockdata->tl || blockdata2->tl);
 			int characterX = character->x + character->dirX * character->velX;
 			if (collided == 1 && (characterX % 16 != 0))
@@ -110,9 +110,9 @@ int Map::collided(BaseCharacter* character, char axis)
 			blockdata = MapGetBlock(xLEFT, y);
 			blockdata2 = MapGetBlock(xRIGHT, y);
 			if (blockdata->user1 == COIN_ID)
-				takeCoin(character, xLEFT, y);
+				takeCoin(character, xLEFT, y, blockdata->user2);
 			if (blockdata2->user1 == COIN_ID)
-				takeCoin(character, xRIGHT, y);
+				takeCoin(character, xRIGHT, y, blockdata2->user2);
 			bool collided = blockdata->tl || blockdata2->tl;
 			int characterY = character->y + character->dirY * character->velY;
 		
@@ -166,19 +166,28 @@ int Map::destroyBlock(BaseCharacter* character)
 	blockdata = MapGetBlockInPixels(x, y);
 	// character->y - 1 because this function is calling when mario reach the highest point and start falling down
 	// alse he is adjusted to the bottom line of the block, so we need to check one block higher then mario is.
-	if (blockdata->user1 == BRICK_ID)  // brick
+	if (blockdata->user1 == BRICK_ID || blockdata->user1 == BRICK_DARK_ID)  // brick
 	{
+		character->y -= 8; // a little bit more up
 		if (character->currentState != SMALL)
 		{
-			MapSetBlockInPixels(x, y, EMPTY_ID);
-			character->y -= 8; // a little bit more up
+			DestroyBrickAnimation anim;
+			anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
+			destroyBrickAnimation.push_back(anim);
+			MapSetBlockInPixels(x, y, blockdata->user2);	// color of background
 			character->score += 50;
 			Sound::play(Sound::BREAK_BRICK);
 		}
 		else
 		{
-			simpleAnimation.Init(x / 16 * 16, y / 16 * 16, BRICK_ID);
+			Sound::play(Sound::BUMP);
+			BumpingBlockAnimation anim;
+			anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
+			bumpingBlockAnimation.push_back(anim);
 		}
+
+		cleanInactiveAnim();
+		
 		return BRICK_ID;
 	}
 	if (blockdata->user1 == QUESTION_ID)
@@ -190,18 +199,40 @@ int Map::destroyBlock(BaseCharacter* character)
 
 		item->LeaveBox();
 		Sound::play(Sound::BUMP);
-		simpleAnimation.Init(x / 16 * 16, y / 16 * 16, QUESTION_ID);
+		BumpingBlockAnimation anim;
+		anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
+		bumpingBlockAnimation.push_back(anim);
 		return QUESTION_ID;
 	}
 	return 0;
 }
 
-void Map::takeCoin(BaseCharacter* character, int x, int y)
+void Map::takeCoin(BaseCharacter* character, int x, int y, int background)
 {
 	if (character->canTakeCoin)
 	{
-		MapSetBlock(x, y, EMPTY_ID);
+		MapSetBlock(x, y, background);
 		character->takeCoin();
 		
+	}
+}
+
+void Map::cleanInactiveAnim()
+{
+	for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+	{
+		if (!bumpingBlockAnimation[v].active)
+		{
+			bumpingBlockAnimation.erase(bumpingBlockAnimation.begin() + v);
+			v--;
+		}
+	}
+	for (int v = 0; v < destroyBrickAnimation.size(); v++)
+	{
+		if (!destroyBrickAnimation[v].active)
+		{
+			destroyBrickAnimation.erase(destroyBrickAnimation.begin() + v);
+			v--;
+		}
 	}
 }
