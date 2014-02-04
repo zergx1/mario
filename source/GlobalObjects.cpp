@@ -11,6 +11,7 @@ const int superJump = 5;
 float normalVel0 = sqrt(normalJump * 16 * 2 * 0.16);
 float superVel0 = sqrt(superJump * 16 * 2 * 0.16);
 
+
 // ID of the blocks
 const int BRICK_ID = 49;
 const int BRICK_DARK_ID = 51;
