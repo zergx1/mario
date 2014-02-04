@@ -54,7 +54,7 @@ int mainArtur(void)
 
 	const int numSprites = 1;
 
-	BaseMonster orbs[numSprites];
+	TurtleMonster orbs[numSprites];
 	Player mario;
 	mario.Init(&map);
 	Menu menu;
@@ -74,7 +74,7 @@ int mainArtur(void)
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init();
+		orbs[i].Init(SMART);
 
 
 	event_queue = al_create_event_queue();
@@ -118,7 +118,11 @@ int mainArtur(void)
 			else
 			{
 				for (int i = 0; i < numSprites; i++)
+				{
 					orbs[i].Update();
+					mario.collisionWithOther(&orbs[i]);
+					simpleAnimation.collisionWithOther(&orbs[i]);
+				}
 				mario.Update(keyboard.keys);
 				if (map.item->live)
 				{

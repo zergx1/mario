@@ -29,7 +29,10 @@ int Map::init(char *path)
 	}
 	xOff = 0;
 	item = new Item();
+	srand(time(0));  
+
 	return status;
+
 }
 
 void Map::del()
@@ -54,12 +57,12 @@ void Map::update(bool *keys)
 
 }
 
-int Map::collided(BaseCharacter* character, char axis)
+int Map::collided(BaseCharacter* character, char axis, int extraX, int extraY)
 {
 	BLKSTR *blockdata;
 	BLKSTR *blockdata2;
-	float x = character->x;
-	float y = character->y;
+	float x = character->x + extraX*character->dirX;
+	float y = character->y + extraY;
 	
 	if (axis == 'x')
 	{
@@ -183,11 +186,22 @@ int Map::destroyBlock(BaseCharacter* character)
 	}
 	if (blockdata->user1 == QUESTION_ID)
 	{
-		item->Init(STAR, x / 16 * 16, y-16);
-		//if(character->currentState == 0)
-		//	item->Init(MUSHROOM, x / 16 * 16, y-16);
-		//else
-		//	item->Init(FLOWER, x / 16 * 16, y - 16);
+		int choice;
+		choice = rand() % 11;
+		if(choice <= 5)
+		{
+			if(character->currentState == 0)
+				item->Init(MUSHROOM, x / 16 * 16, y-16);
+			else
+				item->Init(FLOWER, x / 16 * 16, y - 16);
+		}
+		else if(choice > 5 && choice <= 8)
+		{
+			//coincs
+		}
+		else
+			item->Init(STAR, x / 16 * 16, y-16);
+
 
 		item->LeaveBox();
 		Sound::play(Sound::BUMP);

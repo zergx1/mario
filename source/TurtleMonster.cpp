@@ -1,5 +1,6 @@
 #include "header/TurtleMonster.h"
-
+#include "header/Map.h"
+#include <iostream>
 
 TurtleMonster::TurtleMonster(void)
 {
@@ -9,7 +10,9 @@ void TurtleMonster::Init()
 {
 	BaseMonster::Init();
 	lives = 3;
+	type = NORMAL;
 	image = al_load_bitmap("Sprites/turtle_monster.png");
+
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 	startFrame = 0;
 	maxFrame = 2;
@@ -22,6 +25,23 @@ void TurtleMonster::Init()
 	animationDirection = 1;
 	timeToReborn = 200;
 	currentTimeToReborn = 0;
+
+}
+
+void TurtleMonster::Init(TURTLE s)
+{
+	Init();
+	type = s;
+	if(s == NORMAL)
+	{
+		image = al_load_bitmap("Sprites/turtle_monster.png");
+	}
+	else
+	{
+		image = al_load_bitmap("Sprites/smart_turtle_monster.png");
+
+	}
+	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 }
 
@@ -51,6 +71,7 @@ void TurtleMonster::Hit()
 
 void TurtleMonster::Kill()
 {
+	std::cout<<"kill";
 
 	live = false;
 	velX = 0;
@@ -87,7 +108,7 @@ void TurtleMonster::Draw()
 			flag = ALLEGRO_FLIP_HORIZONTAL;
 
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x, y, flag);
+			frameHeight, (int)x - xOff, y, flag);
 	}
 }
 
@@ -99,6 +120,19 @@ void TurtleMonster::KillByShot()
 
 
 }
+
+void TurtleMonster::Update()
+{
+	BaseMonster::Update();
+	if(type == SMART && lives == 3)
+	{
+		if (!Map::collided(this, 'y', frameWidth) )
+		{
+			dirX *= -1;
+		}
+	}
+}
+
 
 void TurtleMonster::revive()
 {

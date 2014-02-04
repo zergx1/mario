@@ -461,7 +461,7 @@ void Player::collisionWithOther(BaseCharacter* character)
 		{
 			if (velY > 0 && this->live)
 			{
-				character->Kill();
+				character->Hit();
 				score += character->score;
 				globalText.floatingScore(character->x, character->y, character->score);
 				velY = 2;
