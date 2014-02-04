@@ -46,12 +46,10 @@ void Map::draw()
 	MapDrawBG(xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
 }
 
-void Map::update(bool *keys)
+void Map::update(int x)
 {
-	xOff += keys[Keyboard::RIGHT];
+	xOff += x;
 
-	if (xOff < 0)
-		xOff = 0;
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
 		xOff = mapwidth*mapblockwidth - disp_data.width;
 

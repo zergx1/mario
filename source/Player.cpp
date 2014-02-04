@@ -24,6 +24,9 @@ void Player::Init(Map* map)
 	blinking = false;
 	invisible = false;
 
+	normalVel0 = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
+	superVel0 = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);
+
 	pipeMoveState = NONE;
 	pipeCounter = 0;
 
@@ -168,7 +171,7 @@ void Player::Update(bool keys[])
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		velY = 4.8;
+		velY = keys[Keyboard::SPACE] ? superVel0 : normalVel0;
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{
@@ -188,7 +191,7 @@ void Player::Update(bool keys[])
 		x += velX * dirX;
 
 		if (x - xOff > 16 * 8) // map moves
-			map->update(keys);
+			map->update(velX);
 	}
 	else
 	{
@@ -504,8 +507,8 @@ void Player::setIncerdible()
 
 void Player::updateIncerdible()
 {
-	ALLEGRO_BITMAP *norm;
-	ALLEGRO_BITMAP *inc;
+	ALLEGRO_BITMAP *norm = NULL;
+	ALLEGRO_BITMAP *inc = NULL;
 	if(incerdible && currentIncredibleTime++ < incerdileTime)
 	{
 		switch(currentState)

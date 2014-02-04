@@ -24,7 +24,7 @@ int mainAdam(void)
 	Keyboard keyboard;
 	bool done = false;
 	bool render = false;
-
+	settings.init();
 	//int xOff = 0;
 	//int yOff = 0;
 

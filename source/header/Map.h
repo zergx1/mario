@@ -20,7 +20,7 @@ public:
 	int init(char *path);
 	void del();
 	void draw();
-	void update(bool* keys);
+	void update(int x);
 	int destroyBlock(BaseCharacter* character);
 	void cleanInactiveAnim();
 	static void takeCoin(BaseCharacter* character, int x, int y, int background);

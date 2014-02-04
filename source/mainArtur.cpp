@@ -129,7 +129,8 @@ int mainArtur(void)
 				{
 					orbs[i].Update();
 					mario.collisionWithOther(&orbs[i]);
-					simpleAnimation.collisionWithOther(&orbs[i]);
+					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+						bumpingBlockAnimation[v].collisionWithOther(&orbs[i]);
 					for(int j=0;j< numSprites; j++)
 					{
 						if(i == j)
@@ -138,10 +139,16 @@ int mainArtur(void)
 					}
 				}
 				mario.Update(keyboard.keys);
+				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+					bumpingBlockAnimation[v].Update();
+				for (int v = 0; v < destroyBrickAnimation.size(); v++)
+					destroyBrickAnimation[v].Update();
 				if (map.item->live)
 				{
 					map.item->Update();
 					map.item->collisionWithOther(&mario);
+					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+						bumpingBlockAnimation[v].collisionWithOther(map.item);
 				}
 				//f.Update();
 				//item.Update();

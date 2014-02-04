@@ -6,11 +6,10 @@ vector<BumpingBlockAnimation> bumpingBlockAnimation; // simple animation which w
 vector<DestroyBrickAnimation> destroyBrickAnimation;
 Text globalText;	// TOP text - statistic
 int xOff;			//	xOFF for map
-const int normalJump = 4;
-const int superJump = 5;
-float normalVel0 = sqrt(normalJump * 16 * 2 * 0.16);
-float superVel0 = sqrt(superJump * 16 * 2 * 0.16);
+Settings settings;
 
+float normalVel0;	// = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
+float superVel0;	// = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);
 
 // ID of the blocks
 const int BRICK_ID = 49;
