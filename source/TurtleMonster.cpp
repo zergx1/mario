@@ -56,6 +56,10 @@ void TurtleMonster::Hit()
 		maxFrame = 6;
 		frameDelay = 5;
 		velX = 3;
+		frameHeight = 16;
+		killsOtherMonsters = true;
+		//y += 16;
+
 		//curFrame = 3;
 		//live = true;
 	}
@@ -65,13 +69,13 @@ void TurtleMonster::Hit()
 		startFrame = 3;
 		maxFrame = 6;
 		curFrame = 3;
+		frameHeight = 16;
 	}
 
 }
 
 void TurtleMonster::Kill()
 {
-	std::cout<<"kill";
 
 	live = false;
 	velX = 0;
@@ -99,8 +103,11 @@ void TurtleMonster::Draw()
 			flag = ALLEGRO_FLIP_VERTICAL;
 			deathJumpY -= fallingSpeedFactor;
 		}
-		else
-			fy = fy - 16;
+		//else
+		//{
+		//	fy = fy - 16;
+		//	y += 16;
+		//}
 	}
 	if(show)
 	{
@@ -142,6 +149,28 @@ void TurtleMonster::revive()
 	maxFrame = 2;
 	curFrame = 0;
 	currentTimeToReborn = 0;
+	y -= 16;
+	frameHeight = 32;
+	killsOtherMonsters = false;
+
+}
+
+bool TurtleMonster::CheckIfKillPlayer(BaseCharacter* character)
+{
+	if(lives == 2)
+	{
+		lives = 1;
+		dirX = character->dirX;
+		startFrame = 3;
+		maxFrame = 6;
+		frameDelay = 5;
+		velX = 3;
+		frameHeight = 16;
+		//y -= 16;
+
+		return false;
+	}
+	return true;
 }
 
 TurtleMonster::~TurtleMonster(void)

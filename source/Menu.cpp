@@ -17,14 +17,17 @@ void Menu::init()
 	ALLEGRO_BITMAP *bgImage = NULL;
 	ALLEGRO_BITMAP *mgImage = NULL;
 	ALLEGRO_BITMAP *fgImage = NULL;
+
 	current = 0;
 	currentInfoTime = 0;
 	infoTime = 2000;
 	down_clicked = false;
 	up_clicked = false;
+	p_clicked = false;
 	bgImage = al_load_bitmap("background.png");
 	mgImage = al_load_bitmap("starMG.png");
 	fgImage = al_load_bitmap("menu.png");
+
 	ALLEGRO_DISPLAY_MODE   disp_data;
 	al_get_display_mode(0, &disp_data);
 	int h = al_get_bitmap_height(bgImage);
@@ -34,13 +37,16 @@ void Menu::init()
 	Background BG, MG, FG;
 	M.init(0, disp_data.height - h-mh, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
 	B.init(0, disp_data.height - h, 0, 0, disp_data.width, disp_data.height, -1, 1, bgImage);
-
+	//pause_bg.init(0, 
 	menu1 = al_load_bitmap("menu.png");
 	menu2 = al_load_bitmap("menu2.png");
 	menu3 = al_load_bitmap("menu3.png");
+	pause_img = al_load_bitmap("pause.png");
+
 	al_convert_mask_to_alpha(menu1, al_map_rgb(40, 123, 241));
 	al_convert_mask_to_alpha(menu2, al_map_rgb(40, 123, 241));
 	al_convert_mask_to_alpha(menu3, al_map_rgb(40, 123, 241));
+	al_convert_mask_to_alpha(pause_img, al_map_rgb(40, 123, 241));
 
 	//G.init(0, 0, 5, 0, 800, 600, -1, 1, fgImage);
 	image = menu1;
@@ -64,7 +70,6 @@ void Menu::setState(int state)
 
 void Menu::update(bool *keys)
 {
-
 	if(keys[Keyboard::DOWN])
 	{
 		down_clicked = true;
@@ -121,26 +126,58 @@ void Menu::update(bool *keys)
 
 void Menu::updateBackgrounds()
 {
-	M.UpdateBackground();
-
-	B.UpdateBackground();
+	if(state == MENU)
+	{
+		M.UpdateBackground();
+		B.UpdateBackground();
+	}
 		//G.UpdateBackground();
 
 }
 
 void Menu::drawBackgrounds()
 {
-	M.DrawBackground();
-	B.DrawBackground();
-	ALLEGRO_DISPLAY_MODE   disp_data;
-	al_get_display_mode(1, &disp_data);
-	int h = al_get_bitmap_height(image);
-	int w = al_get_bitmap_width(image);
+	if(state == MENU)
+	{
+		M.DrawBackground();
+		B.DrawBackground();
+	}
+	if(state == MENU || state == PAUSE)
+	{
+		ALLEGRO_BITMAP *tmp;
+		if(state == MENU)
+			tmp = image;
+		else
+			tmp = pause_img;
 
-	al_get_display_mode(1, &disp_data);
-	al_draw_bitmap(image, disp_data.width/2-w/2, disp_data.height/2-h/2, 0);
+		ALLEGRO_DISPLAY_MODE   disp_data;
+		al_get_display_mode(1, &disp_data);
+		int h = al_get_bitmap_height(tmp);
+		int w = al_get_bitmap_width(tmp);
+
+		al_get_display_mode(1, &disp_data);
+		al_draw_bitmap(tmp, disp_data.width/2-w/2, disp_data.height/2-h/2, 0);
+	}
+
 
 	//G.DrawBackground();
+}
+void Menu::checkIfPaused(bool *keys)
+{
+	if(keys[Keyboard::P])
+	{
+		p_clicked = true;
+	}
+	else if(!keys[Keyboard::P] && p_clicked)
+	{
+
+		if(state == PAUSE)
+			state = GAME;
+		else if(state == GAME)
+			state = PAUSE;
+		p_clicked = false;
+		//state = GAME;
+	}
 }
 
 void Menu::drawInfo(Player p)
@@ -149,6 +186,12 @@ void Menu::drawInfo(Player p)
 	
 
 }
+
+void Menu::drawPaused()
+{
+
+}
+
 
 Menu::~Menu(void)
 {

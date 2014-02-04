@@ -22,6 +22,7 @@ public:
 	virtual void Kill();
 	virtual void KillByShot();
 	void revive();
+	virtual bool CheckIfKillPlayer(BaseCharacter* character);
 
 	TURTLE type;
 	int timeToReborn;

@@ -30,9 +30,8 @@ void Player::Init(Map* map)
 	incerdible=false; //if mario took star
 	incerdileTime=900;
 	currentIncredibleTime=0;
-
 	this->map = map;
-	this->lives = 3;
+	this->lives =settings.getIntOption("mario_lives");
 	this->x = 0;
 	this->y = 0;
 	this->live = true;
@@ -221,7 +220,7 @@ void Player::Update(bool keys[])
 
 	if (!Map::collided(this, 'y'))
 	{
-		velY += dirY * 10.0 / 60.0;	 // gravity
+		velY += dirY * settings.getIntOption("gravity") / 60.0;	 // gravity
 	}
 	else
 	{
@@ -459,24 +458,36 @@ void Player::collisionWithOther(BaseCharacter* character)
 		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
 		if (horizontal && vertical && !blinking)
 		{
-			if (velY > 0 && this->live)
+			if(incerdible && this->live)
 			{
-				character->Hit();
+				character->KillByShot();
 				score += character->score;
 				globalText.floatingScore(character->x, character->y, character->score);
-				velY = 2;
+			}
+			else if (velY > 0 && this->live)
+			{
+				character->Hit();
+				velY = 2.5;
 				dirY = -1;
+				if(!character->live)
+				{
+					score += character->score;
+					globalText.floatingScore(character->x, character->y, character->score);
+				}
 			}
 			else
 			{
-				if (currentState == SMALL)
+				if(character->CheckIfKillPlayer(this))
 				{
-					this->Kill();
-				}
-				else
-				{
-					currentState--;
-					changeStatus(currentState);
+					if (currentState == SMALL)
+					{
+						this->Kill();
+					}
+					else
+					{
+						currentState--;
+						changeStatus(currentState);
+					}
 				}
 			}
 		}

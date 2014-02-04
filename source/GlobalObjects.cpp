@@ -2,6 +2,7 @@
 #include "header/GlobalObjects.h"
 
 SimpleAnimation simpleAnimation;	// simple animation which which wasn't possible to put on the map
+Settings settings;
 Text globalText;	// TOP text - statistic
 int xOff;			//	xOFF for map
 

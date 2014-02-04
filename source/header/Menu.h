@@ -5,7 +5,7 @@
 #include "Background.h";
 #include "Player.h"
 
-enum STATE{ MENU, GAME, INFO, END };
+enum STATE{ MENU, GAME, INFO, END, PAUSE };
 
 class Menu
 {
@@ -28,6 +28,7 @@ public:
 	ALLEGRO_SAMPLE_INSTANCE *songInstance;
 	bool down_clicked;
 	bool up_clicked;
+	bool p_clicked;
 
 	float x;
 	float y;
@@ -40,14 +41,17 @@ public:
 	int height;
 
 	ALLEGRO_BITMAP *image;
+	ALLEGRO_BITMAP *pause_img;
 
 	void setState(int state);
 	void update(bool* keys);
+	void checkIfPaused(bool *keys);
 	//void drawMenu();
 	void updateBackgrounds();
 	void drawBackgrounds();
 	void init();
 	void drawInfo(Player p);
+	void drawPaused();
 	~Menu(void);
 
 };

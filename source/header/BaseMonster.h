@@ -32,6 +32,8 @@ class BaseMonster: public BaseCharacter
 		virtual void Hit();
 		virtual void Kill();
 		virtual void KillByShot();
+		virtual void collisionWithOtherMonster(BaseCharacter* character);
+
 		~BaseMonster(void);
 };
 
