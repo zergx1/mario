@@ -11,6 +11,9 @@
 #include "header/Keyboard.h"
 #include "header/Menu.h"
 #include "header/FlowerMonster.h"
+#include "header/Text.h"
+#include "header\GlobalObjects.h"
+
 
 int mainArtur(void)
 {
@@ -19,6 +22,8 @@ int mainArtur(void)
 	Keyboard keyboard;
 	bool done = false;
 	bool render = false;
+	settings.init();
+	std::cout<<settings.options["gravity"];
 
 	int xOff = 0;
 	int yOff = 0;
@@ -29,7 +34,7 @@ int mainArtur(void)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_BITMAP *image;
-
+	Text text;
 	//program init
 	if (!al_init())										//initialize Allegro
 		return -1;
@@ -50,13 +55,15 @@ int mainArtur(void)
 
 	al_reserve_samples(1);
 
-	const int numSprites = 1;
+	const int numSprites = 2;
 
-	BaseMonster orbs[numSprites];
+	TurtleMonster orbs[numSprites];
 	Player mario;
 	mario.Init(&map);
 	Menu menu;
 	menu.init();
+	text.init();
+
 	//Item item;
 	//FlowerMonster f;
 //	item.Init(FLOWER);
@@ -70,7 +77,7 @@ int mainArtur(void)
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init();
+		orbs[i].Init(SMART);
 
 
 	event_queue = al_create_event_queue();
@@ -96,15 +103,41 @@ int mainArtur(void)
 
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
-			if (menu.state == MENU)
+			if(menu.state == PAUSE)
+			{
+				menu.checkIfPaused(keyboard.keys);
+
+			}
+			else if (menu.state == MENU)
 			{
 				menu.update(keyboard.keys);
 				menu.updateBackgrounds();
 			}
+			else if (menu.state == INFO)
+			{
+				text.update(&mario);
+				if(menu.currentInfoTime++ > menu.infoTime)
+				{
+					menu.currentInfoTime = 0;
+					menu.state = GAME;
+				}
+
+			}
 			else
 			{
+				menu.checkIfPaused(keyboard.keys);
 				for (int i = 0; i < numSprites; i++)
+				{
 					orbs[i].Update();
+					mario.collisionWithOther(&orbs[i]);
+					simpleAnimation.collisionWithOther(&orbs[i]);
+					for(int j=0;j< numSprites; j++)
+					{
+						if(i == j)
+							continue;
+						orbs[i].collisionWithOtherMonster(&orbs[j]);
+					}
+				}
 				mario.Update(keyboard.keys);
 				if (map.item->live)
 				{
@@ -127,8 +160,14 @@ int mainArtur(void)
 			{
 				menu.drawBackgrounds();
 			}
+			if (menu.state == INFO)
+			{
+				text.draw();
+				//menu.drawInfo(mario);
+			}
 			else
 			{
+	
 				map.draw();
 				mario.Draw();
 				if( map.item->live)
@@ -138,6 +177,8 @@ int mainArtur(void)
 
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Draw();
+				menu.drawBackgrounds();
+
 			}
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

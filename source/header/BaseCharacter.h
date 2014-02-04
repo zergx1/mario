@@ -15,6 +15,7 @@ public:
 	bool live;
 	bool show;
 	bool canTakeCoin;
+	bool killsOtherMonsters;
 
 	float x;	// current x coordinate
 	float y;	// current y coordinate
@@ -47,8 +48,10 @@ public:
 	virtual void Hit();
 	virtual void Kill();
 	virtual void KillByShot();
+	virtual bool CheckIfKillPlayer(BaseCharacter* character);
 	virtual void takeCoin();
 	virtual void collisionWithOther(BaseCharacter* character);
+	virtual void collisionWithOtherMonster(BaseCharacter* character);
 	virtual void takeItem(BaseCharacter* character);
 
 };

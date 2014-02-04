@@ -63,6 +63,9 @@ void Keyboard::update(ALLEGRO_EVENT ev)
 		case ALLEGRO_KEY_X:
 			keys[X] = true;
 			break;
+		case ALLEGRO_KEY_P:
+			keys[P] = true;
+			break;
 		}
 	}
 	else if (ev.type == ALLEGRO_EVENT_KEY_UP)
@@ -95,6 +98,9 @@ void Keyboard::update(ALLEGRO_EVENT ev)
 			break;
 		case ALLEGRO_KEY_X:
 			keys[X] = false;
+			break;
+		case ALLEGRO_KEY_P:
+			keys[P] = false;
 			break;
 		}
 	}

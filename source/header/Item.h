@@ -3,7 +3,7 @@
 #include "basecharacter.h"
 #include "header/Map.h"
 
-enum TYPE{ MUSHROOM, FLOWER };
+enum TYPE{ MUSHROOM, FLOWER, STAR };
 enum ITEM_STATUS{HIDDEN, LEAVING, LEFT};
 
 

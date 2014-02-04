@@ -68,7 +68,7 @@ int mainGeneral(void)
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init();
+		orbs[i].Init(NORMAL);
 
 
 	event_queue = al_create_event_queue();

@@ -24,7 +24,7 @@ public:
 	int destroyBlock(BaseCharacter* character);
 	void cleanInactiveAnim();
 	static void takeCoin(BaseCharacter* character, int x, int y, int background);
-	static int collided(BaseCharacter* character, char axis);
+	static int collided(BaseCharacter* character, char axis, int extraX = 0, int extraY = 0);
 	static int collided(int x, int y);
 	static int outOfStage(int x, int y);
 

@@ -1,5 +1,6 @@
 #include "header/TurtleMonster.h"
-
+#include "header/Map.h"
+#include <iostream>
 
 TurtleMonster::TurtleMonster(void)
 {
@@ -9,7 +10,9 @@ void TurtleMonster::Init()
 {
 	BaseMonster::Init();
 	lives = 3;
+	type = NORMAL;
 	image = al_load_bitmap("Sprites/turtle_monster.png");
+
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 	startFrame = 0;
 	maxFrame = 2;
@@ -25,6 +28,23 @@ void TurtleMonster::Init()
 
 }
 
+void TurtleMonster::Init(TURTLE s)
+{
+	Init();
+	type = s;
+	if(s == NORMAL)
+	{
+		image = al_load_bitmap("Sprites/turtle_monster.png");
+	}
+	else
+	{
+		image = al_load_bitmap("Sprites/smart_turtle_monster.png");
+
+	}
+	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
+
+}
+
 void TurtleMonster::Hit()
 {
 	lives--;
@@ -36,6 +56,10 @@ void TurtleMonster::Hit()
 		maxFrame = 6;
 		frameDelay = 5;
 		velX = 3;
+		frameHeight = 16;
+		killsOtherMonsters = true;
+		//y += 16;
+
 		//curFrame = 3;
 		//live = true;
 	}
@@ -45,6 +69,7 @@ void TurtleMonster::Hit()
 		startFrame = 3;
 		maxFrame = 6;
 		curFrame = 3;
+		frameHeight = 16;
 	}
 
 }
@@ -78,8 +103,11 @@ void TurtleMonster::Draw()
 			flag = ALLEGRO_FLIP_VERTICAL;
 			deathJumpY -= fallingSpeedFactor;
 		}
-		else
-			fy = fy - 16;
+		//else
+		//{
+		//	fy = fy - 16;
+		//	y += 16;
+		//}
 	}
 	if(show)
 	{
@@ -87,7 +115,7 @@ void TurtleMonster::Draw()
 			flag = ALLEGRO_FLIP_HORIZONTAL;
 
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			frameHeight, x, y, flag);
+			frameHeight, (int)x - xOff, y, flag);
 	}
 }
 
@@ -100,6 +128,19 @@ void TurtleMonster::KillByShot()
 
 }
 
+void TurtleMonster::Update()
+{
+	BaseMonster::Update();
+	if(type == SMART && lives == 3)
+	{
+		if (!Map::collided(this, 'y', frameWidth) )
+		{
+			dirX *= -1;
+		}
+	}
+}
+
+
 void TurtleMonster::revive()
 {
 	lives = 3;
@@ -108,6 +149,28 @@ void TurtleMonster::revive()
 	maxFrame = 2;
 	curFrame = 0;
 	currentTimeToReborn = 0;
+	y -= 16;
+	frameHeight = 32;
+	killsOtherMonsters = false;
+
+}
+
+bool TurtleMonster::CheckIfKillPlayer(BaseCharacter* character)
+{
+	if(lives == 2)
+	{
+		lives = 1;
+		dirX = character->dirX;
+		startFrame = 3;
+		maxFrame = 6;
+		frameDelay = 5;
+		velX = 3;
+		frameHeight = 16;
+		//y -= 16;
+
+		return false;
+	}
+	return true;
 }
 
 TurtleMonster::~TurtleMonster(void)

@@ -27,8 +27,11 @@ void Player::Init(Map* map)
 	pipeMoveState = NONE;
 	pipeCounter = 0;
 
+	incerdible=false; //if mario took star
+	incerdileTime=900;
+	currentIncredibleTime=0;
 	this->map = map;
-	this->lives = 3;
+	this->lives =settings.getIntOption("mario_lives");
 	this->x = 0;
 	this->y = 0;
 	this->live = true;
@@ -43,10 +46,17 @@ void Player::Init(Map* map)
 	big_mario = al_load_bitmap("Sprites/big_mario.png");
 	super_mario = al_load_bitmap("Sprites/super_mario.png");
 
+	inc_small_mario = al_load_bitmap("Sprites/inv_small_mario.png");
+	inc_big_mario = al_load_bitmap("Sprites/inv_big_mario.png");
+	inc_super_mario = al_load_bitmap("Sprites/inv_super_mario.png");
+
 	al_convert_mask_to_alpha(small_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(big_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(super_mario, al_map_rgb(0, 0, 0));
 
+	al_convert_mask_to_alpha(inc_small_mario, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(inc_big_mario, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(inc_super_mario, al_map_rgb(0, 0, 0));
 	image = small_mario;
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
@@ -100,11 +110,12 @@ void Player::Update(bool keys[])
 
 	}
 
-
+	updateIncerdible();
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
-		pipeMove(201*16,y-50, DOWN);
-		
+
+		//pipeMove(200*16,y-50, DOWN);
+		setIncerdible();
 		//if (currentState == SMALL)
 		//	changeStatus(BIG);
 		//else if (currentState == BIG)
@@ -157,9 +168,7 @@ void Player::Update(bool keys[])
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		
-		velY = keys[Keyboard::SPACE] ? superVel0 : normalVel0;
-		std::cout << "vel = " << velY << "\n";
+		velY = 4.8;
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{
@@ -211,7 +220,7 @@ void Player::Update(bool keys[])
 
 	if (!Map::collided(this, 'y'))
 	{
-		velY += dirY * 10.0 / 60.0;	 // gravity
+		velY += dirY * settings.getIntOption("gravity") / 60.0;	 // gravity
 	}
 	else
 	{
@@ -449,29 +458,90 @@ void Player::collisionWithOther(BaseCharacter* character)
 		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
 		if (horizontal && vertical && !blinking)
 		{
-			if (velY > 0 && this->live)
+			if(incerdible && this->live)
 			{
-				character->Kill();
+				character->KillByShot();
 				score += character->score;
 				globalText.floatingScore(character->x, character->y, character->score);
-				velY = 2;
+			}
+			else if (velY > 0 && this->live)
+			{
+				character->Hit();
+				velY = 2.5;
 				dirY = -1;
+				if(!character->live)
+				{
+					score += character->score;
+					globalText.floatingScore(character->x, character->y, character->score);
+				}
 			}
 			else
 			{
-				if (currentState == SMALL)
+				if(character->CheckIfKillPlayer(this))
 				{
-					this->Kill();
-				}
-				else
-				{
-					currentState--;
-					changeStatus(currentState);
+					if (currentState == SMALL)
+					{
+						this->Kill();
+					}
+					else
+					{
+						currentState--;
+						changeStatus(currentState);
+					}
 				}
 			}
 		}
 	}
 }
+
+void Player::setIncerdible()
+{
+	incerdible = true;
+	currentIncredibleTime = 0;
+	Sound::play(Sound::POWER_APPEARS);
+
+}
+
+void Player::updateIncerdible()
+{
+	ALLEGRO_BITMAP *norm;
+	ALLEGRO_BITMAP *inc;
+	if(incerdible && currentIncredibleTime++ < incerdileTime)
+	{
+		switch(currentState)
+		{
+		case SMALL:
+			norm = small_mario;
+			inc = inc_small_mario;
+			break;
+		case BIG:
+			norm = big_mario;
+			inc = inc_big_mario;
+			break;
+		case SUPER:
+			norm = super_mario;
+			inc = inc_super_mario;
+			break;
+		}
+		if(currentIncredibleTime % 10 == 0)
+		{
+			if(image == norm)
+				image = inc;
+			else
+				image = norm;
+		}
+		if(currentIncredibleTime+1 >= incerdileTime)
+		{
+			incerdible =  false;
+			image = norm;
+			currentIncredibleTime = 0;
+		}
+
+	}
+
+
+}
+
 
 void Player::takeItem(BaseCharacter* character)
 {

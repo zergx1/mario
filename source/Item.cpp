@@ -57,11 +57,17 @@ void Item::Init(TYPE t, float x1, float y1)
 		speedAfterExitX = 2;
 		speedAfterExitY = 0;
 	}
-	else
+	else if( t == FLOWER)
 	{
 		image = al_load_bitmap("Sprites/flower.png");
 		speedAfterExitX = 0;
 		speedAfterExitY = 0;
+	}
+	else
+	{
+		image = al_load_bitmap("Sprites/star.png");
+		speedAfterExitX = 2;
+		speedAfterExitY = 2;
 	}
 	startY = y;
 
@@ -120,6 +126,10 @@ void Item::Update()
 	{
 		velY += 10.0 / 60.0;
 		//velX = 0.5;
+	}
+	if(speedAfterExitY && (int)y % 16 == 0 && dirY == 1 && velY == 0)
+	{
+			velY = -speedAfterExitY;
 	}
 	y += velY * dirY;
 

@@ -25,7 +25,7 @@ void BaseMonster::Init()
 	timeToClear = 130;
 	currentTimeToClear = 0;
 	x = 1;
-	x = 50;
+	x = 16+rand() % 150;
 	y = 0;
 	velX = 0.5;
 	velY = 0;
@@ -166,3 +166,38 @@ void BaseMonster::Kill()
 
 }
 
+void BaseMonster::collisionWithOtherMonster(BaseCharacter* character)
+{
+
+	if (character->live)
+	{
+
+		float myXLEFT = x;
+		float myYTOP = y;
+		float myXRIGHT = x + frameWidth;
+		float myYBOTTOM = y + frameHeight;
+
+		float xLEFT = character->x;
+		float yTOP = character->y;
+		float xRIGHT = character->x + character->frameWidth;
+		float yBOTTOM = character->y + character->frameHeight;
+
+		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
+		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
+		if (horizontal && vertical)
+		{
+			if (killsOtherMonsters && this->live)
+			{
+				character->KillByShot();
+				score += character->score;
+				globalText.floatingScore(character->x, character->y, character->score);
+				//velY = 2;
+				//dirY = -1;
+			}
+			else
+			{
+				dirX *= -1;
+			}
+		}
+	}
+}
