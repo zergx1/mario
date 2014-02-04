@@ -14,7 +14,7 @@ void Text::init()
 	font = al_load_ttf_font("Fonts/arial.ttf", 15, 0);
 
 	image = al_load_bitmap("Sprites/timer.png");
-	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
+	al_convert_mask_to_alpha(image, al_map_rgb(96, 128, 192));
 
 	counter = 30;	// time
 	counterTemp = 0;

@@ -6,10 +6,10 @@
 const int MAX_SIMULTANEOUS = 10;
 
 struct SoundStructure {
-	bool needSimultaneous = false;
+	bool needSimultaneous;
 	ALLEGRO_SAMPLE_INSTANCE *inst[MAX_SIMULTANEOUS];
 	ALLEGRO_SAMPLE * sample;
-	int index = 0;
+	int index;
 };
 
 namespace Sound{

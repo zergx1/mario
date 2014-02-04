@@ -11,6 +11,7 @@
 #include "header/Keyboard.h"
 #include "header/Menu.h"
 #include "header/FlowerMonster.h"
+#include "header/Text.h"
 
 int mainArtur(void)
 {
@@ -29,7 +30,7 @@ int mainArtur(void)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_BITMAP *image;
-
+	Text text;
 	//program init
 	if (!al_init())										//initialize Allegro
 		return -1;
@@ -57,6 +58,8 @@ int mainArtur(void)
 	mario.Init(&map);
 	Menu menu;
 	menu.init();
+	text.init();
+
 	//Item item;
 	//FlowerMonster f;
 //	item.Init(FLOWER);
@@ -101,13 +104,26 @@ int mainArtur(void)
 				menu.update(keyboard.keys);
 				menu.updateBackgrounds();
 			}
+			else if (menu.state == INFO)
+			{
+				text.update(&mario);
+				if(menu.currentInfoTime++ > menu.infoTime)
+				{
+					menu.currentInfoTime = 0;
+					menu.state = GAME;
+				}
+
+			}
 			else
 			{
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Update();
 				mario.Update(keyboard.keys);
+
 				if( map.item->live)
 					map.item->Update(&mario);
+				text.update(&mario);
+
 				//f.Update();
 				//item.Update();
 			}
@@ -124,12 +140,19 @@ int mainArtur(void)
 			{
 				menu.drawBackgrounds();
 			}
+			if (menu.state == INFO)
+			{
+				text.draw();
+				//menu.drawInfo(mario);
+			}
 			else
 			{
+	
 				map.draw();
 				mario.Draw();
 				if( map.item->live)
 					map.item->Draw(map.xOff);
+				text.draw();
 				//f.Draw();
 				//item.Draw(map.xOff);
 

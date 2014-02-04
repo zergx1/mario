@@ -3,8 +3,9 @@
 #include <allegro5/allegro_image.h>
 #include <allegro5/allegro_audio.h>
 #include "Background.h";
+#include "Player.h"
 
-enum STATE{ MENU, GAME, END };
+enum STATE{ MENU, GAME, INFO, END };
 
 class Menu
 {
@@ -16,6 +17,8 @@ public:
 	Background B,M,G;
 	int current;
 	int last_status;
+	int infoTime;
+	int currentInfoTime;
 	ALLEGRO_BITMAP *menu1;
 	ALLEGRO_BITMAP *menu2;
 	ALLEGRO_BITMAP *menu3;
@@ -44,6 +47,7 @@ public:
 	void updateBackgrounds();
 	void drawBackgrounds();
 	void init();
+	void drawInfo(Player p);
 	~Menu(void);
 
 };

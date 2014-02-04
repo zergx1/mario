@@ -8,8 +8,9 @@ Menu::Menu(void)
 
 void Menu::init()
 {
+
 	//state = MENU;
-	state = GAME;
+	state = INFO;
 	ALLEGRO_BITMAP *title = NULL;
 	title = al_load_bitmap("menu.png");
 
@@ -17,7 +18,8 @@ void Menu::init()
 	ALLEGRO_BITMAP *mgImage = NULL;
 	ALLEGRO_BITMAP *fgImage = NULL;
 	current = 0;
-
+	currentInfoTime = 0;
+	infoTime = 2000;
 	down_clicked = false;
 	up_clicked = false;
 	bgImage = al_load_bitmap("background.png");
@@ -141,6 +143,12 @@ void Menu::drawBackgrounds()
 	//G.DrawBackground();
 }
 
+void Menu::drawInfo(Player p)
+{
+
+	
+
+}
 
 Menu::~Menu(void)
 {

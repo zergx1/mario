@@ -10,6 +10,11 @@ namespace Sound{
 	{
 		isInitialized = true;
 		sounds = new SoundStructure[SIZE_OF_SOUNDS]; 
+		for(int i=0;i<SIZE_OF_SOUNDS;i++)
+		{
+		sounds[i].index = 0;
+		sounds[i].needSimultaneous = false;
+		}
 
 		sounds[JUMP].sample = al_load_sample("Audio/jump.ogg");
 		sounds[MARIO_DIE].sample = al_load_sample("Audio/mario_dies.ogg");
