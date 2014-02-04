@@ -180,7 +180,10 @@ int mainArtur(void)
 					map.item->Draw();
 				//f.Draw();
 				//item.Draw(xOff);
-
+				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+					bumpingBlockAnimation[v].Draw();
+				for (int v = 0; v < destroyBrickAnimation.size(); v++)
+					destroyBrickAnimation[v].Draw();
 				for (int i = 0; i < numSprites; i++)
 					orbs[i].Draw();
 				menu.drawBackgrounds();
