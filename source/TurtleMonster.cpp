@@ -70,6 +70,7 @@ void TurtleMonster::Hit()
 		maxFrame = 6;
 		curFrame = 3;
 		frameHeight = 16;
+		killsOtherMonsters = false;
 	}
 
 }
@@ -166,6 +167,7 @@ bool TurtleMonster::CheckIfKillPlayer(BaseCharacter* character)
 		frameDelay = 5;
 		velX = 3;
 		frameHeight = 16;
+		killsOtherMonsters = true;
 		//y -= 16;
 
 		return false;

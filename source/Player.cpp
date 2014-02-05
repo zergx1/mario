@@ -155,12 +155,25 @@ void Player::Update(bool keys[])
 	{
 		dirX = 1;
 	}
-	if (keys[Keyboard::DOWN] && currentState != SMALL && velY == 0) // go to the down
+	if (keys[Keyboard::DOWN]  && velY == 0) // go to the down
 	{
-		//std::cout << "DOWN\n";
-		curFrame = 4;
-		Draw();
-		return;
+		if( 27*16 < x  && x <27*16+32 && pipeMoveState == NONE)
+		{
+			pipeMove(200 *16, 0, DOWN);
+		}
+		else if(217*16 < x  && x <217*16+32 && pipeMoveState == NONE)
+		{
+			pipeMove(144*16,1,DOWN);
+		}
+		//std::cout << x<<" "<<27*16<<std::endl;
+		if(currentState != SMALL)
+		{
+			curFrame = 4;
+			Draw();
+
+
+			return;
+		}
 
 	}
 
@@ -470,7 +483,7 @@ void Player::collisionWithOther(BaseCharacter* character)
 			else if (velY > 0 && this->live && character->killableByJump)
 			{
 				character->Hit();
-				velY = 2.5;
+				velY = 3;
 				dirY = -1;
 				if(!character->live)
 				{
