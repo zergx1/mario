@@ -156,7 +156,7 @@ int mainGeneral(void)
 				}
 				for (int i = 0; i < numMonsters; i++)
 				{
-					if(monsters[i]->started)
+					if(monsters[i]->started && !mario.win)
 					{
 						monsters[i]->Update();
 						mario.collisionWithOther(monsters[i]);

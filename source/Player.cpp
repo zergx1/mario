@@ -17,7 +17,6 @@ void Player::Init(Map* map)
 	BaseCharacter::Init();
 	name = new char[6];
 	name = "MARIO\0";
-	space_clicked = false;
 	currentState = SMALL;
 	blinking_time = 60;
 	current_blinking_time = 0;
@@ -93,6 +92,31 @@ void Player::Update(bool keys[])
 		Kill();
 		return;
 	}
+	if (win)	// if mario clear stage
+	{
+		if (x < 180 * 16 + 16 * settings.getIntOption("map_scrolling")) // map scrolling
+			map->update(x);
+
+		if (y < 13 * 16 - frameHeight)
+		{
+			velY += dirY * settings.getIntOption("gravity") / 60.0;
+			y += dirY * velY;
+		}
+		else
+		{
+			startFrame = 0;
+			maxFrame = 2;
+		}
+		if (x > 192 * 16)
+			show = false;	// come in to the castle
+		else
+		{
+			x += 2;
+			animation();
+		}
+
+		return;
+	}
 	int width = 320;
 	int height = 240;
 	if(pipeMoveState == DOWN)
@@ -104,7 +128,7 @@ void Player::Update(bool keys[])
 			pipeMoveState = NONE;
 			x = pipeMoveToX;
 			y = pipeMoveToY;
-			xOff = x;
+			xOff = x - 16;
 			pipeCounter = 0;
 		}
 		return;
@@ -112,7 +136,7 @@ void Player::Update(bool keys[])
 	}
 
 	updateIncerdible();
-	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
+	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// some cheat can be here
 	{	
 		//pipeMove(200*16,y-50, DOWN);
 		//setIncerdible();
@@ -136,7 +160,7 @@ void Player::Update(bool keys[])
 		}
 	}
 
-	if (keys[Keyboard::X])
+	if (keys[Keyboard::X])	// super speed
 	{
 		velX = settings.getIntOption("x_mario_speed_super") * 0.26;
 	}
@@ -155,13 +179,13 @@ void Player::Update(bool keys[])
 	}
 	if (keys[Keyboard::DOWN]  && velY == 0) // go to the down
 	{
-		if( 27*16 < x  && x <27*16+32 && pipeMoveState == NONE)
+		if( 27 * 16 < x  && x < 27 * 16 + 32 && pipeMoveState == NONE && y == 11 * 16 - frameHeight)
 		{
-			pipeMove(201 *16, 0, DOWN);
+			pipeMove(201 * 16, 2 * 16, DOWN);
 		}
-		else if(217*16 < x  && x <217*16+32 && pipeMoveState == NONE)
+		else if (217 * 16 < x  && x <217 * 16 + 32 && pipeMoveState == NONE && y == 11 * 16 - frameHeight)
 		{
-			pipeMove(144*16, 32, DOWN);
+			pipeMove(144 * 16, 3 * 16, DOWN);
 		}
 
 		if(currentState != SMALL)
@@ -173,7 +197,7 @@ void Player::Update(bool keys[])
 
 	}
 
-	if (!oldKeys[Keyboard::Z] && keys[Keyboard::Z] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
+	if (!oldKeys[Keyboard::Z] && keys[Keyboard::Z] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// duck if player is on the ground and didn't jump yet
 	{
 		//std::cout << "Jump\n";
 		jump = true;
@@ -198,7 +222,6 @@ void Player::Update(bool keys[])
 	{
 		animation();
 		x += velX * dirX;
-		std::cout << velX << "\n";
 		if (x - xOff > 16 * settings.getIntOption("map_scrolling")) // map scrolling
 			map->update(x);
 	}
@@ -249,8 +272,10 @@ void Player::Update(bool keys[])
 		bullets[i].Update();
 	}
 	
-	transformation();
+	transformation();	// transform betweet states
 
+	if (x >= 183 * 16 && x <= 185 * 16)	// stage is clear
+		stageClear();
 
 	/*for (int i = 0; i < Keyboard::SIZE_KEYS; i++)
 	{
@@ -310,18 +335,27 @@ void Player::Kill()
 		else
 		{
 			changeStatus(SMALL);
-			x = xOff;
-			y = 0;
 			live = true;
 			startFrame = 0;
 			maxFrame = 2;
 			curFrame = 0;
-			//al_rest(2);
+			for (int i = 3; i >= 0; i--)	// respawning
+			{
+				if (x > map->checkpoints[i])
+				{
+					//std::cout << "Respawn " << x << "\n";
+					x = map->checkpoints[i];
+					y = 13 * 16 - frameHeight;
+					xOff = x;
+					break;
+				}
+			}
 		}
 
 	}
 
 }
+
 void Player::changeStatus(int s)
 {
 	if (s < 0 || s > 2)
@@ -556,10 +590,8 @@ void Player::updateIncerdible()
 
 }
 
-
 void Player::takeItem(BaseCharacter* character)
 {
-	//stageClear();
 	globalText.floatingScore(character->x, character->y, character->score);
 	score += character->score;
 	if( dynamic_cast<Item*>(character)->type == GREEN_MUSHROOM)

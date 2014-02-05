@@ -19,6 +19,10 @@ Map::~Map(void)
 int Map::init(char *path)
 {
 	this->MAP_PATH = path;
+	checkpoints[0] = 0;
+	checkpoints[1] = 41 * 16;
+	checkpoints[2] = 61 * 16;
+	checkpoints[3] = 104 * 16;
 	al_get_display_mode(1, &disp_data);
 	std::cout << disp_data.height << std::endl << disp_data.width;
 	int status = MapLoad(path, true);
@@ -49,13 +53,12 @@ void Map::draw()
 
 void Map::update(int x)
 {
-	xOff = x - 16 * settings.getIntOption("map_scrolling");
+	if (x < (200 * 16))
+		xOff = x - 16 * settings.getIntOption("map_scrolling");
 
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
 		xOff = mapwidth*mapblockwidth - disp_data.width;
-	if (x >= 200 * 16 - disp_data.width && xOff >= 200 * 16 - disp_data.width)
-		xOff = 200 * 16 - disp_data.width;
-
+	
 }
 
 int Map::collided(BaseCharacter* character, char axis, int extraX, int extraY)
@@ -142,7 +145,7 @@ int Map::collided(BaseCharacter* character, char axis, int extraX, int extraY)
 
 int Map::collided(int x, int y)
 {
-	std::cout << x / mapblockwidth << " " << y / mapblockheight;
+	//std::cout << x / mapblockwidth << " " << y / mapblockheight;
 	BLKSTR *blockdata;
 	blockdata = MapGetBlock(x / mapblockwidth, y / mapblockheight);
 	return blockdata->tl;

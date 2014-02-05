@@ -13,7 +13,7 @@ public:
 	const char *MAP_PATH;
 	ALLEGRO_DISPLAY_MODE disp_data;
 	Item *item;
-	
+	int checkpoints[4];
 public:
 	Map(void);
 	~Map(void);

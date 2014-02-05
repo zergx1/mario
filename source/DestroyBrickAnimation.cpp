@@ -22,7 +22,7 @@ void DestroyBrickAnimation::Init(int x, int y, BLKSTR *blockdata)
 	if (type == BRICK_ID)
 		this->image = al_load_bitmap("Sprites/brickPart.png");
 	else if (type == BRICK_DARK_ID)
-		this->image = al_load_bitmap("Sprites/brick_dark.png");
+		this->image = al_load_bitmap("Sprites/brick_darkPart.png");
 	
 	MapSetBlockInPixels(x, y, background);
 }
