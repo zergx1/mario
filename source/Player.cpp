@@ -153,12 +153,25 @@ void Player::Update(bool keys[])
 	{
 		dirX = 1;
 	}
-	if (keys[Keyboard::DOWN] && currentState != SMALL && velY == 0) // go to the down
+	if (keys[Keyboard::DOWN]  && velY == 0) // go to the down
 	{
-		//std::cout << "DOWN\n";
-		curFrame = 4;
-		Draw();
-		return;
+		if( 27*16 < x  && x <27*16+32 && pipeMoveState == NONE)
+		{
+			pipeMove(200 *16, 0, DOWN);
+		}
+		else if(217*16 < x  && x <217*16+32 && pipeMoveState == NONE)
+		{
+			pipeMove(144*16,1,DOWN);
+		}
+		//std::cout << x<<" "<<27*16<<std::endl;
+		if(currentState != SMALL)
+		{
+			curFrame = 4;
+			Draw();
+
+
+			return;
+		}
 
 	}
 
@@ -450,10 +463,10 @@ void Player::collisionWithOther(BaseCharacter* character)
 		float myXRIGHT = x + frameWidth;
 		float myYBOTTOM = y + frameHeight;
 
-		float xLEFT = character->x;
-		float yTOP = character->y;
-		float xRIGHT = character->x + character->frameWidth;
-		float yBOTTOM = character->y + character->frameHeight;
+		float xLEFT = character->x+ character->marginX;
+		float yTOP = character->y + character->marginY;
+		float xRIGHT = character->x + character->frameWidth - character->marginX;
+		float yBOTTOM = character->y + character->frameHeight - character->marginY;
 
 		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
 		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
@@ -465,10 +478,10 @@ void Player::collisionWithOther(BaseCharacter* character)
 				score += character->score;
 				//globalText.floatingScore(character->x, character->y, character->score);
 			}
-			else if (velY > 0 && this->live)
+			else if (velY > 0 && this->live && character->killableByJump)
 			{
 				character->Hit();
-				velY = 2.5;
+				velY = 3;
 				dirY = -1;
 				if(!character->live)
 				{
@@ -549,7 +562,16 @@ void Player::takeItem(BaseCharacter* character)
 	//stageClear();
 	globalText.floatingScore(character->x, character->y, character->score);
 	score += character->score;
-	if (currentState != 2)
+	if( dynamic_cast<Item*>(character)->type == GREEN_MUSHROOM)
+	{
+		live++;
+		Sound::play(Sound::POWER_UP);
+	}
+	else if(dynamic_cast<Item*>(character)->type == STAR)
+	{
+		setIncerdible();
+	}
+	else if (currentState != 2)
 		changeStatus(++currentState);
 	else
 		Sound::play(Sound::POWER_UP);

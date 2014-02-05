@@ -19,9 +19,11 @@ void FlowerMonster::Init(int x0, int y0)
 	velX = 0;
 	velY = 0.6;
 	waitY = 200;
-	y = 80;
 	startY = y;
 	currentWaitY = 0;
+	killableByJump = false;
+	marginX = 2;
+	marginY = 2;
 
 
 }
@@ -46,7 +48,7 @@ void FlowerMonster::Draw()
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,
-			(startY - y), x, y, flag);
+			(startY - y), (int)x - xOff, y, flag);
 	}
 }
 

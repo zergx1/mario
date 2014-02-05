@@ -27,6 +27,7 @@ class BaseMonster: public BaseCharacter
 		ALLEGRO_SAMPLE *death_sound;
 		BaseMonster(void);
 		virtual void Init(int x0 = 0, int y0 = 0);
+		virtual void InitType(int x0 = 0, int y0 = 0, int t=0);
 		virtual void Update();
 		virtual void Draw();
 		virtual void Hit();

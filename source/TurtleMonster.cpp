@@ -28,7 +28,7 @@ void TurtleMonster::Init(int x0, int y0)
 
 }
 
-void TurtleMonster::Init(int x0, int y0, TURTLE s)
+void TurtleMonster::InitType(int x0, int y0, int s)
 {
 	Init(x0, y0);
 	type = s;
@@ -70,6 +70,7 @@ void TurtleMonster::Hit()
 		maxFrame = 6;
 		curFrame = 3;
 		frameHeight = 16;
+		killsOtherMonsters = false;
 	}
 
 }
@@ -166,6 +167,7 @@ bool TurtleMonster::CheckIfKillPlayer(BaseCharacter* character)
 		frameDelay = 5;
 		velX = 3;
 		frameHeight = 16;
+		killsOtherMonsters = true;
 		//y -= 16;
 
 		return false;

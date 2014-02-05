@@ -31,7 +31,7 @@ void Item::Init(float x1, float y1, TYPE t)
 	y = y1;
 	velX = 0;
 	velY = 0;
-	dirX = -1;
+	dirX = 1;
 	dirY = 1;
 
 	startFrame = 0;
@@ -61,6 +61,12 @@ void Item::Init(float x1, float y1, TYPE t)
 	{
 		image = al_load_bitmap("Sprites/flower.png");
 		speedAfterExitX = 0;
+		speedAfterExitY = 0;
+	}
+	else if( t == GREEN_MUSHROOM)
+	{
+		image = al_load_bitmap("Sprites/green_mushroom.png");
+		speedAfterExitX = 2;
 		speedAfterExitY = 0;
 	}
 	else

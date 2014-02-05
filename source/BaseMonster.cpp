@@ -24,9 +24,9 @@ void BaseMonster::Init(int x0, int y0)
 
 	timeToClear = 130;
 	currentTimeToClear = 0;
-	x = 1;
-	x = 16+rand() % 150;
-	y = 0;
+	//x = 1;
+	//x = 16+rand() % 150;
+	//y = 0;
 	velX = 0.5;
 	velY = 0;
 	dirX = -1;
@@ -52,8 +52,11 @@ void BaseMonster::Init(int x0, int y0)
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 	death_sound = al_load_sample("Audio/death_monster1.ogg");
+}
 
-
+void BaseMonster::InitType(int x0, int y0, int t)
+{
+	BaseMonster::Init(x0, y0);
 }
 
 void BaseMonster::Update()

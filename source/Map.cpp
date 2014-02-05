@@ -44,7 +44,7 @@ void Map::del()
 void Map::draw()
 {
 	MapUpdateAnims();
-	MapDrawBG(xOff, 0, 0, 0, disp_data.width, mapheight * mapblockheight);
+	MapDrawBG(xOff, 0, 0, 0, 320, mapheight * mapblockheight);
 }
 
 void Map::update(int x)
@@ -213,8 +213,13 @@ int Map::destroyBlock(BaseCharacter* character)
 			jumpingCoinAnimation.push_back(anim);
 			character->score += 200;
 		}
-		else
+		else if(choice == 9)
 			item->Init(x / 16 * 16, y-16, STAR);
+		else
+		{
+			item->Init(x / 16 * 16, y-16, GREEN_MUSHROOM);
+
+		}
 
 
 		item->LeaveBox();
