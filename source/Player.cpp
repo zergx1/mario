@@ -347,13 +347,12 @@ void Player::Kill()
 					break;
 				}
 			}
-			changeStatus(SMALL);
+			changeStatus(SMALL, true);
 			live = true;
 			startFrame = 0;
 			maxFrame = 2;
 			curFrame = 0;
 			beforeStart = true;
-			changeStatus(SMALL, true);
 		}
 
 	}
@@ -365,28 +364,31 @@ void Player::changeStatus(int s, bool instant)
 	if (s < 0 || s > 2)
 		s = 0;
 	currentState = s;
-	if(!instant)
+	if (!instant)
+	{
 		blinking = true;
+	}
 	if (currentState == SMALL)
 	{
 		image = small_mario;
 		frameHeight = 16;
-		Sound::play(Sound::POWER_DOWN);
-
+		if (!instant)
+			Sound::play(Sound::POWER_DOWN);
 	}
 	else if (currentState == BIG)
 	{
 		image = big_mario;
 		frameHeight = 32;
 		y -= 16;
-		Sound::play(Sound::POWER_UP);
+		if (!instant)
+			Sound::play(Sound::POWER_UP);
 	}
 	else if (currentState == SUPER)
 	{
 		image = super_mario;
 		frameHeight = 32;
-		//y -= 16;
-		Sound::play(Sound::POWER_UP);
+		if (!instant)
+			Sound::play(Sound::POWER_UP);
 	}
 }
 

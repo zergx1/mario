@@ -46,7 +46,7 @@ public:
 	~Player(void);
 	virtual void Init(Map* map);
 	virtual void Update(bool keys[]);
-	void changeStatus(int s, bool instant=false);
+	void changeStatus(int s, bool instant = false);
 	virtual void Draw(int flag = 0);
 	virtual void Kill();
 	virtual void animation();
