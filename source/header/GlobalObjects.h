@@ -2,6 +2,7 @@
 #include "Text.h"
 #include "BumpingBlockAnimation.h"
 #include "DestroyBrickAnimation.h"
+#include "JumpingCoinAnimation.h"
 #include "Settings.h"
 #include <vector>
 using std::vector;
@@ -9,12 +10,14 @@ class Settings;
 class Text;
 class BumpingBlockAnimation;
 class DestroyBrickAnimation;
+class JumpingCoinAnimation;
 
 extern int xOff; // for a map
 extern Text globalText;
 extern float normalVel0;
 extern float superVel0;
 extern vector<BumpingBlockAnimation> bumpingBlockAnimation;
+extern vector<JumpingCoinAnimation> jumpingCoinAnimation;
 extern vector<DestroyBrickAnimation> destroyBrickAnimation;
 extern Settings settings;
 

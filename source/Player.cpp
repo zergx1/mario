@@ -23,6 +23,7 @@ void Player::Init(Map* map)
 	current_blinking_time = 0;
 	blinking = false;
 	invisible = false;
+	win = false;
 
 	normalVel0 = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
 	superVel0 = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);
@@ -34,7 +35,7 @@ void Player::Init(Map* map)
 	incerdileTime=900;
 	currentIncredibleTime=0;
 	this->map = map;
-	this->lives =settings.getIntOption("mario_lives");
+	this->lives = settings.getIntOption("mario_lives");
 	this->x = 0;
 	this->y = 0;
 	this->live = true;
@@ -63,12 +64,9 @@ void Player::Init(Map* map)
 	image = small_mario;
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
-	velX = 1;
-	velY = 0;
+	show = true;
 	dirX = 1;
 	dirY = 1;
-
-	show = true;
 
 	startFrame = 0;
 	maxFrame = 2;
@@ -81,10 +79,10 @@ void Player::Init(Map* map)
 	animationDirection = 1;
 	score = 0;
 	coins = 0;
-	b = new Bullet[2];
+	bullets = new Bullet[2];
 
 	for(int i=0;i<2;i++)
-		b[i].Init();
+		bullets[i].Init();
 }
 
 void Player::Update(bool keys[])
@@ -130,9 +128,9 @@ void Player::Update(bool keys[])
 	{
 		for(int i=0;i<2;i++)
 		{
-				if(!b[i].live && !b[i].show)
+				if(!bullets[i].live && !bullets[i].show)
 				{
-					b[i].Shoot(x, y, dirX);
+					bullets[i].Shoot(x, y, dirX);
 					break;
 				}
 		}
@@ -140,11 +138,11 @@ void Player::Update(bool keys[])
 
 	if (keys[Keyboard::SPACE])
 	{
-		velX = 2;
+		velX = settings.getIntOption("x_mario_speed_super") * 0.26;
 	}
 	else
 	{
-		velX = 1;
+		velX = settings.getIntOption("x_mario_speed_normal")  * 0.26;
 	}
 
 	if (keys[Keyboard::LEFT])	// go to the left
@@ -181,7 +179,7 @@ void Player::Update(bool keys[])
 		}
 		else
 		{
-		Sound::play(Sound::JUMP);
+			Sound::play(Sound::JUMP);
 		}
 	}
 	
@@ -189,9 +187,9 @@ void Player::Update(bool keys[])
 	{
 		animation();
 		x += velX * dirX;
-
-		if (x - xOff > 16 * 8) // map moves
-			map->update(velX);
+		std::cout << velX << "\n";
+		if (x - xOff > 16 * settings.getIntOption("map_scrolling")) // map scrolling
+			map->update(x);
 	}
 	else
 	{
@@ -237,7 +235,7 @@ void Player::Update(bool keys[])
 
 	for(int i=0;i<2;i++)
 	{
-		b[i].Update();
+		bullets[i].Update();
 	}
 	
 	transformation();
@@ -259,7 +257,7 @@ void Player::Draw(int flag)
 	float extraY=0;
 	for(int i=0;i<2;i++)
 	{
-		b[i].Draw(xOff);
+		bullets[i].Draw(xOff);
 	}
 	if (show)
 	{
@@ -442,8 +440,8 @@ void Player::pipeMove(int toX, int toY, PIPE_MOVE from)
 void Player::collisionWithOther(BaseCharacter* character)
 {
 	// bullets
-	b[0].collisionWithOther(character);
-	b[1].collisionWithOther(character);
+	bullets[0].collisionWithOther(character);
+	bullets[1].collisionWithOther(character);
 	if (character->live)
 	{
 
@@ -465,7 +463,7 @@ void Player::collisionWithOther(BaseCharacter* character)
 			{
 				character->KillByShot();
 				score += character->score;
-				globalText.floatingScore(character->x, character->y, character->score);
+				//globalText.floatingScore(character->x, character->y, character->score);
 			}
 			else if (velY > 0 && this->live)
 			{
@@ -548,10 +546,18 @@ void Player::updateIncerdible()
 
 void Player::takeItem(BaseCharacter* character)
 {
+	//stageClear();
 	globalText.floatingScore(character->x, character->y, character->score);
 	score += character->score;
 	if (currentState != 2)
 		changeStatus(++currentState);
 	else
 		Sound::play(Sound::POWER_UP);
+}
+
+void Player::stageClear()
+{
+	Sound::play(Sound::WIN);
+	globalText.reset = true;
+	win = true;
 }

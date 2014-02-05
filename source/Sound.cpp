@@ -10,10 +10,10 @@ namespace Sound{
 	{
 		isInitialized = true;
 		sounds = new SoundStructure[SIZE_OF_SOUNDS]; 
-		for(int i=0;i<SIZE_OF_SOUNDS;i++)
+		for(int i = 0; i  <SIZE_OF_SOUNDS; i++)
 		{
-		sounds[i].index = 0;
-		sounds[i].needSimultaneous = false;
+			sounds[i].index = 0;
+			sounds[i].needSimultaneous = false;
 		}
 
 		sounds[JUMP].sample = al_load_sample("Audio/jump.ogg");
@@ -27,6 +27,7 @@ namespace Sound{
 		sounds[COIN].needSimultaneous = true;
 
 		sounds[HURRY].sample = al_load_sample("Audio/Hurry.ogg");
+		sounds[WIN].sample = al_load_sample("Audio/win.ogg");
 		sounds[POWER_UP].sample = al_load_sample("Audio/Powerup.ogg");
 		sounds[POWER_DOWN].sample = al_load_sample("Audio/Power Down.ogg");
 		sounds[POWER_APPEARS].sample = al_load_sample("Audio/Powerup Appears.ogg");

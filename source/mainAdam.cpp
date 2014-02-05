@@ -25,6 +25,7 @@ int mainAdam(void)
 	bool done = false;
 	bool render = false;
 	settings.init();
+
 	//int xOff = 0;
 	//int yOff = 0;
 
@@ -94,25 +95,35 @@ int mainAdam(void)
 			}
 			else
 			{*/
-			for (int i = 0; i < numSprites; i++){
-					orbs[i].Update();
-					mario.collisionWithOther(&orbs[i]);
-					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
-						bumpingBlockAnimation[v].collisionWithOther(&orbs[i]);
-			}
-				mario.Update(keyboard.keys);
-				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
-					bumpingBlockAnimation[v].Update();
-				for (int v = 0; v < destroyBrickAnimation.size(); v++)
-					destroyBrickAnimation[v].Update();
-				if (map.item->live)
-				{
-					map.item->Update();
-					map.item->collisionWithOther(&mario);
-					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
-						bumpingBlockAnimation[v].collisionWithOther(map.item);
+			if (!mario.win)
+			{
+				for (int i = 0; i < numSprites; i++){
+						orbs[i].Update();
+						mario.collisionWithOther(&orbs[i]);
+						for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+							bumpingBlockAnimation[v].collisionWithOther(&orbs[i]);
 				}
-			//}
+					mario.Update(keyboard.keys);
+					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+						bumpingBlockAnimation[v].Update();
+					for (int v = 0; v < destroyBrickAnimation.size(); v++)
+						destroyBrickAnimation[v].Update();
+					for (int v = 0; v < jumpingCoinAnimation.size(); v++)
+						jumpingCoinAnimation[v].Update();
+
+					if (map.item->live)
+					{
+						map.item->Update();
+						map.item->collisionWithOther(&mario);
+						for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+							bumpingBlockAnimation[v].collisionWithOther(map.item);
+					}
+				//}
+			}
+			else
+			{
+
+			}
 			render = true;
 
 		}
@@ -137,6 +148,9 @@ int mainAdam(void)
 					bumpingBlockAnimation[v].Draw();
 				for (int v = 0; v < destroyBrickAnimation.size(); v++)
 					destroyBrickAnimation[v].Draw();
+				for (int v = 0; v < jumpingCoinAnimation.size(); v++)
+					jumpingCoinAnimation[v].Draw();
+				
 				if (map.item->live)
 					map.item->Draw();
 				for (int i = 0; i < numSprites; i++)

@@ -156,6 +156,7 @@ void BaseMonster::KillByShot()
 
 void BaseMonster::Kill()
 {
+	globalText.floatingScore(x, y, score);
 	live = false;
 	velX = 0;
 	//velY = 3;

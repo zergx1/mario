@@ -37,7 +37,8 @@ private:
 	bool blinking;
 
 public:
-	Bullet* b;
+	bool win;
+	Bullet* bullets;
 	bool space_clicked;
 	Player(void);
 	~Player(void);
@@ -55,5 +56,6 @@ public:
 	virtual void pipeMove(int toX, int toY, PIPE_MOVE from);
 	virtual void collisionWithOther(BaseCharacter* character);
 	virtual void takeItem(BaseCharacter* character);
+	void stageClear();
 };
 

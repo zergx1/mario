@@ -17,7 +17,7 @@ Item::~Item(void)
 void Item::Init(float x1, float y1, TYPE t)
 {
 	BaseCharacter::Init(x1, y1);
-	live = false;
+	live = true;
 	show = false;
 	status = HIDDEN;
 	type = t;
@@ -137,18 +137,21 @@ void Item::Update()
 
 void Item::LeaveBox()
 {
-	curFrame = 0;
-	show = true;
-	live = true;
-	status = LEAVING;
-	Sound::play(Sound::POWER_APPEARS);
+	if (live)
+	{
+		curFrame = 0;
+		show = true;
+		//live = true;
+		status = LEAVING;
+		Sound::play(Sound::POWER_APPEARS);
 
+	}
 }
 
 void Item::Draw()
 {
-	int fx = (curFrame % animationColumns) * frameWidth;
-	int fy = (curFrame / animationColumns) * frameHeight;
+	int fx = curFrame * frameWidth;
+	int fy = curFrame * frameHeight;
 	int flag = 0;
 	float new_y = frameHeight;
 	if(status != LEFT)
