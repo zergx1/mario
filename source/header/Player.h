@@ -39,7 +39,7 @@ private:
 
 public:
 	bool win;
-	Bullet* b;
+	Bullet* bullets;
 	bool beforeStart; //show info before start
 	bool space_clicked;
 	Player(void);

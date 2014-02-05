@@ -13,7 +13,7 @@ void Text::init()
 
 	image = al_load_bitmap("Sprites/timer.png");
 	mario_image = al_load_bitmap("Sprites/big_mario.png");
-	al_convert_mask_to_alpha(image, al_map_rgb(96, 128, 192));
+	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	counter = settings.getIntOption("time");	// time
 	counterTemp = 0;
@@ -166,6 +166,7 @@ void Text::update(BaseCharacter *character, bool world_info)
 		
 	}
 
+	}
 }
 
 void Text::floatingScore(int x, int y, char *score)
@@ -203,4 +204,5 @@ void Text::floatingScore(int x, int y, int score)
 
 Text::~Text(void)
 {
+
 }

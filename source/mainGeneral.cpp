@@ -58,7 +58,6 @@ int mainGeneral(void)
 	al_reserve_samples(1);
 
 	start:
-	const int numMonsters = 16;
 
 	// INIT
 	menu.init();
