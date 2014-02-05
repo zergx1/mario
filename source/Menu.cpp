@@ -9,8 +9,8 @@ Menu::Menu(void)
 void Menu::init()
 {
 
-	//state = MENU;
-	state = GAME;
+	state = MENU;
+	//state = GAME;
 	ALLEGRO_BITMAP *title = NULL;
 	title = al_load_bitmap("menu.png");
 
@@ -20,7 +20,7 @@ void Menu::init()
 
 	current = 0;
 	currentInfoTime = 0;
-	infoTime = 2000;
+	infoTime = 150;
 	down_clicked = false;
 	up_clicked = false;
 	p_clicked = false;

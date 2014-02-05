@@ -53,6 +53,7 @@ int mainGeneral(void)
 
 	al_reserve_samples(1);
 
+	start:
 	const int numMonsters = 16;
 
 	BaseMonster *monsters[numMonsters];
@@ -126,7 +127,11 @@ int mainGeneral(void)
 		{
 			//item.LeaveBox();
 		}
-
+		if(mario.beforeStart && menu.state == GAME )
+		{
+				menu.state = INFO;
+				mario.beforeStart = false;
+		}
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
 		keyboard.update(ev);
@@ -145,7 +150,7 @@ int mainGeneral(void)
 			}
 			else if (menu.state == INFO)
 			{
-				text.update(&mario);
+				text.update(&mario, true);
 				if(menu.currentInfoTime++ > menu.infoTime)
 				{
 					menu.currentInfoTime = 0;
@@ -207,7 +212,7 @@ int mainGeneral(void)
 			}
 			if (menu.state == INFO)
 			{
-				text.draw();
+				text.draw(true);
 				//menu.drawInfo(mario);
 			}
 			else
@@ -227,6 +232,10 @@ int mainGeneral(void)
 				}
 				menu.drawBackgrounds();
 
+			}
+			if(mario.lives < 0 && mario.beforeStart)
+			{
+				goto start;
 			}
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));

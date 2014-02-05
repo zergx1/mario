@@ -18,6 +18,8 @@ class Text
 {
 private:
 	ALLEGRO_BITMAP *image;
+	ALLEGRO_BITMAP *mario_image;
+
 	ALLEGRO_FONT *font;
 
 	int startFrame;
@@ -34,7 +36,7 @@ private:
 	char* name;
 	char score[7];
 	char coin[4];
-	char live;
+	char live[2];
 	char time[4];
 	char* level;
 	vector<FloatingTextStruct> vecFloatingText;
@@ -48,9 +50,9 @@ public:
 	int width;
 	int height;
 
-	void draw();
+	void draw(bool world_info=false);
 	void init();
-	void update(BaseCharacter *character);
+	void update(BaseCharacter *character, bool world_info=false);
 	void Text::floatingScore(int x, int y, char *score);
 	void Text::floatingScore(int x, int y, int score);
 
