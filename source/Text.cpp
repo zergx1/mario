@@ -12,6 +12,7 @@ void Text::init()
 	font = al_load_ttf_font("Fonts/arial.ttf", 15, 0);
 
 	image = al_load_bitmap("Sprites/timer.png");
+	mario_image = al_load_bitmap("Sprites/big_mario.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	counter = settings.getIntOption("time");	// time
@@ -28,11 +29,12 @@ void Text::init()
 }
 
 
-void Text::draw()
+void Text::draw(bool world_info)
 {
 	int x = 0;
 	int row1 = 10;
 	int row2 = 25;
+
 	al_draw_text(font, al_map_rgb(255, 255, 255), x += 3 * 15, row1, ALLEGRO_ALIGN_CENTRE, name);
 	al_draw_text(font, al_map_rgb(255, 255, 255), 3 * 15, row2, ALLEGRO_ALIGN_CENTRE, score);
 
@@ -43,17 +45,30 @@ void Text::draw()
 	al_draw_text(font, al_map_rgb(255, 255, 255), x += 60, row1, ALLEGRO_ALIGN_CENTRE, "WORLD");
 	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, "1-1");
 
-	al_draw_text(font, al_map_rgb(255, 255, 255), x += 80, row1, ALLEGRO_ALIGN_CENTRE, "TIME");
-	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, time);
+
+
 	
 	for (int i = 0; i < vecFloatingText.size(); i++)
 	{
 		FloatingTextStruct text = vecFloatingText[i];
 		al_draw_text(font, al_map_rgb(255, 255, 255), text.x - xOff, text.y, ALLEGRO_ALIGN_CENTRE,text.score);
 	}
+
+	if(world_info)
+	{
+			al_draw_bitmap_region(mario_image, 16, 0, 16, 32, x/2, 60 - 3, 0);
+			al_draw_text(font, al_map_rgb(255, 255, 255), x/2+32, 60 + 8, ALLEGRO_ALIGN_CENTRE, live);
+
+
+	}
+	else
+	{
+			al_draw_text(font, al_map_rgb(255, 255, 255), x += 80, row1, ALLEGRO_ALIGN_CENTRE, "TIME");
+			al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, time);
+	}
 }
 
-void Text::update(BaseCharacter *character)
+void Text::update(BaseCharacter *character, bool world_info)
 {
 	// NAME
 	name = character->name;
@@ -81,6 +96,10 @@ void Text::update(BaseCharacter *character)
 	}
 	score[7] = '\0';	// end of array
 
+	live[0] = 'x';
+	live[1] = (char)(character->lives) + 48;
+
+
 	// COINS
 	divisor = 10;
 	temp = character->coins;
@@ -96,6 +115,8 @@ void Text::update(BaseCharacter *character)
 	coin[3] = '\0';	// end of array
 
 	// TIMER
+	if(!world_info)
+	{
 	divisor = 100;
 	temp = counter;
 	if (counter >= 0)
@@ -131,7 +152,6 @@ void Text::update(BaseCharacter *character)
 			character->Kill();
 		}
 	}
-
 	// FLOATING TEXT WITH SCORE
 	for (int i = 0; i < vecFloatingText.size(); i++)
 	{
@@ -146,6 +166,7 @@ void Text::update(BaseCharacter *character)
 		
 	}
 
+	}
 }
 
 void Text::floatingScore(int x, int y, char *score)
@@ -183,4 +204,5 @@ void Text::floatingScore(int x, int y, int score)
 
 Text::~Text(void)
 {
+
 }

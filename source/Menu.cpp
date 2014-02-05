@@ -20,7 +20,7 @@ void Menu::init()
 
 	current = 0;
 	currentInfoTime = 0;
-	infoTime = 2000;
+	infoTime = 150;
 	down_clicked = false;
 	up_clicked = false;
 	p_clicked = false;

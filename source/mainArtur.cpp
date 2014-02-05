@@ -53,6 +53,7 @@ int mainArtur(void)
 
 	al_reserve_samples(1);
 
+	start:
 	const int numMonsters = 16;
 
 	BaseMonster *monsters[numMonsters];
@@ -131,6 +132,11 @@ int mainArtur(void)
 		al_wait_for_event(event_queue, &ev);
 		keyboard.update(ev);
 
+		if(mario.beforeStart )
+		{
+				menu.state = INFO;
+				mario.beforeStart = false;
+		}
 		if (ev.type == ALLEGRO_EVENT_TIMER)
 		{
 			if(menu.state == PAUSE)
@@ -145,7 +151,7 @@ int mainArtur(void)
 			}
 			else if (menu.state == INFO)
 			{
-				text.update(&mario);
+				text.update(&mario, true);
 				if(menu.currentInfoTime++ > menu.infoTime)
 				{
 					menu.currentInfoTime = 0;
@@ -207,7 +213,7 @@ int mainArtur(void)
 			}
 			if (menu.state == INFO)
 			{
-				text.draw();
+				text.draw(true);
 				//menu.drawInfo(mario);
 			}
 			else
@@ -232,6 +238,11 @@ int mainArtur(void)
 				menu.drawBackgrounds();
 
 			}
+			if(mario.lives < 0)
+			{
+				goto start;
+			}
+
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}

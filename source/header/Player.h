@@ -13,6 +13,7 @@ private:
 	Map* map;
 	bool jump;
 	bool invisible;
+	
 
 	bool incerdible; //if mario took star
 	int incerdileTime;
@@ -39,12 +40,13 @@ private:
 public:
 	bool win;
 	Bullet* bullets;
+	bool beforeStart; //show info before start
 	bool space_clicked;
 	Player(void);
 	~Player(void);
 	virtual void Init(Map* map);
 	virtual void Update(bool keys[]);
-	void changeStatus(int s);
+	void changeStatus(int s, bool instant=false);
 	virtual void Draw(int flag = 0);
 	virtual void Kill();
 	virtual void animation();

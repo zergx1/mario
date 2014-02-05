@@ -30,6 +30,7 @@ void Player::Init(Map* map)
 	pipeMoveState = NONE;
 	pipeCounter = 0;
 
+	beforeStart = true;
 	incerdible=false; //if mario took star
 	incerdileTime=900;
 	currentIncredibleTime=0;
@@ -334,11 +335,7 @@ void Player::Kill()
 		}
 		else
 		{
-			changeStatus(SMALL);
-			live = true;
-			startFrame = 0;
-			maxFrame = 2;
-			curFrame = 0;
+
 			for (int i = 3; i >= 0; i--)	// respawning
 			{
 				if (x > map->checkpoints[i])
@@ -350,18 +347,26 @@ void Player::Kill()
 					break;
 				}
 			}
+			changeStatus(SMALL);
+			live = true;
+			startFrame = 0;
+			maxFrame = 2;
+			curFrame = 0;
+			beforeStart = true;
+			changeStatus(SMALL, true);
 		}
 
 	}
 
 }
 
-void Player::changeStatus(int s)
+void Player::changeStatus(int s, bool instant)
 {
 	if (s < 0 || s > 2)
 		s = 0;
 	currentState = s;
-	blinking = true;
+	if(!instant)
+		blinking = true;
 	if (currentState == SMALL)
 	{
 		image = small_mario;
