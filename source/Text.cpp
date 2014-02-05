@@ -9,8 +9,6 @@ Text::Text(void)
 
 void Text::init()
 {
-	al_init_font_addon(); // initialize the font addon
-	al_init_ttf_addon();// initialize the ttf (True Type Font) addon
 	font = al_load_ttf_font("Fonts/arial.ttf", 15, 0);
 
 	image = al_load_bitmap("Sprites/timer.png");
@@ -26,6 +24,7 @@ void Text::init()
 	frameWidth = 16;
 	frameHeight = 16;
 	reset = false;	// when mario is clear the stage
+	name = "Player";
 }
 
 

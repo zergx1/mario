@@ -37,7 +37,7 @@ void Player::Init(Map* map)
 	this->map = map;
 	this->lives = settings.getIntOption("mario_lives");
 	this->x = 0;
-	this->y = 0;
+	this->y = 12 * 16;
 	this->live = true;
 	this->jump = false;
 	this->canTakeCoin = true;
@@ -114,9 +114,8 @@ void Player::Update(bool keys[])
 	updateIncerdible();
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// go to the left
 	{	
-
 		//pipeMove(200*16,y-50, DOWN);
-		setIncerdible();
+		//setIncerdible();
 		//if (currentState == SMALL)
 		//	changeStatus(BIG);
 		//else if (currentState == BIG)
@@ -124,7 +123,8 @@ void Player::Update(bool keys[])
 		//else
 		//	changeStatus(SMALL);
 	}
-	if (currentState == SUPER && !oldKeys[Keyboard::SPACE] && keys[Keyboard::SPACE])
+
+	if (currentState == SUPER && !oldKeys[Keyboard::X] && keys[Keyboard::X])
 	{
 		for(int i=0;i<2;i++)
 		{
@@ -136,7 +136,7 @@ void Player::Update(bool keys[])
 		}
 	}
 
-	if (keys[Keyboard::SPACE])
+	if (keys[Keyboard::X])
 	{
 		velX = settings.getIntOption("x_mario_speed_super") * 0.26;
 	}
@@ -157,32 +157,30 @@ void Player::Update(bool keys[])
 	{
 		if( 27*16 < x  && x <27*16+32 && pipeMoveState == NONE)
 		{
-			pipeMove(200 *16, 0, DOWN);
+			pipeMove(201 *16, 0, DOWN);
 		}
 		else if(217*16 < x  && x <217*16+32 && pipeMoveState == NONE)
 		{
-			pipeMove(144*16,1,DOWN);
+			pipeMove(144*16, 32, DOWN);
 		}
-		//std::cout << x<<" "<<27*16<<std::endl;
+
 		if(currentState != SMALL)
 		{
 			curFrame = 4;
 			Draw();
-
-
 			return;
 		}
 
 	}
 
-	if (!oldKeys[Keyboard::UP] && keys[Keyboard::UP] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
+	if (!oldKeys[Keyboard::Z] && keys[Keyboard::Z] && (int)y % 16 == 0 && dirY == 1 && velY == 0)	// if player is on the ground and didn't jump yet
 	{
-		//std::cout << "Jump bitch\n";
+		//std::cout << "Jump\n";
 		jump = true;
 		startFrame = 2;
 		maxFrame = 3;
 		curFrame = 2;
-		velY = keys[Keyboard::SPACE] ? superVel0 : normalVel0;
+		velY = keys[Keyboard::X] ? superVel0 : normalVel0;
 		dirY = -1;
 		if (Map::collided(this, 'y'))
 		{
@@ -252,12 +250,14 @@ void Player::Update(bool keys[])
 	}
 	
 	transformation();
+
+
 	/*for (int i = 0; i < Keyboard::SIZE_KEYS; i++)
 	{
 		oldKeys[i] = keys[i];
 	}*/
-	oldKeys[Keyboard::UP] = keys[Keyboard::UP]; // i need to store only old up key value
-	oldKeys[Keyboard::SPACE] = keys[Keyboard::SPACE]; // i need to store only old up key value
+	oldKeys[Keyboard::Z] = keys[Keyboard::Z]; // i need to store only old up key value
+	oldKeys[Keyboard::X] = keys[Keyboard::X]; // i need to store only old up key value
 	oldKeys[Keyboard::ENTER] = keys[Keyboard::ENTER]; // i need to store only old up key value
 
 }
