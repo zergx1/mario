@@ -35,7 +35,7 @@ void Menu::init()
 
 	//display = al_create_display(disp_data.width, disp_data.height);
 	Background BG, MG, FG;
-	M.init(0, disp_data.height - h-mh, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
+	M.init(0, -20, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
 	B.init(0, disp_data.height - h, 0, 0, disp_data.width, disp_data.height, -1, 1, bgImage);
 	//pause_bg.init(0, 
 	menu1 = al_load_bitmap("menu.png");
@@ -55,11 +55,11 @@ void Menu::init()
 	theme_song = al_load_sample("Audio/menu_music.ogg");
 	on_change = al_load_sample("Audio/on_change.ogg");
 
-	songInstance = al_create_sample_instance(theme_song);
-	al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
-	al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
+	//songInstance = al_create_sample_instance(theme_song);
+	//al_set_sample_instance_playmode(songInstance, ALLEGRO_PLAYMODE_LOOP);
+	//al_attach_sample_instance_to_mixer(songInstance, al_get_default_mixer());
 
-	al_play_sample_instance(songInstance);
+	//al_play_sample_instance(songInstance);
 
 }
 
@@ -129,7 +129,7 @@ void Menu::updateBackgrounds()
 	if(state == MENU)
 	{
 		M.UpdateBackground();
-		B.UpdateBackground();
+		//B.UpdateBackground();
 	}
 		//G.UpdateBackground();
 
@@ -140,7 +140,7 @@ void Menu::drawBackgrounds()
 	if(state == MENU)
 	{
 		M.DrawBackground();
-		B.DrawBackground();
+		//B.DrawBackground();
 	}
 	if(state == MENU || state == PAUSE)
 	{

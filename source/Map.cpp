@@ -28,6 +28,7 @@ int Map::init(char *path)
 		return -5;
 	}
 	xOff = 0;
+	//xOff = 200 * 16 - 360;
 	item = new Item();
 	srand(time(0));  
 
@@ -48,10 +49,12 @@ void Map::draw()
 
 void Map::update(int x)
 {
-	xOff += x;
+	xOff = x - 16 * settings.getIntOption("map_scrolling");
 
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
 		xOff = mapwidth*mapblockwidth - disp_data.width;
+	if (x >= 200 * 16 - disp_data.width && xOff >= 200 * 16 - disp_data.width)
+		xOff = 200 * 16 - disp_data.width;
 
 }
 
@@ -194,17 +197,21 @@ int Map::destroyBlock(BaseCharacter* character)
 	if (blockdata->user1 == QUESTION_ID)
 	{
 		int choice;
-		choice = rand() % 11;
-		if(choice <= 5)
+		choice = rand() % 100;
+		if(choice <= 20)
 		{
 			if(character->currentState == 0)
 				item->Init(x / 16 * 16, y-16, MUSHROOM);
 			else
 				item->Init(x / 16 * 16, y - 16, FLOWER);
 		}
-		else if(choice > 5 && choice <= 8)
+		else if(choice > 20 && choice < 90)
 		{
-			//coincs
+			character->takeCoin();
+			JumpingCoinAnimation anim;
+			anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
+			jumpingCoinAnimation.push_back(anim);
+			character->score += 200;
 		}
 		else if(choice == 9)
 			item->Init(x / 16 * 16, y-16, STAR);
@@ -230,8 +237,7 @@ void Map::takeCoin(BaseCharacter* character, int x, int y, int background)
 	if (character->canTakeCoin)
 	{
 		MapSetBlock(x, y, background);
-		character->takeCoin();
-		
+		character->takeCoin();	
 	}
 }
 
@@ -250,6 +256,15 @@ void Map::cleanInactiveAnim()
 		if (!destroyBrickAnimation[v].active)
 		{
 			destroyBrickAnimation.erase(destroyBrickAnimation.begin() + v);
+			v--;
+		}
+	}
+
+	for (int v = 0; v < jumpingCoinAnimation.size(); v++)
+	{
+		if (!jumpingCoinAnimation[v].active)
+		{
+			jumpingCoinAnimation.erase(jumpingCoinAnimation.begin() + v);
 			v--;
 		}
 	}

@@ -4,6 +4,7 @@
 
 vector<BumpingBlockAnimation> bumpingBlockAnimation; // simple animation which which wasn't possible to put on the map
 vector<DestroyBrickAnimation> destroyBrickAnimation;
+vector<JumpingCoinAnimation> jumpingCoinAnimation;
 Text globalText;	// TOP text - statistic
 int xOff;			//	xOFF for map
 Settings settings;

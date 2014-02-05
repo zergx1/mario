@@ -9,15 +9,13 @@ Text::Text(void)
 
 void Text::init()
 {
-	al_init_font_addon(); // initialize the font addon
-	al_init_ttf_addon();// initialize the ttf (True Type Font) addon
 	font = al_load_ttf_font("Fonts/arial.ttf", 15, 0);
 
 	image = al_load_bitmap("Sprites/timer.png");
 	mario_image = al_load_bitmap("Sprites/big_mario.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(96, 128, 192));
 
-	counter = 30;	// time
+	counter = settings.getIntOption("time");	// time
 	counterTemp = 0;
 	startFrame = 0;
 	maxFrame = 2;
@@ -26,6 +24,8 @@ void Text::init()
 	frameDelay = 30;
 	frameWidth = 16;
 	frameHeight = 16;
+	reset = false;	// when mario is clear the stage
+	name = "Player";
 }
 
 
@@ -119,25 +119,38 @@ void Text::update(BaseCharacter *character, bool world_info)
 	{
 	divisor = 100;
 	temp = counter;
-	for (int i = 0; i < 3; i++)
+	if (counter >= 0)
 	{
-		time[i] = (char)(temp / divisor) + 48;
-		if (temp / divisor != 0)
-			temp %= divisor;
-		divisor /= 10;
+		for (int i = 0; i < 3; i++)
+		{
+			time[i] = (char)(temp / divisor) + 48;
+			if (temp / divisor != 0)
+				temp %= divisor;
+			divisor /= 10;
+		}
+		time[3] = '\0';	// end of array
+		if (reset)
+		{
+			counter--;
+			character->score++;
+		}
+		else
+			if (++counterTemp == 60 )
+			{
+				counter--;
+				counterTemp = 0;
+			}
 	}
-	time[3] = '\0';	// end of array
-	if (++counterTemp == 60)
+	if (!reset)
 	{
-		counter--;
-		counterTemp = 0;
-	}
 
-	// TIMER
-	if (counter == 10)
-		Sound::play(Sound::HURRY);
-	if (counter == 0)
-		character->Kill();
+		if (counter == 100)
+			Sound::play(Sound::HURRY);
+		if (counter == 0)
+		{
+			counter = settings.getIntOption("time");
+			character->Kill();
+		}
 	}
 	// FLOATING TEXT WITH SCORE
 	for (int i = 0; i < vecFloatingText.size(); i++)

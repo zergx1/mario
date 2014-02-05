@@ -11,7 +11,6 @@ void BumpingBlockAnimation::Init(int x, int y, BLKSTR *blockdata)
 	this->y = y;
 	this->yOffset = y - 8;
 	this->dirY = -1;
-	this->animationDuration = 1;
 	this->type = blockdata->user1;
 	this->background = blockdata->user2;
 	if (type == BRICK_ID)

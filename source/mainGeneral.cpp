@@ -18,13 +18,15 @@
 int mainGeneral(void)
 {
 	//variables
+	Text text;
 	Map map;
 	Keyboard keyboard;
+	Player mario;
+	Menu menu;
+	const int numMonsters = 16;
+	BaseMonster *monsters[numMonsters];
 	bool done = false;
 	bool render = false;
-	settings.init();
-
-
 
 	//allegro variable
 	ALLEGRO_DISPLAY *display = NULL;
@@ -32,12 +34,10 @@ int mainGeneral(void)
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
 	ALLEGRO_BITMAP *image;
-	Text text;
 	//program init
-	if (!al_init())										//initialize Allegro
+	if (!al_init())	//initialize Allegro
 		return -1;
-	int i = al_get_num_display_modes();
-
+	
 	al_get_display_mode(1, &disp_data);
 	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
@@ -46,17 +46,28 @@ int mainGeneral(void)
 		return -1;
 
 	//addon init
-	keyboard.init(display);
+	al_init_font_addon(); // initialize the font addon
+	al_init_ttf_addon();// initialize the ttf (True Type Font) addon
 	al_init_image_addon();
 	al_install_audio();
+	al_reserve_samples(5);
 	al_init_acodec_addon();
+	al_hide_mouse_cursor(display);
+	al_install_keyboard();
 
 	al_reserve_samples(1);
 
 	start:
 	const int numMonsters = 16;
 
-	BaseMonster *monsters[numMonsters];
+	// INIT
+	menu.init();
+	settings.init();
+	globalText.init();
+	text.init();
+	keyboard.init(display);
+	mario.Init(&map);
+
 	monsters[0] = new TurtleMonster();//.Init(13*16, 12*16);
 	monsters[0]->InitType(13*16, 12*15, SMART);
 	monsters[1] =  new BaseMonster();
@@ -89,16 +100,7 @@ int mainGeneral(void)
 	monsters[14]->Init(33*16, 9*16);
 	monsters[15] =  new FlowerMonster();
 	monsters[15]->Init(83*16, 11*16);
-	Player mario;
-	mario.Init(&map);
-	Menu menu;
-	menu.init();
-	text.init();
 
-	//Item item;
-	//FlowerMonster f;
-//	item.Init(FLOWER);
-	//f.Init();
 
 	if (map.init("Maps/test.fmp"))
 	{
@@ -106,10 +108,6 @@ int mainGeneral(void)
 	}
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
-
-	//for (int i = 0; i < numMonsters; i++)
-	//	monsters[i]->Init(SMART);
-
 
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
@@ -183,10 +181,13 @@ int mainGeneral(void)
 					}
 				}
 				mario.Update(keyboard.keys);
+				globalText.update(&mario);
 				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
 					bumpingBlockAnimation[v].Update();
 				for (int v = 0; v < destroyBrickAnimation.size(); v++)
 					destroyBrickAnimation[v].Update();
+				for (int v = 0; v < jumpingCoinAnimation.size(); v++)
+					jumpingCoinAnimation[v].Update();
 				if (map.item->live)
 				{
 					map.item->Update();
@@ -220,10 +221,15 @@ int mainGeneral(void)
 	
 				map.draw();
 				mario.Draw();
+				globalText.draw();
 				if( map.item->live)
 					map.item->Draw();
-				//f.Draw();
-				//item.Draw(xOff);
+				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+					bumpingBlockAnimation[v].Draw();
+				for (int v = 0; v < destroyBrickAnimation.size(); v++)
+					destroyBrickAnimation[v].Draw();
+				for (int v = 0; v < jumpingCoinAnimation.size(); v++)
+					jumpingCoinAnimation[v].Draw();
 
 				for (int i = 0; i < numMonsters; i++)
 				{

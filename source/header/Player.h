@@ -38,6 +38,7 @@ private:
 	bool blinking;
 
 public:
+	bool win;
 	Bullet* b;
 	bool beforeStart; //show info before start
 	bool space_clicked;
@@ -57,5 +58,6 @@ public:
 	virtual void pipeMove(int toX, int toY, PIPE_MOVE from);
 	virtual void collisionWithOther(BaseCharacter* character);
 	virtual void takeItem(BaseCharacter* character);
+	void stageClear();
 };
 

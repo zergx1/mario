@@ -20,8 +20,7 @@ int Keyboard::init(ALLEGRO_DISPLAY *display)
 		keys[i] = false;
 	}
 
-	al_hide_mouse_cursor(display);
-	al_install_keyboard();
+	
 	return 1;
 }
 

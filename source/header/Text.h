@@ -21,7 +21,6 @@ private:
 	ALLEGRO_BITMAP *mario_image;
 
 	ALLEGRO_FONT *font;
-
 	int startFrame;
 	int maxFrame;
 	int curFrame;
@@ -30,7 +29,6 @@ private:
 
 	int frameWidth;
 	int frameHeight;
-	int counter;
 	int counterTemp;
 
 	char* name;
@@ -42,6 +40,8 @@ private:
 	vector<FloatingTextStruct> vecFloatingText;
 
 public:
+	bool reset;
+	int counter;
 	Text(void);
 	~Text(void);
 	float x;

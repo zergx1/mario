@@ -1,25 +1,28 @@
 #pragma once
 #include "GlobalObjects.h"
 #include "lib/mappy_A5.h"
-#include "BaseCharacter.h"
-class BaseCharacter;
-class BumpingBlockAnimation
+
+class JumpingCoinAnimation
 {
 private:
 	int x;
 	int y;
-	int yOffset;
+	int velY;
 	int dirY;
-	int type;
-	int background;
+	int yOffset;
 	ALLEGRO_BITMAP *image;
+	int startFrame;
+	int maxFrame;
+	int curFrame;
+	int frameCount;
+	int frameDelay;
+
 public:
 	bool active;
-	BumpingBlockAnimation(void);
+	JumpingCoinAnimation(void);
 	virtual void Init(int x, int y, BLKSTR *blockdata);
 	virtual void Update();
 	virtual void Draw();
-	virtual void collisionWithOther(BaseCharacter* character);
-	~BumpingBlockAnimation(void);
+	~JumpingCoinAnimation(void);
 };
 

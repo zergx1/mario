@@ -16,7 +16,7 @@ namespace Sound{
 	enum SOUNDS{	PIPE,JUMP, MARIO_DIE,
 					BREAK_BRICK, COIN, BUMP,
 					POWER_UP, POWER_DOWN, POWER_APPEARS,
-					GAIN_LIFE, HURRY,
+					GAIN_LIFE, HURRY, WIN,
 					SIZE_OF_SOUNDS };	
 	int init();
 	void play(int sound);	// play once
