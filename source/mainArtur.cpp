@@ -24,8 +24,7 @@ int mainArtur(void)
 	bool render = false;
 	settings.init();
 
-	int xOff = 0;
-	int yOff = 0;
+
 
 	//allegro variable
 	ALLEGRO_DISPLAY *display = NULL;
@@ -54,9 +53,41 @@ int mainArtur(void)
 
 	al_reserve_samples(1);
 
-	const int numSprites = 2;
+	const int numMonsters = 16;
 
-	TurtleMonster orbs[numSprites];
+	BaseMonster *monsters[numMonsters];
+	monsters[0] = new TurtleMonster();//.Init(13*16, 12*16);
+	monsters[0]->InitType(13*16, 12*15, SMART);
+	monsters[1] =  new BaseMonster();
+	monsters[1]->Init(26*16, 12*16);
+	monsters[2] =  new BaseMonster();
+	monsters[2]->Init(53*16, 12*16);
+	monsters[3] =  new TurtleMonster();
+	monsters[3]->InitType(42*16, 11*16, SMART);
+	monsters[4] =  new BaseMonster();
+	monsters[4]->Init(49*16, 5*16);
+	monsters[5] =  new TurtleMonster();
+	monsters[5]->Init(75*16, 7*16);
+	monsters[6] =  new BaseMonster();
+	monsters[6]->Init(80*16, 12*16);
+	monsters[7] =  new BaseMonster();
+	monsters[7]->Init(98*16, 12*16);
+	monsters[8] =  new TurtleMonster();
+	monsters[8]->InitType(138*16, 11*16, SMART);
+	monsters[9] =  new BaseMonster();
+	monsters[9]->Init(120*16, 12*16);
+	monsters[10] =  new BaseMonster();
+	monsters[10]->Init(168*16, 5*16);
+	monsters[11] =  new TurtleMonster();
+	monsters[11]->Init(166*16, 6*16);
+	monsters[12] =  new TurtleMonster();
+	monsters[12]->Init(164*16, 2*16);
+	monsters[13] =  new BaseMonster();
+	monsters[13]->Init(162*16, 11*16);
+	monsters[14] =  new FlowerMonster();
+	monsters[14]->Init(33*16, 9*16);
+	monsters[15] =  new FlowerMonster();
+	monsters[15]->Init(83*16, 11*16);
 	Player mario;
 	mario.Init(&map);
 	Menu menu;
@@ -75,8 +106,8 @@ int mainArtur(void)
 	image = al_load_bitmap("Sprites/monster1.png");
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
-	for (int i = 0; i < numSprites; i++)
-		orbs[i].Init(SMART);
+	//for (int i = 0; i < numMonsters; i++)
+	//	monsters[i]->Init(SMART);
 
 
 	event_queue = al_create_event_queue();
@@ -125,17 +156,25 @@ int mainArtur(void)
 			else
 			{
 				menu.checkIfPaused(keyboard.keys);
-				for (int i = 0; i < numSprites; i++)
+				for (int i = 0; i < numMonsters; i++)
 				{
-					orbs[i].Update();
-					mario.collisionWithOther(&orbs[i]);
-					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
-						bumpingBlockAnimation[v].collisionWithOther(&orbs[i]);
-					for(int j=0;j< numSprites; j++)
+					monsters[i]->startAction(720);
+				}
+				for (int i = 0; i < numMonsters; i++)
+				{
+					if(monsters[i]->started)
 					{
-						if(i == j)
-							continue;
-						orbs[i].collisionWithOtherMonster(&orbs[j]);
+						monsters[i]->Update();
+						mario.collisionWithOther(monsters[i]);
+						for (int v = 0; v < bumpingBlockAnimation.size(); v++)
+							bumpingBlockAnimation[v].collisionWithOther(monsters[i]);
+						for(int j=0;j< numMonsters; j++)
+						{
+							if(i == j)
+								continue;
+							if(monsters[j]->started)
+								monsters[i]->collisionWithOtherMonster(monsters[j]);
+						}
 					}
 				}
 				mario.Update(keyboard.keys);
@@ -181,8 +220,11 @@ int mainArtur(void)
 				//f.Draw();
 				//item.Draw(xOff);
 
-				for (int i = 0; i < numSprites; i++)
-					orbs[i].Draw();
+				for (int i = 0; i < numMonsters; i++)
+				{
+					if(monsters[i]->started)
+						monsters[i]->Draw();
+				}
 				menu.drawBackgrounds();
 
 			}

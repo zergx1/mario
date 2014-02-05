@@ -13,10 +13,16 @@ void BaseCharacter::Init(int x0, int y0)
 	live = true;
 	show = true;
 	canTakeCoin = false;
+	started = false;
 	killsOtherMonsters = false;
+	killableByJump = true;
 	x = x0;
 	y = y0;
+	marginX = 0;
+	marginY = 0;
 }
+
+
 
 void BaseCharacter::Update()
 {
@@ -67,4 +73,12 @@ bool BaseCharacter::CheckIfKillPlayer(BaseCharacter* character)
 void BaseCharacter::takeItem(BaseCharacter* character)
 {
 
+}
+void BaseCharacter::startAction(int width)
+{
+	//std::cout<<x<<" "<<xOff<<std::endl;
+	if( x >= xOff && x <= xOff+width && !started)
+	{
+		started = true;
+	}
 }

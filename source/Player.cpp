@@ -452,10 +452,10 @@ void Player::collisionWithOther(BaseCharacter* character)
 		float myXRIGHT = x + frameWidth;
 		float myYBOTTOM = y + frameHeight;
 
-		float xLEFT = character->x;
-		float yTOP = character->y;
-		float xRIGHT = character->x + character->frameWidth;
-		float yBOTTOM = character->y + character->frameHeight;
+		float xLEFT = character->x+ character->marginX;
+		float yTOP = character->y + character->marginY;
+		float xRIGHT = character->x + character->frameWidth - character->marginX;
+		float yBOTTOM = character->y + character->frameHeight - character->marginY;
 
 		bool horizontal = (xLEFT >= myXLEFT && xLEFT <= myXRIGHT) || (xRIGHT >= myXLEFT && xRIGHT <= myXRIGHT);
 		bool vertical = (yTOP >= myYTOP && yTOP <= myYBOTTOM) || (yBOTTOM >= myYTOP && yBOTTOM <= myYBOTTOM);
@@ -467,7 +467,7 @@ void Player::collisionWithOther(BaseCharacter* character)
 				score += character->score;
 				globalText.floatingScore(character->x, character->y, character->score);
 			}
-			else if (velY > 0 && this->live)
+			else if (velY > 0 && this->live && character->killableByJump)
 			{
 				character->Hit();
 				velY = 2.5;
@@ -550,7 +550,16 @@ void Player::takeItem(BaseCharacter* character)
 {
 	globalText.floatingScore(character->x, character->y, character->score);
 	score += character->score;
-	if (currentState != 2)
+	if( dynamic_cast<Item*>(character)->type == GREEN_MUSHROOM)
+	{
+		live++;
+		Sound::play(Sound::POWER_UP);
+	}
+	else if(dynamic_cast<Item*>(character)->type == STAR)
+	{
+		setIncerdible();
+	}
+	else if (currentState != 2)
 		changeStatus(++currentState);
 	else
 		Sound::play(Sound::POWER_UP);

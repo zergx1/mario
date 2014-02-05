@@ -206,8 +206,13 @@ int Map::destroyBlock(BaseCharacter* character)
 		{
 			//coincs
 		}
-		else
+		else if(choice == 9)
 			item->Init(x / 16 * 16, y-16, STAR);
+		else
+		{
+			item->Init(x / 16 * 16, y-16, GREEN_MUSHROOM);
+
+		}
 
 
 		item->LeaveBox();

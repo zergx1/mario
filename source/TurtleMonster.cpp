@@ -28,7 +28,7 @@ void TurtleMonster::Init(int x0, int y0)
 
 }
 
-void TurtleMonster::Init(int x0, int y0, TURTLE s)
+void TurtleMonster::InitType(int x0, int y0, int s)
 {
 	Init(x0, y0);
 	type = s;

@@ -16,11 +16,16 @@ public:
 	bool show;
 	bool canTakeCoin;
 	bool killsOtherMonsters;
+	bool started; // when maps is close 
+	bool killableByJump;
 
 	float x;	// current x coordinate
 	float y;	// current y coordinate
 	float velX;
 	float velY;
+	// for collision, escape from too fast collision
+	float marginX; // default 0
+	float marginY;  // default 0
 	int dirX;
 	int dirY;
 	int startFrame;
@@ -42,7 +47,9 @@ public:
 
 	BaseCharacter(void);
 	~BaseCharacter(void);
+	virtual void startAction(int width);
 	virtual void Init(int x0 = 0, int y0 = 0);
+
 	virtual void Update();
 	virtual void Draw(int flag = 0);
 	virtual void Hit();

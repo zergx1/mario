@@ -14,7 +14,7 @@ public:
 
 	TurtleMonster(void);
 	virtual void Init(int x0 = 0, int y0 = 0);
-	virtual void Init(int x0, int y0, TURTLE s);
+	virtual void InitType(int x0, int y0, int s);
 	virtual void Draw();
 	virtual void Update();
 
@@ -24,7 +24,7 @@ public:
 	void revive();
 	virtual bool CheckIfKillPlayer(BaseCharacter* character);
 
-	TURTLE type;
+	int type;
 	int timeToReborn;
 	int currentTimeToReborn;
 	~TurtleMonster(void);
