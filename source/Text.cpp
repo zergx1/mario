@@ -12,7 +12,7 @@ void Text::init()
 	font = al_load_ttf_font("Fonts/arial.ttf", 15, 0);
 
 	image = al_load_bitmap("Sprites/timer.png");
-	mario_image = al_load_bitmap("Sprites/big_mario.png");
+	
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
 
 	counter = settings.getIntOption("time");	// time
@@ -45,8 +45,11 @@ void Text::draw(bool world_info)
 	al_draw_text(font, al_map_rgb(255, 255, 255), x += 60, row1, ALLEGRO_ALIGN_CENTRE, "WORLD");
 	al_draw_text(font, al_map_rgb(255, 255, 255), x, row2, ALLEGRO_ALIGN_CENTRE, "1-1");
 
-
-
+	if (reset)
+	{
+		al_draw_text(font, al_map_rgb(255, 255, 255), x - 100, 100, ALLEGRO_ALIGN_CENTRE, "YOU WIN ! ! !");
+		al_draw_text(font, al_map_rgb(255, 255, 255), x - 100, 115, ALLEGRO_ALIGN_CENTRE, "CONGRATULATIONS");
+	}
 	
 	for (int i = 0; i < vecFloatingText.size(); i++)
 	{
@@ -56,8 +59,8 @@ void Text::draw(bool world_info)
 
 	if(world_info)
 	{
-			al_draw_bitmap_region(mario_image, 16, 0, 16, 32, x/2, 60 - 3, 0);
-			al_draw_text(font, al_map_rgb(255, 255, 255), x/2+32, 60 + 8, ALLEGRO_ALIGN_CENTRE, live);
+			al_draw_bitmap_region(mario_image, 16, 0, 16, 32, x/2, 80 - 3, 0);
+			al_draw_text(font, al_map_rgb(255, 255, 255), x/2+32, 80 + 8, ALLEGRO_ALIGN_CENTRE, live);
 
 
 	}
@@ -70,6 +73,11 @@ void Text::draw(bool world_info)
 
 void Text::update(BaseCharacter *character, bool world_info)
 {
+	if (character->name[0] == 'M')
+		mario_image = al_load_bitmap("Sprites/big_mario.png");
+	else
+		mario_image = al_load_bitmap("Sprites/big_luigi.png");
+
 	// NAME
 	name = character->name;
 
@@ -144,8 +152,11 @@ void Text::update(BaseCharacter *character, bool world_info)
 	if (!reset)
 	{
 
-		if (counter == 100)
+		if (counter == 290)
+		{
 			Sound::play(Sound::HURRY);
+			Sound::playBackgroundMusic(Sound::MUSIC_HURRY_UP);
+		}
 		if (counter == 0)
 		{
 			counter = settings.getIntOption("time");

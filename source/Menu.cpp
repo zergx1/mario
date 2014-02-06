@@ -8,7 +8,6 @@ Menu::Menu(void)
 
 void Menu::init()
 {
-
 	state = MENU;
 	//state = GAME;
 	ALLEGRO_BITMAP *title = NULL;
@@ -18,6 +17,7 @@ void Menu::init()
 	ALLEGRO_BITMAP *mgImage = NULL;
 	ALLEGRO_BITMAP *fgImage = NULL;
 
+	numberOfPlayers = 0;
 	current = 0;
 	currentInfoTime = 0;
 	infoTime = 150;
@@ -114,8 +114,11 @@ void Menu::update(bool *keys)
 	{
 	case 0:
 		image = menu1; break;
+		numberOfPlayers = 0;
 	case 1:
-		image = menu2; break;
+		image = menu2; 
+		numberOfPlayers = 1;
+		break;
 	case 2:
 		image = menu3; break;
 	}

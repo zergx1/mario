@@ -13,6 +13,7 @@
 #include "header/FlowerMonster.h"
 #include "header/Text.h"
 #include "header\GlobalObjects.h"
+#include "header/Sound.h"
 
 
 int mainGeneral(void)
@@ -21,7 +22,9 @@ int mainGeneral(void)
 	Text text;
 	Map map;
 	Keyboard keyboard;
-	Player mario;
+	Player *players[2];
+	players[0] = new Player();
+	players[1] = new Player();
 	Menu menu;
 	const int numMonsters = 16;
 	BaseMonster *monsters[numMonsters];
@@ -33,7 +36,7 @@ int mainGeneral(void)
 	ALLEGRO_DISPLAY_MODE   disp_data;
 	ALLEGRO_EVENT_QUEUE *event_queue = NULL;
 	ALLEGRO_TIMER *timer;
-	ALLEGRO_BITMAP *image;
+
 	//program init
 	if (!al_init())	//initialize Allegro
 		return -1;
@@ -65,8 +68,19 @@ int mainGeneral(void)
 	globalText.init();
 	text.init();
 	keyboard.init(display);
-	mario.Init(&map);
+	players[0]->Init(&map, false);
+	players[1]->Init(&map, true);
 
+respawn:
+	if (++currentPlayer > menu.numberOfPlayers)
+		currentPlayer = 0;
+	players[currentPlayer]->readyToRespawn = false;
+	xOff = players[currentPlayer]->x;
+	if (map.init("Maps/test.fmp"))
+	{
+		return -5;
+	}
+	map.draw();
 	monsters[0] = new TurtleMonster();//.Init(13*16, 12*16);
 	monsters[0]->InitType(13*16, 12*15, SMART);
 	monsters[1] =  new BaseMonster();
@@ -101,13 +115,7 @@ int mainGeneral(void)
 	monsters[15]->Init(83*16, 11*16);
 
 
-	if (map.init("Maps/test.fmp"))
-	{
-		return -5;
-	}
-	image = al_load_bitmap("Sprites/monster1.png");
-	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));
-
+	
 	event_queue = al_create_event_queue();
 	timer = al_create_timer(1.0 / 60);
 
@@ -122,12 +130,12 @@ int mainGeneral(void)
 			break;
 		if(keyboard.keys[Keyboard::ENTER])
 		{
-			//item.LeaveBox();
+			//item.LeaveBox();	
 		}
-		if(mario.beforeStart && menu.state == GAME )
+		if(players[currentPlayer]->beforeStart && menu.state == GAME )
 		{
 				menu.state = INFO;
-				mario.beforeStart = false;
+				players[currentPlayer]->beforeStart = false;
 		}
 		ALLEGRO_EVENT ev;
 		al_wait_for_event(event_queue, &ev);
@@ -147,11 +155,12 @@ int mainGeneral(void)
 			}
 			else if (menu.state == INFO)
 			{
-				text.update(&mario, true);
+				text.update(players[currentPlayer], true);
 				if(menu.currentInfoTime++ > menu.infoTime)
 				{
 					menu.currentInfoTime = 0;
 					menu.state = GAME;
+					Sound::playBackgroundMusic(Sound::MUSIC);
 				}
 
 			}
@@ -164,10 +173,10 @@ int mainGeneral(void)
 				}
 				for (int i = 0; i < numMonsters; i++)
 				{
-					if(monsters[i]->started && !mario.win)
+					if (monsters[i]->started && !players[currentPlayer]->win)
 					{
 						monsters[i]->Update();
-						mario.collisionWithOther(monsters[i]);
+						players[currentPlayer]->collisionWithOther(monsters[i]);
 						for (int v = 0; v < bumpingBlockAnimation.size(); v++)
 							bumpingBlockAnimation[v].collisionWithOther(monsters[i]);
 						for(int j=0;j< numMonsters; j++)
@@ -179,8 +188,8 @@ int mainGeneral(void)
 						}
 					}
 				}
-				mario.Update(keyboard.keys);
-				globalText.update(&mario);
+				players[currentPlayer]->Update(keyboard.keys);
+				globalText.update(players[currentPlayer]);
 				for (int v = 0; v < bumpingBlockAnimation.size(); v++)
 					bumpingBlockAnimation[v].Update();
 				for (int v = 0; v < destroyBrickAnimation.size(); v++)
@@ -190,7 +199,7 @@ int mainGeneral(void)
 				if (map.item->live)
 				{
 					map.item->Update();
-					map.item->collisionWithOther(&mario);
+					map.item->collisionWithOther(players[currentPlayer]);
 					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
 						bumpingBlockAnimation[v].collisionWithOther(map.item);
 				}
@@ -213,13 +222,13 @@ int mainGeneral(void)
 			if (menu.state == INFO)
 			{
 				text.draw(true);
-				//menu.drawInfo(mario);
+				//menu.drawInfo(players);
 			}
 			else
 			{
 	
 				map.draw();
-				mario.Draw();
+				players[currentPlayer]->Draw();
 				globalText.draw();
 				if( map.item->live)
 					map.item->Draw();
@@ -238,10 +247,14 @@ int mainGeneral(void)
 				menu.drawBackgrounds();
 
 			}
-			if(mario.lives < 0 && mario.beforeStart)
+			if (players[0]->lives <= 0 && players[0]->beforeStart && ((players[1]->lives <= 0 && players[1]->beforeStart) || !menu.numberOfPlayers == 1)) // material implication
 			{
+				Sound::play(Sound::GAME_OVER);
 				goto start;
 			}
+			if (players[currentPlayer]->readyToRespawn)
+				goto respawn;
+
 			al_flip_display();
 			al_clear_to_color(al_map_rgb(0, 0, 0));
 		}
@@ -250,7 +263,6 @@ int mainGeneral(void)
 	map.del();
 	keyboard.del();
 
-	al_destroy_bitmap(image);
 	al_destroy_event_queue(event_queue);
 	al_destroy_display(display);						//destroy our display object
 

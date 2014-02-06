@@ -19,6 +19,7 @@ public:
 	int last_status;
 	int infoTime;
 	int currentInfoTime;
+	int numberOfPlayers;
 	ALLEGRO_BITMAP *menu1;
 	ALLEGRO_BITMAP *menu2;
 	ALLEGRO_BITMAP *menu3;

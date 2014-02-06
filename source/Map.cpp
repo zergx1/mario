@@ -31,8 +31,7 @@ int Map::init(char *path)
 		al_show_native_message_box(al_get_current_display(), "Critical error", "", "Given map doesn't exist", NULL, ALLEGRO_MESSAGEBOX_ERROR);
 		return -5;
 	}
-	xOff = 0;
-	//xOff = 200 * 16 - 360;
+	
 	item = new Item();
 	srand(time(0));  
 
@@ -53,7 +52,7 @@ void Map::draw()
 
 void Map::update(int x)
 {
-	if (x < (200 * 16))
+	if (x < (200 * 16))	// for hiden scene
 		xOff = x - 16 * settings.getIntOption("map_scrolling");
 
 	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
@@ -201,28 +200,30 @@ int Map::destroyBlock(BaseCharacter* character)
 	{
 		int choice;
 		choice = rand() % 100;
-		if(choice <= 20)
+		/*if(choice <= 20)
 		{
-			if(character->currentState == 0)
-				item->Init(x / 16 * 16, y-16, MUSHROOM);
-			else
-				item->Init(x / 16 * 16, y - 16, FLOWER);
-		}
-		else if(choice > 20 && choice < 90)
-		{
-			character->takeCoin();
-			JumpingCoinAnimation anim;
-			anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
-			jumpingCoinAnimation.push_back(anim);
-			character->score += 200;
-		}
-		else if(choice == 9)
-			item->Init(x / 16 * 16, y-16, STAR);
+		if(character->currentState == 0)
+		item->Init(x / 16 * 16, y-16, MUSHROOM);
 		else
+		item->Init(x / 16 * 16, y - 16, FLOWER);
+		}
+		else if(choice > 20 && choice <= 80)
+		{
+		character->takeCoin();
+		JumpingCoinAnimation anim;
+		anim.Init(x / 16 * 16, y / 16 * 16, blockdata);
+		jumpingCoinAnimation.push_back(anim);
+		character->score += 200;
+		}
+		else if (choice > 80 && choice <= 90)*/
+		{
+			item->Init(x / 16 * 16, y-16, STAR);
+		}
+	/*	else
 		{
 			item->Init(x / 16 * 16, y-16, GREEN_MUSHROOM);
 
-		}
+		}*/
 
 
 		item->LeaveBox();

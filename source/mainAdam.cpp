@@ -57,7 +57,7 @@ int mainAdam(void)
 	al_reserve_samples(1);
 
 
-	mario.Init(&map);
+	mario.Init(&map,1);
 	globalText.init();
 	//menu.init();
 

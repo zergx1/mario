@@ -39,12 +39,13 @@ private:
 
 public:
 	bool win;
+	bool luigi;
 	Bullet* bullets;
-	bool beforeStart; //show info before start
-	bool space_clicked;
+	bool beforeStart;	//show info before start
+	bool readyToRespawn;
 	Player(void);
 	~Player(void);
-	virtual void Init(Map* map);
+	virtual void Init(Map* map, bool luigi);
 	virtual void Update(bool keys[]);
 	void changeStatus(int s, bool instant = false);
 	virtual void Draw(int flag = 0);

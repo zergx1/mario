@@ -166,6 +166,7 @@ bool TurtleMonster::CheckIfKillPlayer(BaseCharacter* character)
 		maxFrame = 6;
 		frameDelay = 5;
 		velX = 3;
+		x += dirX * velX;
 		frameHeight = 16;
 		killsOtherMonsters = true;
 		//y -= 16;

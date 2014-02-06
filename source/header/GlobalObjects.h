@@ -16,6 +16,7 @@ extern int xOff; // for a map
 extern Text globalText;
 extern float normalVel0;
 extern float superVel0;
+extern int currentPlayer;
 extern vector<BumpingBlockAnimation> bumpingBlockAnimation;
 extern vector<JumpingCoinAnimation> jumpingCoinAnimation;
 extern vector<DestroyBrickAnimation> destroyBrickAnimation;

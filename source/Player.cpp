@@ -12,18 +12,22 @@ Player::~Player(void)
 {
 }
 
-void Player::Init(Map* map)
+void Player::Init(Map* map, bool luigi)
 {
 	BaseCharacter::Init();
 	name = new char[6];
-	name = "MARIO\0";
+	if (!luigi)
+		name = "MARIO\0";
+	else
+		name = "LUIGI\0";
+
 	currentState = SMALL;
 	blinking_time = 60;
 	current_blinking_time = 0;
 	blinking = false;
 	invisible = false;
 	win = false;
-
+	readyToRespawn = true;
 	normalVel0 = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
 	superVel0 = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);
 
@@ -34,6 +38,7 @@ void Player::Init(Map* map)
 	incerdible=false; //if mario took star
 	incerdileTime=900;
 	currentIncredibleTime=0;
+	this->luigi = luigi;
 	this->map = map;
 	this->lives = settings.getIntOption("mario_lives");
 	this->x = 0;
@@ -46,13 +51,26 @@ void Player::Init(Map* map)
 	{
 		oldKeys[i] = false;
 	}
-	small_mario = al_load_bitmap("Sprites/small_mario.png");
-	big_mario = al_load_bitmap("Sprites/big_mario.png");
-	super_mario = al_load_bitmap("Sprites/super_mario.png");
+	if (luigi)
+	{
+		small_mario = al_load_bitmap("Sprites/small_luigi.png");
+		big_mario = al_load_bitmap("Sprites/big_luigi.png");
+		super_mario = al_load_bitmap("Sprites/super_luigi.png");
 
-	inc_small_mario = al_load_bitmap("Sprites/inv_small_mario.png");
-	inc_big_mario = al_load_bitmap("Sprites/inv_big_mario.png");
-	inc_super_mario = al_load_bitmap("Sprites/inv_super_mario.png");
+		inc_small_mario = al_load_bitmap("Sprites/inv_small_luigi.png");
+		inc_big_mario = al_load_bitmap("Sprites/inv_big_luigi.png");
+		inc_super_mario = al_load_bitmap("Sprites/inv_super_luigi.png");
+	}
+	else
+	{
+		small_mario = al_load_bitmap("Sprites/small_mario.png");
+		big_mario = al_load_bitmap("Sprites/big_mario.png");
+		super_mario = al_load_bitmap("Sprites/super_mario.png");
+
+		inc_small_mario = al_load_bitmap("Sprites/inv_small_mario.png");
+		inc_big_mario = al_load_bitmap("Sprites/inv_big_mario.png");
+		inc_super_mario = al_load_bitmap("Sprites/inv_super_mario.png");
+	}
 
 	al_convert_mask_to_alpha(small_mario, al_map_rgb(0, 0, 0));
 	al_convert_mask_to_alpha(big_mario, al_map_rgb(0, 0, 0));
@@ -139,14 +157,12 @@ void Player::Update(bool keys[])
 	updateIncerdible();
 	if (!oldKeys[Keyboard::ENTER] && keys[Keyboard::ENTER])	// some cheat can be here
 	{	
-		//pipeMove(200*16,y-50, DOWN);
-		//setIncerdible();
-		//if (currentState == SMALL)
-		//	changeStatus(BIG);
-		//else if (currentState == BIG)
-		//	changeStatus(SUPER);
-		//else
-		//	changeStatus(SMALL);
+		if (currentState == SMALL)
+			changeStatus(BIG);
+		else if (currentState == BIG)
+			changeStatus(SUPER);
+		else
+			changeStatus(SMALL);
 	}
 
 	if (currentState == SUPER && !oldKeys[Keyboard::X] && keys[Keyboard::X])
@@ -182,10 +198,12 @@ void Player::Update(bool keys[])
 	{
 		if( 27 * 16 < x  && x < 27 * 16 + 32 && pipeMoveState == NONE && y == 11 * 16 - frameHeight)
 		{
+			Sound::playBackgroundMusic(Sound::MUSIC_UNDERGROUND);
 			pipeMove(201 * 16, 2 * 16, DOWN);
 		}
 		else if (217 * 16 < x  && x <217 * 16 + 32 && pipeMoveState == NONE && y == 11 * 16 - frameHeight)
 		{
+			Sound::playBackgroundMusic(Sound::MUSIC);
 			pipeMove(144 * 16, 3 * 16, DOWN);
 		}
 
@@ -315,7 +333,10 @@ void Player::Kill()
 {
 	if (live)
 	{
+		Sound::stopBackgroundMusic();
 		Sound::play(Sound::MARIO_DIE);
+		incerdible = false;
+		
 		dirY = -1;
 		velY = 3;
 		lives--;
@@ -353,6 +374,7 @@ void Player::Kill()
 			maxFrame = 2;
 			curFrame = 0;
 			beforeStart = true;
+			readyToRespawn = true;			
 		}
 
 	}
@@ -411,7 +433,7 @@ void Player::takeCoin()
 	//std::cout << "Take coin \n";
 	coins++;
 	Sound::play(Sound::COIN);
-	if (coins == 100)
+	if (coins == settings.getIntOption("coins_for_life"))
 	{
 		coins = 0;
 		lives++;
@@ -587,6 +609,7 @@ void Player::updateIncerdible()
 		}
 		if(currentIncredibleTime+1 >= incerdileTime)
 		{
+			Sound::playBackgroundMusic(Sound::MUSIC);
 			incerdible =  false;
 			image = norm;
 			currentIncredibleTime = 0;
@@ -608,6 +631,7 @@ void Player::takeItem(BaseCharacter* character)
 	}
 	else if(dynamic_cast<Item*>(character)->type == STAR)
 	{
+		Sound::playBackgroundMusic(Sound::MUSIC_INVINCIBLE);
 		setIncerdible();
 	}
 	else if (currentState != 2)
@@ -618,6 +642,7 @@ void Player::takeItem(BaseCharacter* character)
 
 void Player::stageClear()
 {
+	Sound::stopBackgroundMusic();
 	Sound::play(Sound::WIN);
 	globalText.reset = true;
 	win = true;

@@ -8,6 +8,7 @@ vector<JumpingCoinAnimation> jumpingCoinAnimation;
 Text globalText;	// TOP text - statistic
 int xOff;			//	xOFF for map
 Settings settings;
+int currentPlayer = -1;	// mario should start first
 
 float normalVel0;	// = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
 float superVel0;	// = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);

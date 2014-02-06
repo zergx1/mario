@@ -90,7 +90,7 @@ int mainArtur(void)
 	monsters[15] =  new FlowerMonster();
 	monsters[15]->Init(83*16, 11*16);
 	Player mario;
-	mario.Init(&map);
+	mario.Init(&map, true);
 	Menu menu;
 	menu.init();
 	text.init();

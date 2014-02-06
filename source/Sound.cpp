@@ -14,7 +14,13 @@ namespace Sound{
 		{
 			sounds[i].index = 0;
 			sounds[i].needSimultaneous = false;
+			sounds[i].playing = false;
 		}
+
+		sounds[MUSIC].sample = al_load_sample("Audio/music.ogg");
+		sounds[MUSIC_UNDERGROUND].sample = al_load_sample("Audio/musicDown.ogg");
+		sounds[MUSIC_HURRY_UP].sample = al_load_sample("Audio/musicHurry.ogg");
+		sounds[MUSIC_INVINCIBLE].sample = al_load_sample("Audio/musicInvcible.ogg");
 
 		sounds[JUMP].sample = al_load_sample("Audio/jump.ogg");
 		sounds[MARIO_DIE].sample = al_load_sample("Audio/mario_dies.ogg");
@@ -28,6 +34,7 @@ namespace Sound{
 
 		sounds[HURRY].sample = al_load_sample("Audio/Hurry.ogg");
 		sounds[WIN].sample = al_load_sample("Audio/win.ogg");
+		sounds[GAME_OVER].sample = al_load_sample("Audio/Game Over.ogg");
 		sounds[POWER_UP].sample = al_load_sample("Audio/Powerup.ogg");
 		sounds[POWER_DOWN].sample = al_load_sample("Audio/Power Down.ogg");
 		sounds[POWER_APPEARS].sample = al_load_sample("Audio/Powerup Appears.ogg");
@@ -63,5 +70,28 @@ namespace Sound{
 	void play(int sound)
 	{
 		play(sound, ALLEGRO_PLAYMODE_ONCE);
+	}
+
+	void stopBackgroundMusic()
+	{
+		if (!isInitialized)
+			init();
+		if (sounds[MUSIC].playing)
+			al_stop_sample_instance(sounds[MUSIC].inst[0]);
+		if (sounds[MUSIC_INVINCIBLE].playing)
+			al_stop_sample_instance(sounds[MUSIC_INVINCIBLE].inst[0]);
+		if (sounds[MUSIC_HURRY_UP].playing)
+			al_stop_sample_instance(sounds[MUSIC_HURRY_UP].inst[0]);
+		if (sounds[MUSIC_UNDERGROUND].playing)
+			al_stop_sample_instance(sounds[MUSIC_UNDERGROUND].inst[0]);
+
+	}
+
+	void playBackgroundMusic(int sound)
+	{
+		stopBackgroundMusic();
+		al_set_sample_instance_playmode(sounds[sound].inst[0], ALLEGRO_PLAYMODE_LOOP);
+		al_play_sample_instance(sounds[sound].inst[0]);
+		sounds[sound].playing = true;
 	}
 }
