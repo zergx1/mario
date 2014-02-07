@@ -112,7 +112,7 @@ void Item::Update()
 	if (x < 0 || y > height3)
 		live = false;
 
-	if ( (x >= width3 - frameWidth && dirX == 1) || (Map::collided(this, 'x')))
+	if ( (Map::collided(this, 'x')))
 	{
 		dirX *= -1;
 		//animationDirection *= 1;
