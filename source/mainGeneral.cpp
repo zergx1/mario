@@ -66,7 +66,7 @@ int mainGeneral(void)
 	menu.init();
 	settings.init();
 	globalText.init();
-	text.init();
+	//text.init();
 	keyboard.init(display);
 	players[0]->Init(&map, false);
 	players[1]->Init(&map, true);
@@ -155,7 +155,7 @@ respawn:
 			}
 			else if (menu.state == INFO)
 			{
-				text.update(players[currentPlayer], true);
+				globalText.update(players[currentPlayer], true);
 				if(menu.currentInfoTime++ > menu.infoTime)
 				{
 					menu.currentInfoTime = 0;
@@ -221,7 +221,7 @@ respawn:
 			}
 			if (menu.state == INFO)
 			{
-				text.draw(true);
+				globalText.draw(true);
 				//menu.drawInfo(players);
 			}
 			else

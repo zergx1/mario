@@ -24,6 +24,7 @@ void FlowerMonster::Init(int x0, int y0)
 	killableByJump = false;
 	marginX = 2;
 	marginY = 2;
+	score = settings.getIntOption("flower_monster_score");
 
 
 }
