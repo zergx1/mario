@@ -61,8 +61,6 @@ void Text::draw(bool world_info)
 	{
 			al_draw_bitmap_region(mario_image, 16, 0, 16, 32, x/2, 80 - 3, 0);
 			al_draw_text(font, al_map_rgb(255, 255, 255), x/2+32, 80 + 8, ALLEGRO_ALIGN_CENTRE, live);
-
-
 	}
 	else
 	{
@@ -106,6 +104,7 @@ void Text::update(BaseCharacter *character, bool world_info)
 
 	live[0] = 'x';
 	live[1] = (char)(character->lives) + 48;
+	live[2] = '\0';
 
 
 	// COINS
@@ -125,29 +124,29 @@ void Text::update(BaseCharacter *character, bool world_info)
 	// TIMER
 	if(!world_info)
 	{
-	divisor = 100;
-	temp = counter;
-	if (counter >= 0)
-	{
-		for (int i = 0; i < 3; i++)
+		divisor = 100;
+		temp = counter;
+		if (counter >= 0)
 		{
-			time[i] = (char)(temp / divisor) + 48;
-			if (temp / divisor != 0)
-				temp %= divisor;
-			divisor /= 10;
-		}
-		time[3] = '\0';	// end of array
-		if (reset)
-		{
-			counter--;
-			character->score++;
-		}
-		else
-			if (++counterTemp == 60 )
+			for (int i = 0; i < 3; i++)
+			{
+				time[i] = (char)(temp / divisor) + 48;
+				if (temp / divisor != 0)
+					temp %= divisor;
+				divisor /= 10;
+			}
+			time[3] = '\0';	// end of array
+			if (reset)
 			{
 				counter--;
-				counterTemp = 0;
+				character->score++;
 			}
+			else
+				if (++counterTemp == 60 )
+				{
+					counter--;
+					counterTemp = 0;
+				}
 	}
 	if (!reset)
 	{
