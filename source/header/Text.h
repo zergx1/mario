@@ -34,7 +34,7 @@ private:
 	char* name;
 	char score[7];
 	char coin[4];
-	char live[2];
+	char live[3];
 	char time[4];
 	char* level;
 	vector<FloatingTextStruct> vecFloatingText;
@@ -50,9 +50,9 @@ public:
 	int width;
 	int height;
 
-	void draw(bool world_info=false);
+	void draw(bool world_info = false);
 	void init();
-	void update(BaseCharacter *character, bool world_info=false);
+	void update(BaseCharacter *character, bool world_info = false);
 	void Text::floatingScore(int x, int y, char *score);
 	void Text::floatingScore(int x, int y, int score);
 

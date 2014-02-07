@@ -20,7 +20,7 @@ void Menu::init()
 	numberOfPlayers = 0;
 	current = 0;
 	currentInfoTime = 0;
-	infoTime = 150;
+	infoTime = 1 * 30;
 	down_clicked = false;
 	up_clicked = false;
 	p_clicked = false;
