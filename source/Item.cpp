@@ -109,7 +109,7 @@ void Item::Update()
 	if (!live || status != LEFT)	// trick do spadania 
 		return;
 	
-	if (x < 0 || y > height3)
+	if (x < 0 || y >= HEIGHT)
 		live = false;
 
 	if ( (Map::collided(this, 'x')))
@@ -122,7 +122,7 @@ void Item::Update()
 		x += velX * dirX;
 	}
 
-	if ( (y >= height3 - frameHeight) || (Map::collided(this, 'y')))
+	if ( (y >= HEIGHT - frameHeight) || (Map::collided(this, 'y')))
 	{
 		velY = 0;
 		//velX = 1;
@@ -162,6 +162,11 @@ void Item::Draw()
 	float new_y = frameHeight;
 	if(status != LEFT)
 		new_y = (startY - y);
+	if (y >= HEIGHT || x <= xOff)
+	{
+		live = false;	
+		show = false;
+	}
 	if(show)
 	{
 		al_draw_bitmap_region(image, fx, fy, frameWidth,

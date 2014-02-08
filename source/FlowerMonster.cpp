@@ -122,7 +122,7 @@ void FlowerMonster::Hit()
 
 void FlowerMonster::KillByShot()
 {
-	BaseMonster::KillByShot();
+	BaseMonster::Kill();
 }
 
 
