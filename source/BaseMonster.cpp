@@ -3,9 +3,6 @@
 #include <math.h>
 #include <iostream>
 
-int width = 320;
-int height = 240;
-
 BaseMonster::BaseMonster(void)
 {
 }
@@ -133,7 +130,7 @@ void BaseMonster::Draw()
 		else
 			fy = fy - 8;
 	}
-	if (y > height || x < xOff)
+	if (y > HEIGHT || x < xOff)
 	{
 		live = false;	
 	}

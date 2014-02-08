@@ -16,7 +16,7 @@ void Background::init(float x1, float y1, float velx1, float vely1, int width1, 
 	dirX = dirX1;
 	dirY = dirY1;
 	image = image1;
-	al_convert_mask_to_alpha(image, al_map_rgb(40, 123, 241));
+	//al_convert_mask_to_alpha(image, al_map_rgb(40, 123, 241));
 }
 
 void Background::UpdateBackground()
@@ -28,11 +28,11 @@ void Background::UpdateBackground()
 
 void Background::DrawBackground()
 {
-	int WIDTH = 1000;
+	int WIDTHt = 1000;
 
 	al_draw_bitmap(image, x, y, 0);
 
-	if(x + width < WIDTH)
+	if(x + width < WIDTHt)
 		al_draw_bitmap(image, x + width, y, 0);
 }
 

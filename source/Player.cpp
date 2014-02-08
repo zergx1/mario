@@ -136,8 +136,6 @@ void Player::Update(bool keys[])
 
 		return;
 	}
-	int width = 320;
-	int height = 240;
 	if(pipeMoveState == DOWN)
 	{
 		pipeCounter += 0.5;
@@ -281,7 +279,7 @@ void Player::Update(bool keys[])
 		jump = false;
 	}
 
-	if (y > height + frameHeight)
+	if (y > HEIGHT + frameHeight)
 	{
 		Kill();
 	}
@@ -374,7 +372,8 @@ void Player::Kill()
 			maxFrame = 2;
 			curFrame = 0;
 			beforeStart = true;
-			readyToRespawn = true;			
+			readyToRespawn = true;	
+			velX = 0;
 		}
 
 	}
@@ -627,7 +626,7 @@ void Player::takeItem(BaseCharacter* character)
 	if( dynamic_cast<Item*>(character)->type == GREEN_MUSHROOM)
 	{
 		live++;
-		Sound::play(Sound::POWER_UP);
+		Sound::play(Sound::GAIN_LIFE);
 	}
 	else if(dynamic_cast<Item*>(character)->type == STAR)
 	{

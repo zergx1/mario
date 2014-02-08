@@ -20,7 +20,7 @@ void Menu::init()
 	numberOfPlayers = 0;
 	current = 0;
 	currentInfoTime = 0;
-	infoTime = 1 * 60;
+	infoTime = 1 * 30;
 	down_clicked = false;
 	up_clicked = false;
 	p_clicked = false;
@@ -28,13 +28,15 @@ void Menu::init()
 	mgImage = al_load_bitmap("starMG.png");
 	fgImage = al_load_bitmap("menu.png");
 
+	ALLEGRO_DISPLAY_MODE   disp_data;
+	al_get_display_mode(0, &disp_data);
 	int h = al_get_bitmap_height(bgImage);
 	int mh = al_get_bitmap_height(mgImage);
 
 	//display = al_create_display(disp_data.width, disp_data.height);
 	Background BG, MG, FG;
 	M.init(0, -20, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
-	B.init(0, HEIGHT - h, 0, 0, WIDTH, HEIGHT, -1, 1, bgImage);
+	B.init(0, disp_data.height - h, 0, 0, disp_data.width, disp_data.height, -1, 1, bgImage);
 	//pause_bg.init(0, 
 	menu1 = al_load_bitmap("menu.png");
 	menu2 = al_load_bitmap("menu2.png");
@@ -111,8 +113,13 @@ void Menu::update(bool *keys)
 	switch(current)
 	{
 	case 0:
+<<<<<<< HEAD
+		image = menu1; 
+		numberOfPlayers = 0;
+=======
 		image = menu1;
 		numberOfPlayers = 0; 
+>>>>>>> origin/master
 		break;
 	case 1:
 		image = menu2; 
@@ -151,11 +158,14 @@ void Menu::drawBackgrounds()
 			tmp = image;
 		else
 			tmp = pause_img;
-		
+
+		ALLEGRO_DISPLAY_MODE   disp_data;
+		al_get_display_mode(1, &disp_data);
 		int h = al_get_bitmap_height(tmp);
 		int w = al_get_bitmap_width(tmp);
 
-		al_draw_bitmap(tmp, WIDTH/2-w/2, HEIGHT/2-h/2, 0);
+		al_get_display_mode(1, &disp_data);
+		al_draw_bitmap(tmp, disp_data.width/2-w/2, disp_data.height/2-h/2, 0);
 	}
 
 

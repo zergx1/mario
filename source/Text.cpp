@@ -151,10 +151,10 @@ void Text::update(BaseCharacter *character, bool world_info)
 	if (!reset)
 	{
 
-		if (counter == 290)
+		if (counter == 295)
 		{
+			//Sound::stopBackgroundMusic();
 			Sound::play(Sound::HURRY);
-			Sound::playBackgroundMusic(Sound::MUSIC_HURRY_UP);
 		}
 		if (counter == 0)
 		{

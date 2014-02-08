@@ -24,7 +24,7 @@ int Map::init(char *path)
 	checkpoints[2] = 61 * 16;
 	checkpoints[3] = 104 * 16;
 	al_get_display_mode(1, &disp_data);
-	std::cout << disp_data.height << std::endl << disp_data.width;
+	//std::cout << disp_data.height << std::endl << disp_data.width;
 	int status = MapLoad(path, true);
 	if (status)
 	{
@@ -55,8 +55,8 @@ void Map::update(int x)
 	if (x < (200 * 16))	// for hiden scene
 		xOff = x - 16 * settings.getIntOption("map_scrolling");
 
-	if (xOff >(mapwidth*mapblockwidth - disp_data.width))
-		xOff = mapwidth*mapblockwidth - disp_data.width;
+	if (xOff >(mapwidth*mapblockwidth - WIDTH))
+		xOff = mapwidth*mapblockwidth - WIDTH;
 	
 }
 
@@ -200,7 +200,7 @@ int Map::destroyBlock(BaseCharacter* character)
 	{
 		int choice;
 		choice = rand() % 100;
-		/*if(choice <= 20)
+		if(choice <= 20)
 		{
 		if(character->currentState == 0)
 		item->Init(x / 16 * 16, y-16, MUSHROOM);
@@ -215,15 +215,14 @@ int Map::destroyBlock(BaseCharacter* character)
 		jumpingCoinAnimation.push_back(anim);
 		character->score += 200;
 		}
-		else if (choice > 80 && choice <= 90)*/
+		else if (choice > 80 && choice <= 90)
 		{
 			item->Init(x / 16 * 16, y-16, STAR);
 		}
-	/*	else
+		else
 		{
 			item->Init(x / 16 * 16, y-16, GREEN_MUSHROOM);
-
-		}*/
+		}
 
 
 		item->LeaveBox();

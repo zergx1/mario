@@ -22,6 +22,9 @@ extern vector<JumpingCoinAnimation> jumpingCoinAnimation;
 extern vector<DestroyBrickAnimation> destroyBrickAnimation;
 extern Settings settings;
 
+extern int WIDTH;
+extern int HEIGHT;
+
 extern const int BRICK_ID;
 extern const int BRICK_DARK_ID;
 extern const int EMPTY_ID;

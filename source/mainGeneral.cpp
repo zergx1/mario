@@ -41,7 +41,7 @@ int mainGeneral(void)
 		return -1;
 	
 	al_get_display_mode(1, &disp_data);
-	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
 	if (!display)										//test display object
@@ -201,8 +201,9 @@ respawn:
 					for (int v = 0; v < bumpingBlockAnimation.size(); v++)
 						bumpingBlockAnimation[v].collisionWithOther(map.item);
 				}
-				//f.Update();
-				//item.Update();
+				//if (globalText.counter == 290)
+				//	Sound::playBackgroundMusic(Sound::MUSIC_INVINCIBLE);
+
 			}
 			render = true;
 
@@ -217,7 +218,7 @@ respawn:
 			{
 				menu.drawBackgrounds();
 			}
-			if (menu.state == INFO)
+			else if (menu.state == INFO)
 			{
 				globalText.draw(true);
 				//menu.drawInfo(players);

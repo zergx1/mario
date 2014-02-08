@@ -13,6 +13,8 @@ int currentPlayer = -1;	// mario should start first
 float normalVel0;	// = sqrt(settings.getIntOption("normal_jump") * 16 * 2 * 0.16);
 float superVel0;	// = sqrt(settings.getIntOption("super_jump") * 16 * 2 * 0.16);
 
+int WIDTH = 320;
+int HEIGHT = 240;
 // ID of the blocks
 const int BRICK_ID = 49;
 const int BRICK_DARK_ID = 51;
