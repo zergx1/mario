@@ -167,7 +167,7 @@ respawn:
 				menu.checkIfPaused(keyboard.keys);
 				for (int i = 0; i < numMonsters; i++)
 				{
-					monsters[i]->startAction(720);
+					monsters[i]->startAction(WIDTH);
 				}
 				for (int i = 0; i < numMonsters; i++)
 				{

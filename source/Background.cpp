@@ -28,12 +28,10 @@ void Background::UpdateBackground()
 
 void Background::DrawBackground()
 {
-	int WIDTHt = 1000;
 
 	al_draw_bitmap(image, x, y, 0);
 
-	if(x + width < WIDTHt)
-		al_draw_bitmap(image, x + width, y, 0);
+
 }
 
 Background::~Background(void)
