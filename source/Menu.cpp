@@ -113,8 +113,8 @@ void Menu::update(bool *keys)
 	switch(current)
 	{
 	case 0:
-		image = menu1; 
-		numberOfPlayers = 0;
+		image = menu1;
+		numberOfPlayers = 0; 
 		break;
 	case 1:
 		image = menu2; 

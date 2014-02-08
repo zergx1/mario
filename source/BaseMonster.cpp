@@ -41,7 +41,7 @@ void BaseMonster::Init(int x0, int y0)
 	frameHeight = 16;
 	animationColumns = 3;
 	animationDirection = 1;
-	score = 100;
+	score = settings.getIntOption("base_monster_score");
 	lives = 1;
 	deathJumpY = 5;
 	fallingSpeedFactor = 0.3;

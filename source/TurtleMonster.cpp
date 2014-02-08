@@ -23,8 +23,10 @@ void TurtleMonster::Init(int x0, int y0)
 	frameHeight = 32;
 	animationColumns = 6;
 	animationDirection = 1;
-	timeToReborn = 200;
+	timeToReborn = settings.getIntOption("turtle_knocked_time") * 60;
 	currentTimeToReborn = 0;
+	score = settings.getIntOption("turtle_monster_score");
+
 
 }
 
@@ -35,10 +37,15 @@ void TurtleMonster::InitType(int x0, int y0, int s)
 	if(s == NORMAL)
 	{
 		image = al_load_bitmap("Sprites/turtle_monster.png");
+	score = settings.getIntOption("turtle_monster_score");
+
+
 	}
 	else
 	{
 		image = al_load_bitmap("Sprites/smart_turtle_monster.png");
+		score = settings.getIntOption("smart_turtle_score");
+
 
 	}
 	al_convert_mask_to_alpha(image, al_map_rgb(0, 0, 0));

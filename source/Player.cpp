@@ -33,10 +33,10 @@ void Player::Init(Map* map, bool luigi)
 
 	pipeMoveState = NONE;
 	pipeCounter = 0;
-
+	velY = 0;
 	beforeStart = true;
 	incerdible=false; //if mario took star
-	incerdileTime=900;
+	incerdileTime= settings.getIntOption("star_time") * 60;
 	currentIncredibleTime=0;
 	this->luigi = luigi;
 	this->map = map;
