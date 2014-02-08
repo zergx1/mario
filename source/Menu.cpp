@@ -33,7 +33,7 @@ void Menu::init()
 
 	//display = al_create_display(disp_data.width, disp_data.height);
 	Background BG, MG, FG;
-	M.init(0, -20, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
+	M.init(0, 0, 0.5, 0, al_get_bitmap_width(mgImage), 1600, -1, 1, mgImage);
 	B.init(0, HEIGHT - h, 0, 0, WIDTH, HEIGHT, -1, 1, bgImage);
 	//pause_bg.init(0, 
 	menu1 = al_load_bitmap("menu.png");

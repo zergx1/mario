@@ -1,9 +1,6 @@
 #include "header\Item.h"
 #include "header/Sound.h"
 
-int width3 = 320;
-int height3 = 240;
-
 Item::Item(void)
 {
 	live = false;
@@ -109,7 +106,7 @@ void Item::Update()
 	if (!live || status != LEFT)	// trick do spadania 
 		return;
 	
-	if (x < 0 || y > height3)
+	if (x < 0 || y > HEIGHT)
 		live = false;
 
 	if ( (Map::collided(this, 'x')))
@@ -122,7 +119,7 @@ void Item::Update()
 		x += velX * dirX;
 	}
 
-	if ( (y >= height3 - frameHeight) || (Map::collided(this, 'y')))
+	if ( (y >= HEIGHT - frameHeight) || (Map::collided(this, 'y')))
 	{
 		velY = 0;
 		//velX = 1;

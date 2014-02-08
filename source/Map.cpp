@@ -47,7 +47,7 @@ void Map::del()
 void Map::draw()
 {
 	MapUpdateAnims();
-	MapDrawBG(xOff, 0, 0, 0, 320, mapheight * mapblockheight);
+	MapDrawBG(xOff, 0, 0, 0, WIDTH, mapheight * mapblockheight);
 }
 
 void Map::update(int x)
