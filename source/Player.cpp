@@ -177,11 +177,11 @@ void Player::Update(bool keys[])
 
 	if (keys[Keyboard::X])	// super speed
 	{
-		velX = settings.getIntOption("x_mario_speed_super") * 0.26;
+		velX = settings.getIntOption("x_mario_speed_super");
 	}
 	else
 	{
-		velX = settings.getIntOption("x_mario_speed_normal")  * 0.26;
+		velX = settings.getIntOption("x_mario_speed_normal");
 	}
 
 	if (keys[Keyboard::LEFT])	// go to the left
@@ -345,7 +345,7 @@ void Player::Kill()
 	}
 	else
 	{
-		if (y <= 240 + frameHeight)
+		if (y <= HEIGHT + frameHeight)
 		{
 			velY += dirY * 10.0 / 60.0;	 // gravity
 			if (velY <= 0)

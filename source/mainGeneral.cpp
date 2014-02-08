@@ -41,7 +41,7 @@ int mainGeneral(void)
 		return -1;
 	
 	al_get_display_mode(1, &disp_data);
-	al_set_new_display_flags(ALLEGRO_FULLSCREEN);
+	//al_set_new_display_flags(ALLEGRO_FULLSCREEN);
 	display = al_create_display(disp_data.width, disp_data.height);			//create our display object
 
 	if (!display)										//test display object
@@ -79,7 +79,7 @@ respawn:
 		return -5;
 	}
 	map.draw();
-	monsters[0] = new TurtleMonster();//.Init(13*16, 12*16);
+	monsters[0] = new TurtleMonster();
 	monsters[0]->InitType(13*16, 12*15, SMART);
 	monsters[1] =  new BaseMonster();
 	monsters[1]->Init(26*16, 12*16);

@@ -1,9 +1,6 @@
 #include "header\Bullet.h"
 #include "header\Map.h"
 
-int width2 = 320;
-int height2 = 240;
-
 Bullet::Bullet(void)
 {
 }
@@ -71,9 +68,9 @@ void Bullet::Update()
 			//animationDirection *= 1;
 		}
 
-		if ((y >= height2 - frameHeight) || (Map::collided(this, 'y')))
+		if ((y >= HEIGHT - frameHeight) || (Map::collided(this, 'y')))
 		{
-			if(y >= height2)
+			if(y >= HEIGHT)
 				Kill();
 
 			//animationDirection *= 1;

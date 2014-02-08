@@ -1,9 +1,6 @@
 #include "header\Item.h"
 #include "header/Sound.h"
 
-int width3 = 320;
-int height3 = 240;
-
 Item::Item(void)
 {
 	live = false;
